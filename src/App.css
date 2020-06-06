@@ -1,0 +1,29 @@
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.all-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  place-content: space-between stretch;
+}
+
+.app-background {
+  background: white;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  place-content: start stretch;
+  background-color: #EEE;
+}
