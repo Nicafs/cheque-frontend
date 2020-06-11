@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import store from './redux/store';
 
 import './index.css';
@@ -14,6 +15,7 @@ configureFakeBackend();
 
 ReactDOM.render(
     <Provider store={store}>
+      <CssBaseline />
       <BrowserRouter>
         <App />
       </BrowserRouter>

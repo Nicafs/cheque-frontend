@@ -7,7 +7,6 @@ const initialState = {
 }
 
 export default function clients(state = initialState, action){
-  console.log("Entrou no reducer do client");
   switch(action.type){
     case clientTypes.CLIENT_GET:
       return {
@@ -22,7 +21,15 @@ export default function clients(state = initialState, action){
     return {
       ...state,
       loading: true,
-      data: action.data
+      data: action.data,
+      filteredData: action.data
+    }
+
+    case clientTypes.CLIENT_FILTER:
+    return {
+      ...state,
+      loading: true,
+      filteredData: action.data
     }
 
     case clientTypes.CLIENT_UPDATE:

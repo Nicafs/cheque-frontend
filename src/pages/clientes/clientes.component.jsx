@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { connect } from 'react-redux';
+import { isEqual } from 'date-fns';
+
+import {Container, Grid} from '@material-ui/core';
 
 import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/client/client.actions';
+
+import './clientes.styles.scss';
 
 function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
@@ -15,17 +20,34 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
     { type: 'text', name: 'address', label: 'Endereço', validators: 'requerid', value: null }
   ]
 
+  const columns =  [
+    {
+      title: 'Nome', 
+      field: 'name',
+    },
+    { title: 'Data de nascimento', field: 'birthDate', },
+    { title: 'Sexo', field: 'phone' },
+    {
+      title: 'Telefone',
+      field: 'phone',
+    },
+    {
+      title: 'Endereço',
+      field: 'addrress',
+    },
+  ]
+
   useEffect(() => {
     findClients();
   }, [findClients]);
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
-
     filtersSubmit.map(filter => {
       if (filter.value) {
         filteredData = filteredData.filter(d =>  {
           if(filter.type === 'text') return d[filter.name].includes(filter.value);
+          if(filter.type === 'date') return isEqual(new Date(d[filter.name]), new Date(filter.value));
           return d[filter.name] === filter.value;
         })
       }
@@ -36,14 +58,15 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
   }
 
   return (
-    <div className="Clientes">
-      <div className="form">
-        <Filters filters={filters} handleSubmit={handleSubmit} />
-      </div>
+    <Container className="Clientes">
+      <Grid item md={12}>
+        <Filters filters={filters} handleSubmit={handleSubmit} linkTo='/clientes/crud' linkPrev='/' className="form" />
+      </Grid>
+
       {filteredData ?
-        (<TableCustom data={filteredData} />)
+        (<TableCustom data={filteredData} columns={columns}/>)
         : null}
-    </div >
+    </Container >
   );
 };
 

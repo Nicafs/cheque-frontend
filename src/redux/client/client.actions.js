@@ -16,10 +16,8 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  console.log("Entrou  mo find()");
   axios.get('/clients')
     .then((response)=>{
-      console.log("Teve de resposta:", response);
         dispatch({
           type: clientTypes.CLIENT_GET_ALL,
           data: response.data,
@@ -27,6 +25,13 @@ export const find = () => dispatch => {
     }).catch((err)=>{
         console.log(err);
     })
+  }
+
+export const filter = (data) => dispatch => {
+    dispatch({
+      type: clientTypes.CLIENT_FILTER,
+      data: data,
+    });
   }
 
 
@@ -50,18 +55,15 @@ export const update = (formData, token) => dispatch => {
 }
 
 export const create = (formData, token) => dispatch => {
-  console.log("Executando o create dos actions do client");
     const config = {
         headers: {
             'Authorization': token,
         }
     };
-    console.log("Executando o create dos actions do client");
 
     axios.post('/clients', formData, config)
     .then(payload => {
 
-      console.log("Resposta do axios:", payload);
     return dispatch({
         type: clientTypes.CLIENT_CREATE,
         payload,

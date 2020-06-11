@@ -18,3 +18,7 @@ h1, h2, h3 {
 }
 
 .txt-center { text-align: center;}
+
+
+.MuiCard-root { width: 100% !important; }
+.MuiContainer-root { display: grid !important; }

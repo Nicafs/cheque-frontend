@@ -17,22 +17,34 @@ class Menu extends React.Component {
           linkUrl: 'clientes'
         },
         {
+          title: 'Bancos',
+          imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
+          id: 2,
+          linkUrl: 'bancos'
+        },
+        {
+          title: 'Cheques',
+          imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
+          id: 3,
+          linkUrl: 'cheques'
+        },
+        {
           title: 'Operação de Crédito',
           imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png',
           size: 'large',
-          id: 2,
+          id: 4,
           linkUrl: 'operacoes'
         },
         {
           title: 'Histórico',
           imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png',
-          id: 3,
+          id: 5,
           linkUrl: 'historico'
         },
         {
           title: 'Relatório',
           imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-          id: 4,
+          id: 6,
           linkUrl: 'relatorio'
         }
       ]

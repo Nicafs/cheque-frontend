@@ -26,4 +26,5 @@
   flex-grow: 1;
   place-content: start stretch;
   background-color: #EEE;
+  padding: 10px 0px;
 }
