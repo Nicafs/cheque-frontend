@@ -11,11 +11,11 @@ import { alertActions } from './redux/alert/alert.actions';
 import HomePage from './pages/homepage/homepage.component';
 import { Login } from './pages/login/login.component';
 import Clientes from './pages/clientes/clientes.component';
-import { CrudCliente } from './pages/clientes/crud/cliente-crud.component';
+import CrudCliente from './pages/clientes/crud/cliente-crud.component';
 import Bancos from './pages/bancos/bancos.component';
-import { CrudBanco } from './pages/bancos/crud/banco-crud.component';
+import CrudBanco from './pages/bancos/crud/banco-crud.component';
 import Cheques from './pages/cheques/cheques.component';
-import { CrudCheque } from './pages/cheques/crud/cheque-crud.component';
+import CrudCheque from './pages/cheques/crud/cheque-crud.component';
 import Operacoes from './pages/operacoes/operacoes.component';
 import Historico from './pages/historico/historico.component';
 import Relatorio from './pages/relatorio/relatorio.component';
@@ -46,10 +46,13 @@ class App extends React.Component {
             <PrivateRoute exact path='/' component={HomePage} />
             <PrivateRoute exact path='/clientes' component={Clientes} />
             <PrivateRoute exact path='/clientes/crud' component={CrudCliente} />
+            <PrivateRoute exact path='/clientes/crud/:id' component={CrudCliente} />
             <PrivateRoute exact path='/bancos' component={Bancos} />
             <PrivateRoute exact path='/bancos/crud' component={CrudBanco} />
+            <PrivateRoute exact path='/bancos/crud/:id' component={CrudBanco} />
             <PrivateRoute exact path='/cheques' component={Cheques} />
             <PrivateRoute exact path='/cheques/crud' component={CrudCheque} />
+            <PrivateRoute exact path='/cheques/crud/:id' component={CrudCheque} />
             <PrivateRoute exact path='/operacoes' component={Operacoes} />
             <PrivateRoute exact path='/historico' component={Historico} />
             <PrivateRoute exact path='/relatorio' component={Relatorio} />

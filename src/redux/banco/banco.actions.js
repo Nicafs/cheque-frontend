@@ -2,17 +2,16 @@ import { bancoTypes } from './banco.types';
 
 import axios from '../axios';
 
-export const findById = id => dispatch => {
-  axios.get(`/bancos/`&{id})
-    .then(payload => {
-     
-      return dispatch({
-        type: bancoTypes.BANCO_GET,
-        payload,
-      });
-
+export const findById = (id) => dispatch => {
+  axios.get(`/bancos/${id}`)
+  .then((response)=>{
+    dispatch({
+      type: bancoTypes.BANCO_GET,
+      data: response.data,
+        });
+    }).catch((err)=>{
+        console.log(err);
     })
-    .catch(err => console.log(err));
 }
 
 export const find = () => dispatch => {
@@ -25,15 +24,14 @@ export const find = () => dispatch => {
     }).catch((err)=>{
         console.log(err);
     })
-  }
+}
 
 export const filter = (data) => dispatch => {
     dispatch({
       type: bancoTypes.BANCO_FILTER,
       data: data,
     });
-  }
-
+}
 
 export const update = (formData, token) => dispatch => {
   const config = {
@@ -43,15 +41,14 @@ export const update = (formData, token) => dispatch => {
   };
 
   axios.put('/bancos', formData, config)
-  .then(payload => {
-
-    return dispatch({
-      type: bancoTypes.BANCO_UPDATE,
-      payload,
-    });
-
+  .then((response)=>{
+      dispatch({
+        type: bancoTypes.BANCO_UPDATE,
+        banco: response.data,
+      });
+  }).catch((err)=>{
+      console.log(err);
   })
-  .catch(err => console.log(err)); 
 }
 
 export const create = (formData, token) => dispatch => {
@@ -62,13 +59,30 @@ export const create = (formData, token) => dispatch => {
     };
 
     axios.post('/bancos', formData, config)
-    .then(payload => {
+    .then((response)=>{
+      return dispatch({
+                  type: bancoTypes.BANCO_CREATE,
+                  banco: response.data,
+                });
+            }).catch((err)=>{
+                console.log(err);
+            })
+}
 
-    return dispatch({
-        type: bancoTypes.BANCO_CREATE,
-        payload,
-    });
+export const deleteById = (id, token) => dispatch => {
+  const config = {
+    headers: {
+      'Authorization': token,
+    }
+  };
 
-    })
-    .catch(err => console.log(err)); 
+  axios.delete(`/bancos/${id}`, config)
+  .then((response)=>{
+      dispatch({
+        type: bancoTypes.BANCO_DELETE,
+        banco: null,
+      });
+  }).catch((err)=>{
+      console.log(err);
+  })
 }

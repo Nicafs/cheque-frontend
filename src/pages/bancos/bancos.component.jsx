@@ -7,26 +7,18 @@ import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/banco/banco.actions';
 
-import MaterialTable from 'material-table';
 function Bancos({ findBancos, data, filteredData, filterSubmit }) {
-
+  
   const filters = [
     { type: 'text', name: 'codigo', label: 'Codigo', validators: '', value: null },
     { type: 'text', name: 'descricao', label: 'Descricao', validators: '', value: null }
   ]
 
   const columns =  [
-    {
-      title: 'Código', 
-      field: 'codigo',
-    },
+    { title: 'Código', field: 'codigo' },
     { title: 'Descrição', field: 'descricao' },
     { title: 'Juros', field: 'juros', type: 'numeric' },
-    {
-      title: 'Prazo',
-      field: 'prazo',
-      type: 'numeric' 
-    },
+    { title: 'Prazo', field: 'prazo', type: 'numeric' },
   ]
 
   useEffect(() => {
@@ -35,6 +27,7 @@ function Bancos({ findBancos, data, filteredData, filterSubmit }) {
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
+    
     filtersSubmit.map(filter => {
       if (filter.value) {
         filteredData = filteredData.filter(d =>  {
@@ -51,18 +44,13 @@ function Bancos({ findBancos, data, filteredData, filterSubmit }) {
   return (
     <Container className="Bancos">
       <Grid item md={12}>
-        <Filters filters={filters} handleSubmit={handleSubmit} linkTo='/bancos/crud' linkPrev='/' className="form" />
+        <Filters filters={filters} handleSubmit={handleSubmit} title="Buscar Banco"
+                 linkTo='/bancos/crud' linkPrev='/' className="form" />
       </Grid>
 
       {filteredData ?
-        (<TableCustom data={filteredData} columns={columns} />)
+        (<TableCustom data={filteredData} columns={columns} linkTo='/bancos/crud' isEditable='true' />)
         : null}
-
-      <MaterialTable
-      title="Editable Example"
-      columns={columns}
-      data={data}
-    />
     </Container >
   );
 };

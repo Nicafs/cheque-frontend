@@ -3,7 +3,13 @@ import { bancoTypes } from './banco.types';
 
 const initialState = {
   loading: false,
+  banco: {codigo: '',
+          descricao: '',
+          juros: '',
+          prazo: ''
+  },
   data: [],
+  filteredData: [],
 }
 
 export default function bancos(state = initialState, action){
@@ -11,16 +17,12 @@ export default function bancos(state = initialState, action){
     case bancoTypes.BANCO_GET:
       return {
         ...state,
-        loading: true,
-        data: {
-          ...action.payload,
-        }
+        banco: action.data
       }
 
     case bancoTypes.BANCO_GET_ALL:
     return {
       ...state,
-      loading: true,
       data: action.data,
       filteredData: action.data
     }
@@ -28,7 +30,6 @@ export default function bancos(state = initialState, action){
     case bancoTypes.BANCO_FILTER:
     return {
       ...state,
-      loading: true,
       filteredData: action.data
     }
 
@@ -49,6 +50,14 @@ export default function bancos(state = initialState, action){
         ...action.payload,
       }
     }
+
+    case bancoTypes.BANCO_DELETE:
+    return {
+      ...state,
+      loading: true,
+      data: action.payload,
+    }
+
     default:
       return state;
   }

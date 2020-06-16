@@ -1,9 +1,9 @@
-import { chequeTypes } from './cheque.types';
+import { operacaoTypes } from './operacao.types';
 
 
 const initialState = {
   loading: false,
-  cheque: {
+  operacao: {
     banco_id: '',
     client_id: '',
     agencia: '',
@@ -23,14 +23,14 @@ const initialState = {
 
 export default function cheques(state = initialState, action){
   switch(action.type){
-    case chequeTypes.CHEQUES_GET:
+    case operacaoTypes.OPERACOES_GET:
       return {
         ...state,
         loading: true,
-        cheque: action.payload,
+        operacao: action.payload,
       }
 
-    case chequeTypes.CHEQUES_GET_ALL:
+    case operacaoTypes.OPERACOES_GET_ALL:
     return {
       ...state,
       loading: true,
@@ -38,21 +38,21 @@ export default function cheques(state = initialState, action){
       filteredData: action.data
     }
 
-    case chequeTypes.CHEQUES_FILTER:
+    case operacaoTypes.OPERACOES_FILTER:
     return {
       ...state,
       loading: true,
       filteredData: action.data
     }
 
-    case chequeTypes.CHEQUES_UPDATE:
+    case operacaoTypes.OPERACOES_UPDATE:
     return {
       ...state,
       loading: true,
       data: action.payload,
     }
 
-    case chequeTypes.CHEQUES_CREATE:
+    case operacaoTypes.OPERACOES_CREATE:
     return {
       ...state,
       loading: true,

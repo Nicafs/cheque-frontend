@@ -26,7 +26,7 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
       field: 'name',
     },
     { title: 'Data de nascimento', field: 'birthDate', },
-    { title: 'Sexo', field: 'phone' },
+    { title: 'Sexo', field: 'gender' },
     {
       title: 'Telefone',
       field: 'phone',
@@ -72,8 +72,8 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.client.data,
-    filteredData: state.client.filteredData
+    data: state.clients.data,
+    filteredData: state.clients.filteredData
   };
 }
 

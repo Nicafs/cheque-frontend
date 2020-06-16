@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { Link as RouterLink } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup, Link } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
 
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
 import './filters.styles.scss';
 
-export default function Filters({ filters, handleSubmit, linkTo, linkPrev, ...otherProps}) {
+function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...otherProps}) {
 
   const handleSubmitForm = async event => {
     event.preventDefault();
@@ -18,7 +18,6 @@ export default function Filters({ filters, handleSubmit, linkTo, linkPrev, ...ot
 
   const handleChange = e => {
     const { name, value } = e.target
-    // setValues({ ...filters, [name]: value })
 
     setValues(prevFilters => (prevFilters.map((filter) => {
       if (filter.name === name) return { ...filter, value: value }
@@ -31,10 +30,10 @@ export default function Filters({ filters, handleSubmit, linkTo, linkPrev, ...ot
 
   return (
     <Card variant="outlined">
-      <CardHeader title="Criar um Cliente" />
+      <CardHeader title={title} />
 
       <CardContent>
-        <form className='clienteForm' onSubmit={handleSubmitForm}>
+        <form className='filterForm' onSubmit={handleSubmitForm}>
 
           {filters.map((filter, index) => {
             switch (filter.type) {
@@ -74,17 +73,15 @@ export default function Filters({ filters, handleSubmit, linkTo, linkPrev, ...ot
               Buscar
             </Button>
             
-            <Link component={RouterLink} to={linkTo}>
-              <Button variant="contained" type="button" color="secondary">
-                Cadastrar
-              </Button>
-            </Link>
+            <Button variant="contained" type="button" color="secondary" 
+                onClick={() => history.push(`${linkTo}`)}>
+              Cadastrar
+            </Button>
 
-            <Link component={RouterLink} to={linkPrev}>
-              <Button variant="contained" type="button">
-                Voltar
-              </Button>
-            </Link>
+            <Button variant="contained" type="button"
+                onClick={() => history.push(`${linkPrev}`)}>
+              Voltar
+            </Button>
           </ButtonGroup>
 
         </form>
@@ -92,3 +89,5 @@ export default function Filters({ filters, handleSubmit, linkTo, linkPrev, ...ot
     </Card>
   );
 }
+
+export default withRouter(Filters);

@@ -1,176 +1,159 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
-import { Button, Card, CardContent, CardHeader } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import { create } from '../../../redux/client/client.actions';
-
+import axios from '../../../redux/axios';
+import { create, findById, update, deleteById } from '../../../redux/client/client.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate  from '../../../core/components/form-input/form-date.component';
 import './cliente-crud.styles.scss';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  fill: {
-    flexBasis: '100%',
-  },
-});
-
-class CrudCliente extends React.Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      name: '',
-      email: '',
-      birthDate: new Date(),
-      gender: '',
-      cpf: '',
-      phone: '',
-      address: ''
+function CrudClient ({ findClientById, createClient, updateClient, deleteClient, client, history, ...otherProps }) {
+  const [clientForm, setClient] = useState(client);
+  const id = otherProps.match.params.id;
+  const { enqueueSnackbar } = useSnackbar();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`/clients/${id}`);
+      setClient(response.data);
+    };
+ 
+    if(id){
+      fetchData();
     }
-  }
+  }, [id]);
 
-  componentDidMount() {
-    // this.getClient();
-  }
-
-  // getClient() {
-  //     this.getClient = api.findById('api')
-  //         .then(response => response.data)
-  //         .then(data => {
-
-  //             this.setState( ...data);
-  //         });
-  // }
-
-
-  handleSubmit = async event => {
+  const handleSubmit = async event => {
     event.preventDefault();
 
-    const { name, email, birthDate, gender, cpf, phone, address } = event.target;
-    const { user } = this.props;
-    const formData = {
-      name: name.value,
-      email: email.value,
-      birthDate: birthDate.value,
-      gender: gender.value,
-      cpf: cpf.value,
-      phone: phone.value,
-      address: address.value,
+    if(id){
+      clientForm['id'] = id;
+      updateClient(clientForm);
+      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    } else {
+      createClient(clientForm);
+      enqueueSnackbar('Foi Criado com Sucesso !!')
     }
-    console.log("Vai chamar o create - formData:", formData, " user:", user);
-
-    const { dispatch } = this.props;
-    
-    dispatch(create(formData));
   }
 
-  handleChange = event => {
-    const { name, value } = event.target;
+  const handleChange = e => {
+    const { name, value } = e.target
+    setClient({...clientForm, [name]: value});
+  }
 
-    this.setState({ [name]: value });
+  const handleDelete = () => {
+    alert('Deseja deletar mesmo?');
+    if(id){
+      deleteClient(id);
+    }
   };
 
-  handleChangeDate = (date) => {
-    this.setState({ birthDate: date });
-  };
+  return (
+    <Card variant="outlined">
+      <CardHeader title="Criar um Cliente"/>
 
-  render() {
-    const { name, email, birthDate, gender, phone, address, cpf } = this.state;
+      <CardContent>
+        <form className='clienteForm' onSubmit={handleSubmit}>
 
-    return (
-      <Card variant="outlined">
-        <CardHeader title="Criar um Cliente"/>
+          <FormInput
+            type='text'
+            name='name'
+            value={clientForm.name}
+            onChange={handleChange}
+            label='Nome'
+            required
+          />
 
-        <CardContent>
-          <form className='clienteForm' onSubmit={this.handleSubmit}>
+          <FormInput
+            type='email'
+            name='email'
+            value={clientForm.email}
+            onChange={handleChange}
+            label='E-mail'
+          />
 
-            <FormInput
-              type='text'
-              name='name'
-              value={name}
-              onChange={this.handleChange}
-              label='Nome'
-              required
-            />
+          <FormDate
+            name='birthDate'
+            value={clientForm.birthDate}
+            onChange={date => handleChange({ target: { name: 'birthDate', value: date } })}
+            label='Data de Nascimento' />
 
-            <FormInput
-              type='email'
-              name='email'
-              value={email}
-              onChange={this.handleChange}
-              label='E-mail'
-            />
+          <FormInput
+            type='text'
+            name='gender'
+            value={clientForm.gender}
+            onChange={handleChange}
+            label='Gênero'
+            required
+          />
 
-            <FormDate
-              name='birthDate'
-              value={birthDate}
-              onChange={this.handleChangeDate}
-              label='Data de Nascimento' />
+          <FormInput
+            type='text'
+            name='cpf'
+            value={clientForm.cpf}
+            onChange={handleChange}
+            label='CPF'
+            required
+          />
 
-            <FormInput
-              type='text'
-              name='gender'
-              value={gender}
-              onChange={this.handleChange}
-              label='Gênero'
-              required
-            />
+          <FormInput
+            type='text'
+            name='phone'
+            value={clientForm.phone}
+            onChange={handleChange}
+            label='Telefone'
+            required
+          />
 
-            <FormInput
-              type='text'
-              name='cpf'
-              value={cpf}
-              onChange={this.handleChange}
-              label='CPF'
-              required
-            />
+          <FormInput
+            type='text'
+            name='address'
+            value={clientForm.address}
+            onChange={handleChange}
+            label='Endereço'
+            required
+          />
 
-            <FormInput
-              type='text'
-              name='phone'
-              value={phone}
-              onChange={this.handleChange}
-              label='Telefone'
-              required
-            />
-
-            <FormInput
-              type='text'
-              name='address'
-              value={address}
-              onChange={this.handleChange}
-              label='Endereço'
-              required
-            />
-
+          <ButtonGroup className="btn-group">
             <Button variant="contained" type="submit" color="primary">
               Salvar
             </Button>
+            <Button variant="contained" type="button" color="default" 
+                onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+              Voltar
+            </Button>
+            <Button variant="contained" type="button" color="secondary" 
+                onClick={handleDelete} startIcon={<DeleteIcon />}>
+              Excluir
+            </Button>
+          </ButtonGroup>
 
-          </form>
-        </CardContent>
-      </Card>
-    );
-  }
+        </form>
+      </CardContent>
+    </Card>
+  );
 }
 
-const mapStateToProps = (state) =>{
-  const { loggingIn } = state.authentication;
+const mapStateToProps = (state) => {
   return {
-     loggingIn
+    client: state.clients.client
   };
 }
 
-const connectedLoginPage = withRouter(connect(mapStateToProps, null, null, {
-  pure: false
-})(withStyles(styles)(CrudCliente)));
+const mapDispatchToProps = dispatch => ({
+  findClientById: (id) => dispatch(findById(id)),
+  createClient: (form) => dispatch(create(form)),
+  updateClient: (form) => dispatch(update(form)),
+  deleteClient: (id) => dispatch(deleteById(id))
+});
 
-export { connectedLoginPage as CrudCliente };
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CrudClient));

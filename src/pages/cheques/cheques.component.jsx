@@ -10,8 +10,24 @@ import { find, filter } from '../../redux/cheque/cheque.actions';
 function Cheques({ findCheque, data, filteredData, filterSubmit }) {
 
   const filters = [
-    { type: 'text', name: 'codigo', label: 'Codigo', validators: '', value: null },
-    { type: 'text', name: 'descricao', label: 'Descricao', validators: '', value: null }
+    { type: 'text', name: 'emitente', label: 'Emitente', validators: '', value: null },
+    { type: 'number', name: 'numero', label: 'Número', validators: '', value: null },
+    { type: 'text', name: 'situacao', label: 'Situação', validators: '', value: null },
+    { type: 'date', name: 'data_vencimento', label: 'Data de Vencimento', validators: '', value: null },
+    { type: 'date', name: 'data_quitacao', label: 'Data de Quitação', validators: '', value: null }
+  ]
+
+  const columns =  [
+    { title: 'Agência', field: 'agencia' },
+    { title: 'Conta', field: 'conta' },
+    { title: 'Número', field: 'numero', type: 'numeric' },
+    { title: 'Situação', field: 'situacao' },
+    { title: 'Dias', field: 'dias', type: 'numeric' },
+    { title: 'Data de Vencimento', field: 'data_vencimento', type: 'date' },
+    { title: 'Data de Quitação', field: 'data_quitacao', type: 'date' },
+    { title: 'Valor de Operação', field: 'valor_operacao', type: 'numeric' },
+    { title: 'Valor de Encargos', field: 'valor_encargos', type: 'numeric' },
+    { title: 'Emitente', field: 'emitente' },
   ]
 
   useEffect(() => {
@@ -20,6 +36,7 @@ function Cheques({ findCheque, data, filteredData, filterSubmit }) {
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
+    
     filtersSubmit.map(filter => {
       if (filter.value) {
         filteredData = filteredData.filter(d =>  {
@@ -36,11 +53,12 @@ function Cheques({ findCheque, data, filteredData, filterSubmit }) {
   return (
     <Container className="Cheques">
       <Grid item md={12}>
-        <Filters filters={filters} handleSubmit={handleSubmit} linkTo='/cheques/crud' linkPrev='/' className="form" />
+        <Filters filters={filters} handleSubmit={handleSubmit} title="Buscar Cheque"
+                 linkTo='/cheques/crud' linkPrev='/' className="form" />
       </Grid>
 
       {filteredData ?
-        (<TableCustom data={filteredData} />)
+        (<TableCustom data={filteredData} columns={columns} linkTo='/cheques/crud' isEditable='true' />)
         : null}
     </Container >
   );

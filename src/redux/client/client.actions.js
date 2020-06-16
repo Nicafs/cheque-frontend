@@ -25,15 +25,14 @@ export const find = () => dispatch => {
     }).catch((err)=>{
         console.log(err);
     })
-  }
+}
 
 export const filter = (data) => dispatch => {
     dispatch({
       type: clientTypes.CLIENT_FILTER,
       data: data,
     });
-  }
-
+}
 
 export const update = (formData, token) => dispatch => {
   const config = {
@@ -71,4 +70,22 @@ export const create = (formData, token) => dispatch => {
 
     })
     .catch(err => console.log(err)); 
+}
+
+export const deleteById = (id, token) => dispatch => {
+  const config = {
+    headers: {
+      'Authorization': token,
+    }
+  };
+
+  axios.delete(`/clients/${id}`, config)
+  .then((response)=>{
+      dispatch({
+        type: clientTypes.CHEQUE_DELETE,
+        client: null,
+      });
+  }).catch((err)=>{
+      console.log(err);
+  })
 }

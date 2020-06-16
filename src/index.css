@@ -21,4 +21,4 @@ h1, h2, h3 {
 
 
 .MuiCard-root { width: 100% !important; }
-.MuiContainer-root { display: grid !important; }
+.MuiContainer-root { display: grid !important; gap: 10px;}

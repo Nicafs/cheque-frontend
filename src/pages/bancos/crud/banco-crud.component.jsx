@@ -1,90 +1,76 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
-import { Button, Card, CardContent, CardHeader } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import { create } from '../../../redux/banco/banco.actions';
-
+import axios from '../../../redux/axios';
+import { create, findById, update, deleteById } from '../../../redux/banco/banco.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import './banco-crud.styles.scss';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  fill: {
-    flexBasis: '100%',
-  },
-});
-
-class CrudBanco extends React.Component {
-  constructor(props){
-    super(props);
-
-    this.state = {
-      codigo: '',
-      descricao: '',
-      juros: '',
-      prazo: '',
+function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, banco, history, ...otherProps }) {
+  const [bancoForm, setBanco] = useState(banco);
+  const id = otherProps.match.params.id;
+  const { enqueueSnackbar } = useSnackbar();
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`/bancos/${id}`);
+      setBanco(response.data);
+    };
+ 
+    if(id){
+      fetchData();
     }
-  }
+  }, [id]);
 
-  componentDidMount() {
-    // this.getClient();
-  }
-
-  // getClient() {
-  //     this.getClient = api.findById('api')
-  //         .then(response => response.data)
-  //         .then(data => {
-
-  //             this.setState( ...data);
-  //         });
-  // }
-
-
-  handleSubmit = async event => {
+  // useEffect(() => {
+  //   if(id) {
+  //     findBancoById(id);
+  //   }
+  // }, [findBancoById, id]);
+  
+  const handleSubmit = async event => {
     event.preventDefault();
 
-    const { codigo, descricao, juros, prazo } = event.target;
-
-    const formData = {
-      codigo: codigo.value,
-      descricao: descricao.value,
-      juros: juros.value,
-      prazo: prazo.value,
+    if(id){
+      bancoForm['id'] = id;
+      updateBanco(bancoForm);
+      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    } else {
+      createBanco(bancoForm);
+      enqueueSnackbar('Foi Criado com Sucesso !!')
     }
-
-    const { dispatch } = this.props;
-    
-    dispatch(create(formData));
   }
 
-  handleChange = event => {
-    const { name, value } = event.target;
+  const handleChange = e => {
+    const { name, value } = e.target
+    setBanco({...bancoForm, [name]: value});
+  }
 
-    this.setState({ [name]: value });
+  const handleDelete = () => {
+    alert('Deseja deletar mesmo?');
+    if(id){
+      deleteBanco(id);
+    }
   };
 
-  render() {
-    const { codigo, descricao, juros, prazo  } = this.state;
-
-    return (
+  return (
       <Card variant="outlined">
         <CardHeader title="Criar um Banco"/>
 
         <CardContent>
-          <form className='bancoForm' onSubmit={this.handleSubmit}>
+          <form className='bancoForm' onSubmit={handleSubmit}>
 
             <FormInput
               type='text'
               name='codigo'
-              value={codigo}
-              onChange={this.handleChange}
+              value={bancoForm.codigo}
+              onChange={handleChange}
               label='Código'
               required
             />
@@ -92,8 +78,8 @@ class CrudBanco extends React.Component {
             <FormInput
               type='text'
               name='descricao'
-              value={descricao}
-              onChange={this.handleChange}
+              value={bancoForm.descricao}
+              onChange={handleChange}
               label='Descrição'
               required
             />
@@ -101,39 +87,53 @@ class CrudBanco extends React.Component {
             <FormInput
               type='number'
               name='juros'
-              value={juros}
-              onChange={this.handleChange}
+              value={bancoForm.juros}
+              onChange={handleChange}
               label='Juros' />
 
             <FormInput
               type='number'
               name='prazo'
-              value={prazo}
-              onChange={this.handleChange}
+              value={bancoForm.prazo}
+              onChange={handleChange}
               label='Prazo'
             />
 
 
+          <ButtonGroup className="btn-group">
             <Button variant="contained" type="submit" color="primary">
               Salvar
             </Button>
+            <Button variant="contained" type="button" color="default" 
+                onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+              Voltar
+            </Button>
+            <Button variant="contained" type="button" color="secondary" 
+                onClick={handleDelete} startIcon={<DeleteIcon />}>
+              Excluir
+            </Button>
+          </ButtonGroup>
 
           </form>
         </CardContent>
       </Card>
     );
-  }
 }
 
-const mapStateToProps = (state) =>{
-  const { loggingIn } = state.authentication;
+const mapStateToProps = (state) => {
   return {
-     loggingIn
+    banco: state.bancos.banco
   };
 }
 
-const connectedLoginPage = withRouter(connect(mapStateToProps, null, null, {
-  pure: false
-})(withStyles(styles)(CrudBanco)));
+const mapDispatchToProps = dispatch => ({
+  findBancoById: (id) => dispatch(findById(id)),
+  createBanco: (form) => dispatch(create(form)),
+  updateBanco: (form) => dispatch(update(form)),
+  deleteBanco: (id) => dispatch(deleteById(id))
+});
 
-export { connectedLoginPage as CrudBanco };
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CrudBanco));

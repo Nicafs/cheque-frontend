@@ -1,14 +1,13 @@
-.btn-group{
-    button {
-        margin-right: 10px; 
-    }
-}
-
-.filterForm{
+.chequeForm {
     display: flex;
     flex-direction: column;
     
     .MuiFormControl-root {
         margin-bottom: 10px;
     }
+}
+
+.MuiCard-root {
+    width: 70%;
+    align-self: center;
 }

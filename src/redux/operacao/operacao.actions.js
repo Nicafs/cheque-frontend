@@ -1,13 +1,13 @@
-import { chequeTypes } from './cheque.types';
+import { operacaoTypes } from './operacao.types';
 
 import axios from '../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/cheques/`&{id})
+  axios.get(`/operacoes/`&{id})
     .then(response => {
      
       return dispatch({
-        type: chequeTypes.CHEQUE_GET,
+        type: operacaoTypes.OPERACOES_GET,
         payload: response.data,
       });
 
@@ -16,10 +16,10 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/cheques')
+  axios.get('/operacoes')
     .then((response)=>{
         dispatch({
-          type: chequeTypes.CHEQUE_GET_ALL,
+          type: operacaoTypes.OPERACOES_GET_ALL,
           data: response.data,
         });
     }).catch((err)=>{
@@ -29,7 +29,7 @@ export const find = () => dispatch => {
 
 export const filter = (data) => dispatch => {
     dispatch({
-      type: chequeTypes.CHEQUE_FILTER,
+      type: operacaoTypes.OPERACOES_FILTER,
       data: data,
     });
 }
@@ -41,11 +41,11 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/cheques', formData, config)
+  axios.put('/operacoes', formData, config)
   .then(response => {
 
     return dispatch({
-      type: chequeTypes.CHEQUE_UPDATE,
+      type: operacaoTypes.OPERACOES_UPDATE,
       payload: response.data,
     });
 
@@ -60,11 +60,11 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/cheques', formData, config)
+    axios.post('/operacoes', formData, config)
     .then(response => {
 
     return dispatch({
-        type: chequeTypes.CHEQUE_CREATE,
+        type: operacaoTypes.OPERACOES_CREATE,
         payload: response.data,
     });
 
@@ -79,10 +79,10 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/cheques/${id}`, config)
+  axios.delete(`/operacoes/${id}`, config)
   .then((response)=>{
       dispatch({
-        type: chequeTypes.CHEQUE_DELETE,
+        type: operacaoTypes.OPERACOES_DELETE,
         cheque: null,
       });
   }).catch((err)=>{
