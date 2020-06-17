@@ -7,28 +7,23 @@ import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
+import DialogCheque from '../dialog-cheque/dialog-cheque.component';
 import axios from '../../../redux/axios';
-import { create, findById, update, deleteById } from '../../../redux/cheque/cheque.actions';
-import { find as findClient } from '../../../redux/client/client.actions';
-import { find as findBanco } from '../../../redux/banco/banco.actions';
+import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
-import FormSelect from '../../../core/components/form-input/form-select.component';
-import './cheque-crud.styles.scss';
+import './operacao-crud.styles.scss';
 
-function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, selectClient, selectBanco, clients, bancos, cheque, history, ...otherProps }) {
-  const [chequeForm, setCheque] = useState(cheque);
+function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao, operacao, history, ...otherProps }) {
+  const [operacaoForm, setOperacao] = useState(operacao);
   const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
   
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/cheques/${id}`);
-      setCheque(response.data);
+      const response = await axios.get(`/operacoes/${id}`);
+      setOperacao(response.data);
     };
-
-    selectBanco();
-    selectClient();
     
     if(id){
       fetchData();
@@ -39,136 +34,122 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
     event.preventDefault();
 
     if(id){
-      chequeForm['id'] = id;
-      updateCheque(chequeForm);
+      operacaoForm['id'] = id;
+      updateOperacao(operacaoForm);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
-      createCheque(chequeForm);
+      createOperacao(operacaoForm);
       enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
   const handleChange = e => {
     const { name, value } = e.target
-    console.log("e:", e, " name:", name, " value", value)
-    setCheque({...chequeForm, [name]: value});
+    setOperacao({...operacaoForm, [name]: value});
   }
 
   const handleDelete = () => {
     alert('Deseja deletar mesmo?');
     if(id){
-      deleteCheque(id);
+      deleteOperacao(id);
     }
   };
-  const bancoSelects = bancos.map(banco =>{ return {value: banco.id, description: banco.descricao}});
-  const clientSelects = clients.map(client =>{ return {value: client.id, description: client.name}});
-  console.log("chequeForm:",chequeForm, "bancoSelects:", bancoSelects, "clientSelects", clientSelects)
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   return (
     <Card variant="outlined">
-      <CardHeader title="Criar um Cheque" />
+      <CardHeader title="Criar uma Operação" />
 
       <CardContent>
-        <form className='chequeForm' onSubmit={handleSubmit}>
+        <form className='operacaoForm' onSubmit={handleSubmit}>
 
-          <FormSelect
+          <FormInput
+            type='number'
+            name='operacao'
+            value={operacaoForm.operacao}
+            onChange={handleChange}
+            label='Operação'
+            disabled
+          />
+
+          <FormInput
+            type='text'
             name='client_id'
-            value={chequeForm.client_id}
-            selects={clientSelects}
+            value={operacaoForm.client_id}
             onChange={handleChange}
             label='Cliente'
             required
           />
 
-          <FormSelect
-            name='banco_id'
-            value={chequeForm.banco_id}
-            selects={bancoSelects}
-            onChange={handleChange}
-            label='Banco'
-            required
-          />
+          <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+            Open form dialog
+          </Button>
 
           <FormInput
             type='text'
             name='agencia'
-            value={chequeForm.agencia}
+            value={operacaoForm.agencia}
             onChange={handleChange}
             label='Agencia'
             required
           />
 
           <FormInput
-            type='text'
-            name='conta'
-            value={chequeForm.conta}
-            onChange={handleChange}
-            label='Conta'
-            required
-          />
-
-          <FormInput
-            type='text'
-            name='numero'
-            value={chequeForm.numero}
-            onChange={handleChange}
-            label='Numero'
-          />
-
-          <FormInput
-            type='text'
-            name='situacao'
-            value={chequeForm.situacao}
-            onChange={handleChange}
-            label='Situação'
-          />
-
-          <FormInput
             type='number'
-            name='dias'
-            value={chequeForm.dias}
+            name='perc_mes'
+            value={operacaoForm.perc_mes}
             onChange={handleChange}
-            label='Dias'
+            label='% ao mês'
           />
 
           <FormDate
-            name='data_vencimento'
-            value={chequeForm.data_vencimento}
-            onChange={date => handleChange({ target: { name: 'data_vencimento', value: date } })}
-            label='Data de Vencimento' />
-
-          <FormDate
-            name='data_quitacao'
-            value={chequeForm.data_quitacao}
-            onChange={date => handleChange({ target: { name: 'data_quitacao', value: date } })}
-            label='Data de Quitação' />
+            name='data_operacao'
+            value={operacaoForm.data_operacao}
+            onChange={date => handleChange({ target: { name: 'data_operacao', value: date } })}
+            label='Data de Operação' />
 
           <FormInput
             type='number'
-            name='valor_operacao'
-            value={chequeForm.valor_operacao}
+            name='tarifa'
+            value={operacaoForm.tarifa}
             onChange={handleChange}
-            label='Valor de Operação'
-            required
+            label='Tarifa'
           />
 
           <FormInput
             type='number'
-            name='valor_encargos'
-            value={chequeForm.valor_encargos}
+            name='acrescimos'
+            value={operacaoForm.acrescimos}
             onChange={handleChange}
-            label='Valor de Encargos'
-            required
+            label='Acréscimos'
           />
 
           <FormInput
-            type='text'
-            name='emitente'
-            value={chequeForm.emitente}
+            type='number'
+            name='limite'
+            value={operacaoForm.limite}
             onChange={handleChange}
-            label='Emitente'
-            required
+            label='Limite'
           />
+
+          <FormInput
+            type='number'
+            name='disponivel'
+            value={operacaoForm.acrescimos}
+            onChange={handleChange}
+            label='Disponível'
+          />
+
+          <DialogCheque open={open} handleClose={handleClose}></DialogCheque>
 
           <ButtonGroup className="btn-group">
             <Button variant="contained" type="submit" color="primary">
@@ -192,22 +173,18 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
 
 const mapStateToProps = (state) => {
   return {
-    cheque: state.cheques.cheque,
-    bancos: state.bancos.data,
-    clients: state.clients.data,
+    operacao: state.operacoes.operacao,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  findChequeById: (id) => dispatch(findById(id)),
-  createCheque: (form) => dispatch(create(form)),
-  updateCheque: (form) => dispatch(update(form)),
-  deleteCheque: (id) => dispatch(deleteById(id)),
-  selectBanco: () => dispatch(findClient()),
-  selectClient: () => dispatch(findBanco())
+  findOperacaoById: (id) => dispatch(findById(id)),
+  createOperacao: (form) => dispatch(create(form)),
+  updateOperacao: (form) => dispatch(update(form)),
+  deleteOperacao: (id) => dispatch(deleteById(id)),
 });
 
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(CrudCheque));
+)(CrudOperacao));

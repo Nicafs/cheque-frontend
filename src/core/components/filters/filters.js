@@ -41,7 +41,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
                 return <FormDate
                   key={filter.name}
                   name={filter.name}
-                  value={values[filter.value]}
+                  value={filter.value}
                   onChange={date => handleChange({ target: { name: filter.name, value: date } })}
                   label={filter.label} />
 
@@ -49,7 +49,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
                 return <FormSelect
                   key={filter.name}
                   name={filter.name}
-                  value={values[filter.value]}
+                  value={filter.value}
                   onChange={handleChange}
                   label={filter.label}
                   selects={filter.selects}
@@ -60,7 +60,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
                   key={filter.name}
                   type={filter.type}
                   name={filter.name}
-                  value={values[filter.value]}
+                  value={filter.value}
                   onChange={handleChange}
                   label={filter.label}
                 />

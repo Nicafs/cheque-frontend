@@ -15,10 +15,10 @@ const FormSelect = ({ handleChange, label, name, value, selects, ...props }) => 
             {...props}
         >
             <option aria-label="Nenhum" value={null}> Selecione </option>
-            {selects.map(select => {
+            {selects ? selects.map(select => {
                    return <option key={select.value} value={select.value}> {select.description} </option>
                 })
-            }
+            : null }
         </Select>
     </FormControl>
 );

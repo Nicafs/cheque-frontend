@@ -112,7 +112,7 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
             name='numero'
             value={chequeForm.numero}
             onChange={handleChange}
-            label='Numero'
+            label='Docto/cheque'
           />
 
           <FormInput
@@ -203,8 +203,8 @@ const mapDispatchToProps = dispatch => ({
   createCheque: (form) => dispatch(create(form)),
   updateCheque: (form) => dispatch(update(form)),
   deleteCheque: (id) => dispatch(deleteById(id)),
-  selectBanco: () => dispatch(findClient()),
-  selectClient: () => dispatch(findBanco())
+  selectBanco: () => dispatch(findBanco()),
+  selectClient: () => dispatch(findClient())
 });
 
 export default withRouter(connect(

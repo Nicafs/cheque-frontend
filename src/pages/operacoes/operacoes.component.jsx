@@ -6,8 +6,9 @@ import {Container, Grid} from '@material-ui/core';
 import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/operacao/operacao.actions';
+import { find as findClient } from '../../redux/client/client.actions';
 
-function Operacoes({ findOperacao, data, filteredData, filterSubmit }) {
+function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClient, clients }) {
 
   const filters = [
     { type: 'date', name: 'data_ini_cadastro', label: 'Data Inicial de Cadastro', validators: '', value: null },
@@ -16,9 +17,13 @@ function Operacoes({ findOperacao, data, filteredData, filterSubmit }) {
     { type: 'date', name: 'data_final_aprovacao', label: 'Data Final de Aprovação', validators: '', value: null },
     { type: 'date', name: 'data_ini_quitacao', label: 'Data Inicial de Quitação', validators: '', value: null },
     { type: 'date', name: 'data_final_quitacao', label: 'Data Final de Quitação', validators: '', value: null },
-    { type: 'select', name: 'client', label: 'Cliente', validators: '', value: null },
+    { type: 'select', name: 'client', label: 'Cliente', validators: '', value: null, selects: clients },
     { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: null },
-    { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: null }
+    { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: null, selects: 
+    [{value:'todas', description: '1 - Todas'}, 
+     {value:'analise', description: '2 - Em Análise'}, 
+     {value:'aprovado', description: '3 - Aprovado'}, 
+     {value:'quitado', description: '4 - Quitado'} ] }
   ]
 
   const columns =  [
@@ -32,8 +37,9 @@ function Operacoes({ findOperacao, data, filteredData, filterSubmit }) {
   ]
 
   useEffect(() => {
-    findOperacao();
-  }, [findOperacao]);
+    findOperacoes();
+    selectClient();
+  }, []);
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
@@ -68,13 +74,16 @@ function Operacoes({ findOperacao, data, filteredData, filterSubmit }) {
 const mapStateToProps = (state) => {
   return {
     data: state.operacoes.data,
-    filteredData: state.operacoes.filteredData
+    filteredData: state.operacoes.filteredData,
+    bancos: state.bancos.data,
+    clients: state.clients.data,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   filterSubmit: (data) => dispatch(filter(data)),
-  findOperacoes: () => dispatch(find())
+  findOperacoes: () => dispatch(find()),
+  selectClient: () => dispatch(findClient())
 });
 
 export default connect(

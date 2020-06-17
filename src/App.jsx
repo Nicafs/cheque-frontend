@@ -17,6 +17,7 @@ import CrudBanco from './pages/bancos/crud/banco-crud.component';
 import Cheques from './pages/cheques/cheques.component';
 import CrudCheque from './pages/cheques/crud/cheque-crud.component';
 import Operacoes from './pages/operacoes/operacoes.component';
+import CrudOperacao from './pages/operacoes/crud/operacao-crud.component';
 import Historico from './pages/historico/historico.component';
 import Relatorio from './pages/relatorio/relatorio.component';
 
@@ -54,6 +55,8 @@ class App extends React.Component {
             <PrivateRoute exact path='/cheques/crud' component={CrudCheque} />
             <PrivateRoute exact path='/cheques/crud/:id' component={CrudCheque} />
             <PrivateRoute exact path='/operacoes' component={Operacoes} />
+            <PrivateRoute exact path='/operacoes/crud' component={CrudOperacao} />
+            <PrivateRoute exact path='/operacoes/crud/:id' component={CrudOperacao} />
             <PrivateRoute exact path='/historico' component={Historico} />
             <PrivateRoute exact path='/relatorio' component={Relatorio} />
             <Route path='/login' component={Login} />
