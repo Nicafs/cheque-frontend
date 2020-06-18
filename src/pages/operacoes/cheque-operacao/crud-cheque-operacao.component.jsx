@@ -3,37 +3,42 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-import { Card, CardContent, Grid } from '@material-ui/core';
+import { Card, CardContent, Grid, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { create } from '../../../redux/cheque-operacao/chequeOperacao.actions';
 import { find as findBanco } from '../../../redux/banco/banco.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
+import DialogBanco from './dialog-banco/dialog-banco.component';
 
 const useStyles = makeStyles(() => ({
+  groupItemButton: {
+    '& .MuiButtonBase-root': { margin: '0px 10px 0px 5px', },
+  },
   groupItem: {
     '& .MuiFormControl-root': { marginRight: '20px', },
   },
 }));
 
 function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeOperacao, history, ...otherProps }) {
-  
+
   const [chequeOperacaoForm, setChequeOperacao] = useState(chequeOperacao);
 
   const { enqueueSnackbar } = useSnackbar();
-  
+
   useEffect(() => {
     selectBanco();
-  }, []);
-  
+  }, [selectBanco]);
+
   const handleSubmit = async event => {
     event.preventDefault();
 
     createChequeOperacao(chequeOperacaoForm);
     enqueueSnackbar('Foi Criado com Sucesso !!')
-    
+
   }
 
   const handleChange = e => {
@@ -41,7 +46,15 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
     setChequeOperacao({...chequeOperacaoForm, [name]: value});
   }
 
-  const bancoSelects = bancos.map(banco =>{ return {value: banco.id, description: banco.descricao}});
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const classes = useStyles();
 
@@ -61,19 +74,21 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
               />
             </Grid>
 
-            <Grid container item xs={12} className={classes.groupItem}>
-              <Grid item xs={2}>
-                <FormInput
-                  type='text'
-                  name='banco_id'
-                  value={chequeOperacaoForm.banco_id}
-                  onChange={handleChange}
-                  label='Banco'
-                  required
-                />
-              </Grid>
+            <Grid container item className={classes.groupItemButton}>
+              <FormInput
+                type='text'
+                name='banco_id'
+                value={chequeOperacaoForm.banco_id}
+                onChange={handleChange}
+                label='Banco'
+                required
+              />
 
-              <Grid item xs={10}>
+              <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                <ExitToAppIcon />
+              </Button >
+
+              <Grid item xs={8}>
                 <FormInput
                   type='text'
                   name='banco_nome'
@@ -130,7 +145,7 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
                 name='data_vencimento'
                 value={chequeOperacaoForm.data_vencimento}
                 onChange={date => handleChange({ target: { name: 'data_vencimento', value: date } })}
-                label='Data de Vencimento' 
+                label='Data de Vencimento'
                 required />
 
               <FormInput
@@ -155,6 +170,8 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
             </Grid>
           </Grid>
         </form>
+
+        <DialogBanco open={open} handleClose={handleClose}></DialogBanco>
       </CardContent>
     </Card>
   );

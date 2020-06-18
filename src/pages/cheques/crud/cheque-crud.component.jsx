@@ -20,7 +20,7 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
   const [chequeForm, setCheque] = useState(cheque);
   const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`/cheques/${id}`);
@@ -29,12 +29,12 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
 
     selectBanco();
     selectClient();
-    
+
     if(id){
       fetchData();
     }
-  }, [id]);
-  
+  }, [id, selectBanco, selectClient]);
+
   const handleSubmit = async event => {
     event.preventDefault();
 
@@ -174,11 +174,11 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
             <Button variant="contained" type="submit" color="primary">
               Salvar
             </Button>
-            <Button variant="contained" type="button" color="default" 
+            <Button variant="contained" type="button" color="default"
                 onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
               Voltar
             </Button>
-            <Button variant="contained" type="button" color="secondary" 
+            <Button variant="contained" type="button" color="secondary"
                 onClick={handleDelete} startIcon={<DeleteIcon />}>
               Excluir
             </Button>

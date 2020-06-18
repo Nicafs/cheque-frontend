@@ -27,34 +27,34 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator(a, b, orderBy) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
+//   }
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator(order, orderBy) {
+//   return order === 'desc'
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }
 
 function TableCustom({ data, columns, isEditable, linkTo, history}) {
 
   const [page, setPage] = React.useState(0);
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  // const [order, setOrder] = React.useState('asc');
+  // const [orderBy, setOrderBy] = React.useState('calories');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  // const handleRequestSort = (event, property) => {
+  //   const isAsc = orderBy === property && order === 'asc';
+  //   setOrder(isAsc ? 'desc' : 'asc');
+  //   setOrderBy(property);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -89,18 +89,18 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {stableSort(data, getComparator(order, orderBy))
+              {stableSort(data)
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
 
                     return (
                       <TableRow key={row.id}>
-                        {isEditable ? 
+                        {isEditable ?
                           <TableCell>
                             <IconButton aria-label="editar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
                               <EditIcon />
                             </IconButton>
-          
+
                             <IconButton aria-label="deletar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
                               <DeleteIcon />
                             </IconButton>
@@ -108,7 +108,7 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
                         : null}
 
                         {columns.map(column => (
-                          <TableCell key={column.field}> 
+                          <TableCell key={column.field}>
                             {
                               getValue(row, column.field, column.type)
                             }
@@ -118,8 +118,8 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
                   )})}
             </TableBody>
           </Table>
-        
-            
+
+
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50]}
             component="div"

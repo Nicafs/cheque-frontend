@@ -19,10 +19,10 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
     { type: 'date', name: 'data_final_quitacao', label: 'Data Final de Quitação', validators: '', value: null },
     { type: 'select', name: 'client', label: 'Cliente', validators: '', value: null, selects: clients },
     { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: null },
-    { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: null, selects: 
-    [{value:'todas', description: '1 - Todas'}, 
-     {value:'analise', description: '2 - Em Análise'}, 
-     {value:'aprovado', description: '3 - Aprovado'}, 
+    { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: null, selects:
+    [{value:'todas', description: '1 - Todas'},
+     {value:'analise', description: '2 - Em Análise'},
+     {value:'aprovado', description: '3 - Aprovado'},
      {value:'quitado', description: '4 - Quitado'} ] }
   ]
 
@@ -39,11 +39,11 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
   useEffect(() => {
     findOperacoes();
     selectClient();
-  }, []);
+  }, [findOperacoes, selectClient]);
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
-    
+
     filtersSubmit.map(filter => {
       if (filter.value) {
         filteredData = filteredData.filter(d =>  {
