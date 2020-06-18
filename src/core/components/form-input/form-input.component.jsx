@@ -2,8 +2,8 @@ import React from 'react';
 
 import { OutlinedInput, FormControl, InputLabel } from '@material-ui/core';
 
-const FormInput = ({ handleChange, label, ...props }) => (
-    <FormControl variant="outlined">
+const FormInput = ({ handleChange, label, fullWidth, ...props }) => (
+    <FormControl variant="outlined" fullWidth={fullWidth}>
         {label ? (
             <InputLabel htmlFor={label}>
                 {label}

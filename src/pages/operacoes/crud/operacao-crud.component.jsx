@@ -3,16 +3,31 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import ChequeOperacoes from '../cheque-operacao/cheque-operacao.component';
 import DialogCheque from '../dialog-cheque/dialog-cheque.component';
 import axios from '../../../redux/axios';
 import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import './operacao-crud.styles.scss';
+
+const useStyles = makeStyles(() => ({
+  groupItemButton: {
+    '& .MuiButtonBase-root': { margin: '0px 10px 10px 5px', },
+  },
+  groupItem: {
+    '& .MuiFormControl-root': { margin: '0px 10px 10px 0px', },
+  },
+  maginRight: {
+    marginRight: '10px'
+  }
+}));
 
 function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao, operacao, history, ...otherProps }) {
   const [operacaoForm, setOperacao] = useState(operacao);
@@ -65,6 +80,8 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     setOpen(false);
   };
   
+  const classes = useStyles();
+
   return (
     <Card variant="outlined">
       <CardHeader title="Criar uma Operação" />
@@ -72,98 +89,120 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
       <CardContent>
         <form className='operacaoForm' onSubmit={handleSubmit}>
 
-          <FormInput
-            type='number'
-            name='operacao'
-            value={operacaoForm.operacao}
-            onChange={handleChange}
-            label='Operação'
-            disabled
-          />
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Grid container item className={classes.groupItemButton}>
+                <FormInput
+                  className={classes.maginRight}
+                  type='number'
+                  name='operacao'
+                  value={operacaoForm.operacao}
+                  onChange={handleChange}
+                  label='Operação'
+                  disabled
+                />
 
-          <FormInput
-            type='text'
-            name='client_id'
-            value={operacaoForm.client_id}
-            onChange={handleChange}
-            label='Cliente'
-            required
-          />
+                <FormInput
+                  type='text'
+                  name='client_id'
+                  value={operacaoForm.client_id}
+                  onChange={handleChange}
+                  label='Cliente'
+                  required
+                />
 
-          <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-            Open form dialog
-          </Button>
+                <Button variant="contained" color="primary" onClick={handleClickOpen}>
+                  <ExitToAppIcon />
+                </Button >
+                
+                <Grid item xs={6}>
+                  <FormInput
+                    type='text'
+                    value={operacaoForm.client_nome}
+                    onChange={handleChange}
+                    label=''
+                    disabled
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
+            </Grid>
 
-          <FormInput
-            type='text'
-            name='agencia'
-            value={operacaoForm.agencia}
-            onChange={handleChange}
-            label='Agencia'
-            required
-          />
+            <Grid item xs={12} className={classes.groupItem}>
+              <FormInput
+                type='number'
+                name='perc_mes'
+                value={operacaoForm.perc_mes}
+                onChange={handleChange}
+                label='% ao mês'
+              />
 
-          <FormInput
-            type='number'
-            name='perc_mes'
-            value={operacaoForm.perc_mes}
-            onChange={handleChange}
-            label='% ao mês'
-          />
+              <FormDate
+                name='data_operacao'
+                value={operacaoForm.data_operacao}
+                onChange={date => handleChange({ target: { name: 'data_operacao', value: date } })}
+                label='Data de Operação' />
 
-          <FormDate
-            name='data_operacao'
-            value={operacaoForm.data_operacao}
-            onChange={date => handleChange({ target: { name: 'data_operacao', value: date } })}
-            label='Data de Operação' />
+              <FormInput
+                type='number'
+                name='tarifa'
+                value={operacaoForm.tarifa}
+                onChange={handleChange}
+                label='Tarifa'
+              />
+            </Grid>
 
-          <FormInput
-            type='number'
-            name='tarifa'
-            value={operacaoForm.tarifa}
-            onChange={handleChange}
-            label='Tarifa'
-          />
+            <Grid item xs={12} className={classes.groupItem}>
+              <FormInput
+                type='number'
+                name='acrescimos'
+                value={operacaoForm.acrescimos}
+                onChange={handleChange}
+                label='Acréscimos'
+              />
 
-          <FormInput
-            type='number'
-            name='acrescimos'
-            value={operacaoForm.acrescimos}
-            onChange={handleChange}
-            label='Acréscimos'
-          />
+              <FormInput
+                type='number'
+                name='limite'
+                value={operacaoForm.limite}
+                onChange={handleChange}
+                label='Limite'
+                disabled
+              />
 
-          <FormInput
-            type='number'
-            name='limite'
-            value={operacaoForm.limite}
-            onChange={handleChange}
-            label='Limite'
-          />
+              <FormInput
+                type='number'
+                name='disponivel'
+                value={operacaoForm.acrescimos}
+                onChange={handleChange}
+                label='Disponível'
+                disabled
+              />
+            </Grid>
+          
+            <Grid item xs={12}>
+              <ChequeOperacoes></ChequeOperacoes>
+            </Grid>
 
-          <FormInput
-            type='number'
-            name='disponivel'
-            value={operacaoForm.acrescimos}
-            onChange={handleChange}
-            label='Disponível'
-          />
+            <Grid item xs={12}>
+              <ButtonGroup className="btn-group">
+                <Button variant="contained" type="submit" color="primary">
+                  Salvar
+                </Button>
+                <Button variant="contained" type="button" color="default" 
+                    onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+                  Voltar
+                </Button>
+                <Button variant="contained" type="button" color="secondary" 
+                    onClick={handleDelete} startIcon={<DeleteIcon />}>
+                  Excluir
+                </Button>
+              </ButtonGroup>
+            </Grid>
+          </Grid>
 
           <DialogCheque open={open} handleClose={handleClose}></DialogCheque>
-
-          <ButtonGroup className="btn-group">
-            <Button variant="contained" type="submit" color="primary">
-              Salvar
-            </Button>
-            <Button variant="contained" type="button" color="default" 
-                onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
-              Voltar
-            </Button>
-            <Button variant="contained" type="button" color="secondary" 
-                onClick={handleDelete} startIcon={<DeleteIcon />}>
-              Excluir
-            </Button>
-          </ButtonGroup>
 
         </form>
       </CardContent>

@@ -5,6 +5,7 @@ const initialState = {
   chequeOperacao: false,
   cheque: {
     banco_id: '',
+    tipo: '',
     agencia: '',
     conta: '',
     numero: '',
