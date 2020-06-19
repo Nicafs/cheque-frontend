@@ -2,9 +2,10 @@ import { chequeOperacaoTypes } from './chequeOperacao.types';
 
 
 const initialState = {
-  chequeOperacao: false,
-  cheque: {
+  loading: false,
+  chequeOperacao: {
     banco_id: '',
+    banco_nome: '',
     tipo: '',
     agencia: '',
     conta: '',

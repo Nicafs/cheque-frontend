@@ -1,12 +1,13 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
+import { makeStyles } from '@material-ui/core/styles';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
+import Table from '@material-ui/core/Table';
+import EnhancedTableHead from './EnhancedTableHead';
+import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -16,6 +17,30 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { ptBR } from '@material-ui/core/locale';
 
 const theme = createMuiTheme({}, ptBR);
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+  },
+  paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  table: {
+    minWidth: 750,
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
+}));
 
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -27,34 +52,57 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-// function descendingComparator(a, b, orderBy) {
-//   if (b[orderBy] < a[orderBy]) {
-//     return -1;
-//   }
-//   if (b[orderBy] > a[orderBy]) {
-//     return 1;
-//   }
-//   return 0;
-// }
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
 
-// function getComparator(order, orderBy) {
-//   return order === 'desc'
-//     ? (a, b) => descendingComparator(a, b, orderBy)
-//     : (a, b) => -descendingComparator(a, b, orderBy);
-// }
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
 
-function TableCustom({ data, columns, isEditable, linkTo, history}) {
+function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, linkTo, history}) {
 
+  const classes = useStyles();
+  const [selected, setSelected] = React.useState({});
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
   const [page, setPage] = React.useState(0);
-  // const [order, setOrder] = React.useState('asc');
-  // const [orderBy, setOrderBy] = React.useState('calories');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  // const handleRequestSort = (event, property) => {
-  //   const isAsc = orderBy === property && order === 'asc';
-  //   setOrder(isAsc ? 'desc' : 'asc');
-  //   setOrderBy(property);
-  // };
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleClick = (event, row) => {
+    // const selectedIndex = selected.indexOf(name);
+    // let newSelected = [];
+
+    // if (selectedIndex === -1) {
+    //   newSelected = newSelected.concat(selected, name);
+    // } else if (selectedIndex === 0) {
+    //   newSelected = newSelected.concat(selected.slice(1));
+    // } else if (selectedIndex === selected.length - 1) {
+    //   newSelected = newSelected.concat(selected.slice(0, -1));
+    // } else if (selectedIndex > 0) {
+    //   newSelected = newSelected.concat(
+    //     selected.slice(0, selectedIndex),
+    //     selected.slice(selectedIndex + 1),
+    //   );
+    // }
+    
+    handleSelected(row);
+    setSelected(row);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -76,25 +124,44 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
     }
   }
 
+  const isSelected = (id) => selected.id === id;
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
   return (
     <ThemeProvider theme={theme}>
-        <TableContainer component={Paper}>
-          <Table className='table'>
-            <TableHead>
-              <TableRow>
-                {isEditable ? <TableCell> Ações </TableCell> : null}
-                {columns.map(head => (
-                  <TableCell key={head.title}> {head.title} </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+      <Paper className={classes.paper}>
+        <TableContainer>
+          <Table 
+            className={classes.table}
+            aria-labelledby="Tabela de Informações"
+            aria-label="Tabela de Informações"
+          >
+
+          <EnhancedTableHead
+              classes={classes}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              isEditable={isEditable}
+              headCells={columns}
+            />
+
             <TableBody>
-              {stableSort(data)
+              {stableSort(data, getComparator(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
 
                     return (
-                      <TableRow key={row.id}>
+                      <TableRow 
+                        key={row.id}
+                        hover
+                        onClick={(event) => isSelectable ? handleClick(event, row) : null}
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        selected={isItemSelected}>
+
                         {isEditable ?
                           <TableCell>
                             <IconButton aria-label="editar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
@@ -108,7 +175,7 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
                         : null}
 
                         {columns.map(column => (
-                          <TableCell key={column.field}>
+                          <TableCell key={column.field} align={column.type === 'numeric' ? 'right' : 'left'}>
                             {
                               getValue(row, column.field, column.type)
                             }
@@ -116,21 +183,27 @@ function TableCustom({ data, columns, isEditable, linkTo, history}) {
                         ))}
                       </TableRow>
                   )})}
+
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 33 * emptyRows }}>
+                  <TableCell colSpan={columns.length} />
+                </TableRow>
+              )}
             </TableBody>
           </Table>
-
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, 50]}
-            component="div"
-            count={data.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            labelRowsPerPage="Registros por página"
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
         </TableContainer>
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          labelRowsPerPage="Registros por página"
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Paper>
     </ThemeProvider>
   );
 };

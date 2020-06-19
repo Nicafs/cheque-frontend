@@ -10,15 +10,15 @@ import { find, filter } from '../../redux/banco/banco.actions';
 function Bancos({ findBancos, data, filteredData, filterSubmit }) {
   
   const filters = [
-    { type: 'text', name: 'codigo', label: 'Codigo', validators: '', value: null },
-    { type: 'text', name: 'descricao', label: 'Descricao', validators: '', value: null }
+    { type: 'text', name: 'codigo', label: 'Codigo', validators: '', value: '' },
+    { type: 'text', name: 'descricao', label: 'Descricao', validators: '', value: '' }
   ]
 
   const columns =  [
-    { title: 'Código', field: 'codigo' },
-    { title: 'Descrição', field: 'descricao' },
-    { title: 'Juros', field: 'juros', type: 'numeric' },
-    { title: 'Prazo', field: 'prazo', type: 'numeric' },
+    { label: 'Código', field: 'codigo' },
+    { label: 'Descrição', field: 'descricao' },
+    { label: 'Juros', field: 'juros', type: 'numeric' },
+    { label: 'Prazo', field: 'prazo', type: 'numeric' },
   ]
 
   useEffect(() => {

@@ -3,7 +3,8 @@ import { bancoTypes } from './banco.types';
 
 const initialState = {
   loading: false,
-  banco: {codigo: '',
+  banco: {id: '',
+          codigo: '',
           descricao: '',
           juros: '',
           prazo: ''

@@ -22,3 +22,4 @@ h1, h2, h3 {
 
 .MuiCard-root { width: 100% !important; }
 .MuiContainer-root { display: grid !important; gap: 10px;}
+.Mui-selected {background-color: #3f51b5 !important;}

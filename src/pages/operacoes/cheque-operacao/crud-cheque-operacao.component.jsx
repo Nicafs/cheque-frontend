@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { create } from '../../../redux/cheque-operacao/chequeOperacao.actions';
-import { find as findBanco } from '../../../redux/banco/banco.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
@@ -23,15 +22,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeOperacao, history, ...otherProps }) {
+function CrudChequeOperacao({ createChequeOperacao,  chequeOperacao, history }) {
 
   const [chequeOperacaoForm, setChequeOperacao] = useState(chequeOperacao);
 
   const { enqueueSnackbar } = useSnackbar();
-
-  useEffect(() => {
-    selectBanco();
-  }, [selectBanco]);
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -52,7 +47,8 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (selected) => {
+    setChequeOperacao({...chequeOperacaoForm, banco_nome: selected.descricao, banco_id: selected.id });
     setOpen(false);
   };
 
@@ -94,7 +90,7 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
                   name='banco_nome'
                   value={chequeOperacaoForm.banco_nome}
                   onChange={handleChange}
-                  label=''
+                  label='Descrição'
                   disabled
                   fullWidth
                   required
@@ -179,14 +175,12 @@ function CrudChequeOperacao({ createChequeOperacao, selectBanco, bancos, chequeO
 
 const mapStateToProps = (state) => {
   return {
-    chequeOperacao: state.chequesOperacao.chequeOperacao,
-    bancos: state.bancos.data,
+    chequeOperacao: state.chequesOperacao.chequeOperacao
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  createChequeOperacao: (form) => dispatch(create(form)),
-  selectBanco: () => dispatch(findBanco())
+  createChequeOperacao: (form) => dispatch(create(form))
 });
 
 export default withRouter(connect(
