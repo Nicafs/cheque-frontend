@@ -114,14 +114,18 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
   };
 
   const getValue = (row, field, type) => {
-    switch(type) {
-      case 'date':
-        return row[field].toLocaleDateString();
-      case 'numeric':
-        return row[field];
-      default:
-        return row[field];
+    console.log("row:", row, " row[field]:", row[field], " field:", field, " type:", type)
+    if(row[field]) {
+      switch(type) {
+        case 'date':
+          return row[field].toLocaleDateString();
+        case 'numeric':
+          return row[field];
+        default:
+          return row[field];
+      }
     }
+    return '';
   }
 
   const isSelected = (id) => selected.id === id;
@@ -155,7 +159,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
 
                     return (
                       <TableRow 
-                        key={row.id}
+                        key={index}
                         hover
                         onClick={(event) => isSelectable ? handleClick(event, row) : null}
                         aria-checked={isItemSelected}
