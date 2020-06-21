@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid, Container } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
@@ -55,70 +55,93 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
   };
 
   return (
-    <Card variant="outlined">
+    <Container className="ClientesCrud">
+      <Card variant="outlined">
       <CardHeader title="Criar um Cliente"/>
 
       <CardContent>
         <form className='clienteForm' onSubmit={handleSubmit}>
+          <Grid container spacing={1}>
+            <Grid item xs={8}>
+              <FormInput
+                type='text'
+                name='name'
+                value={clientForm.name}
+                onChange={handleChange}
+                label='Nome'
+                fullWidth
+                required
+              />
+            </Grid>
 
-          <FormInput
-            type='text'
-            name='name'
-            value={clientForm.name}
-            onChange={handleChange}
-            label='Nome'
-            required
-          />
+            <Grid item xs={4}>
+              <FormInput
+                type='email'
+                name='email'
+                value={clientForm.email}
+                onChange={handleChange}
+                label='E-mail'
+                fullWidth
+              />
+            </Grid>
 
-          <FormInput
-            type='email'
-            name='email'
-            value={clientForm.email}
-            onChange={handleChange}
-            label='E-mail'
-          />
+            <Grid item xs={3}>
+              <FormDate
+                name='birthDate'
+                value={clientForm.birthDate}
+                onChange={date => handleChange({ target: { name: 'birthDate', value: date } })}
+                label='Data de Nascimento'
+                fullWidth />
+            </Grid>
 
-          <FormDate
-            name='birthDate'
-            value={clientForm.birthDate}
-            onChange={date => handleChange({ target: { name: 'birthDate', value: date } })}
-            label='Data de Nascimento' />
+            <Grid item xs={3}>
+              <FormInput
+                type='text'
+                name='gender'
+                value={clientForm.gender}
+                onChange={handleChange}
+                label='Gênero'
+                fullWidth
+                required
+              />
+            </Grid>
 
-          <FormInput
-            type='text'
-            name='gender'
-            value={clientForm.gender}
-            onChange={handleChange}
-            label='Gênero'
-            required
-          />
+            <Grid item xs={3}>
+              <FormInput
+                type='text'
+                name='cpf'
+                value={clientForm.cpf}
+                onChange={handleChange}
+                label='CPF'
+                fullWidth
+                required
+              />
+            </Grid>
 
-          <FormInput
-            type='text'
-            name='cpf'
-            value={clientForm.cpf}
-            onChange={handleChange}
-            label='CPF'
-            required
-          />
+            <Grid item xs={3}>
+              <FormInput
+                type='text'
+                name='phone'
+                value={clientForm.phone}
+                onChange={handleChange}
+                label='Telefone'
+                fullWidth
+                required
+              />
+            </Grid>
 
-          <FormInput
-            type='text'
-            name='phone'
-            value={clientForm.phone}
-            onChange={handleChange}
-            label='Telefone'
-            required
-          />
-
-          <FormInput
-            type='text'
-            name='address'
-            value={clientForm.address}
-            onChange={handleChange}
-            label='Endereço'
-            required
-          />
+            <Grid item xs={12}>
+              <FormInput
+                type='text'
+                name='address'
+                value={clientForm.address}
+                onChange={handleChange}
+                label='Endereço'
+                fullWidth
+                required
+              />
+            </Grid>
+          </Grid>
 
           <ButtonGroup className="btn-group">
             <Button variant="contained" type="submit" color="primary">
@@ -137,6 +160,7 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
         </form>
       </CardContent>
     </Card>
+    </Container>
   );
 }
 

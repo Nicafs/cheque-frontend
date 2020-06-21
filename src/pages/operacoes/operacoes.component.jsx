@@ -39,13 +39,13 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
   ]
 
   const columns =  [
-    { title: 'Data de Operação', field: 'data_operacao', type: 'date' },
-    { title: 'Total Operação', field: 'total_operacao', type: 'money' },
-    { title: '% ao mês', field: 'percentage', type: 'numeric' },
-    { title: 'Situação', field: 'situacao' },
-    { title: 'Total Encargos', field: 'total_encargos', type: 'money' },
-    { title: 'Outros Acréscimos', field: 'total_acrescimos', type: 'money' },
-    { title: 'Total Líquido', field: 'total_liquido', type: 'money' },
+    { label: 'Data de Operação', field: 'data_operacao', type: 'date' },
+    { label: 'Total Operação', field: 'total_operacao', type: 'money' },
+    { label: '% ao mês', field: 'percentage', type: 'numeric' },
+    { label: 'Situação', field: 'situacao' },
+    { label: 'Total Encargos', field: 'total_encargos', type: 'money' },
+    { label: 'Outros Acréscimos', field: 'total_acrescimos', type: 'money' },
+    { label: 'Total Líquido', field: 'total_liquido', type: 'money' },
   ]
 
   useEffect(() => {
@@ -72,7 +72,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
   return (
     <Container className="Operacoes">
       <Grid item md={12}>
-        <Filters filters={filters} handleSubmit={handleSubmit} title="Buscar Operações"
+        <Filters filters={filters} handleSubmit={handleSubmit} label="Buscar Operações"
                  linkTo='/operacoes/crud' linkPrev='/' className="form" />
         
         <DialogCheque open={open} handleClose={handleClose}></DialogCheque>

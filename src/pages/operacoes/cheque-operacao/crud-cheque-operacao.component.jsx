@@ -16,7 +16,7 @@ const useStyles = makeStyles(() => ({
     '& .MuiButtonBase-root': { margin: '0px 10px 0px 5px', },
   },
   groupItem: {
-    '& .MuiFormControl-root': { marginRight: '20px', },
+    '& .MuiFormControl-root': { marginRight: '6px', },
   },
 }));
 
@@ -48,7 +48,7 @@ function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
     <Card variant="outlined">
       <CardContent>
         <form className='chequeOperacaoForm' onSubmit={(event) => { event.preventDefault(); handleSubmit(chequeOperacaoForm);} }>
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
             <Grid item xs={12}>
               <FormSelect
                 name='tipo'

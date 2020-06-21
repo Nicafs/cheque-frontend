@@ -19,10 +19,10 @@ import './operacao-crud.styles.scss';
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '0px 10px 10px 5px', },
+    '& .MuiButtonBase-root': { margin: '0px 10px 0px 5px', },
   },
   groupItem: {
-    '& .MuiFormControl-root': { margin: '0px 10px 10px 0px', },
+    '& .MuiFormControl-root': { margin: '0px 10px 0px 0px', },
   },
   maginRight: {
     marginRight: '10px'
@@ -90,7 +90,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
         <CardContent>
           <form className='operacaoForm' onSubmit={handleSubmit}>
 
-            <Grid container spacing={3}>
+            <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Grid container item className={classes.groupItemButton}>
                   <FormInput

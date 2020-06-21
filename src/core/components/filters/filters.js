@@ -46,7 +46,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
 
       <CardContent>
         <form className='filterForm' onSubmit={handleSubmitForm}>
-          <Grid container spacing={3}>
+          <Grid container spacing={1}>
             {filters.map((filter, index) => {
                 return (
                   <Grid item xs={filter.size} key={filter.name}>

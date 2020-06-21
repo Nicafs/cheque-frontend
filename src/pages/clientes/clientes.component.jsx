@@ -13,26 +13,26 @@ import './clientes.styles.scss';
 function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
   const filters = [
-    { type: 'text', name: 'name', label: 'Nome', validators: 'requerid', value: null },
-    { type: 'date', name: 'birthDate', label: 'Data de Nascimento', validators: 'requerid', value: null },
-    { type: 'select', name: 'gender', label: 'Sexo', validators: 'requerid', value: null, selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }] },
-    { type: 'text', name: 'phone', label: 'Telefone', validators: 'requerid', value: null, format: '(00) 00000-0000' },
-    { type: 'text', name: 'address', label: 'Endereço', validators: 'requerid', value: null }
+    { type: 'text', name: 'name', label: 'Nome', validators: 'requerid', value: '', size: 9 },
+    { type: 'date', name: 'birthDate', label: 'Data de Nascimento', validators: 'requerid', value: null, size: 3 },
+    { type: 'select', name: 'gender', label: 'Sexo', validators: 'requerid', value: '', selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }], size: 2 },
+    { type: 'text', name: 'phone', label: 'Telefone', validators: 'requerid', value: '', format: '(00) 00000-0000', size: 4 },
+    { type: 'text', name: 'address', label: 'Endereço', validators: 'requerid', value: '', size: 6 }
   ]
 
   const columns =  [
     {
-      title: 'Nome', 
+      label: 'Nome', 
       field: 'name',
     },
-    { title: 'Data de nascimento', field: 'birthDate', },
-    { title: 'Sexo', field: 'gender' },
+    { label: 'Data de nascimento', field: 'birthDate', },
+    { label: 'Sexo', field: 'gender' },
     {
-      title: 'Telefone',
+      label: 'Telefone',
       field: 'phone',
     },
     {
-      title: 'Endereço',
+      label: 'Endereço',
       field: 'addrress',
     },
   ]
@@ -65,7 +65,7 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
       {filteredData ?
         (<TableCustom data={filteredData} columns={columns}/>)
-        : null}
+        : ''}
     </Container >
   );
 };
