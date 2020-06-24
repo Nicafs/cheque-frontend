@@ -1,13 +1,13 @@
-import { clientTypes } from './client.types';
+import { emailClientTypes } from './email.types';
 
-import axios from '../axios';
+import axios from '../../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/client/`&{id})
+  axios.get(`/emailClient/`&{id})
     .then(payload => {
      
       return dispatch({
-        type: clientTypes.CLIENT_GET,
+        type: emailClientTypes.EMAIL_CLIENT_GET,
         payload,
       });
 
@@ -16,10 +16,10 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/clients')
+  axios.get('/emailClient')
     .then((response)=>{
         dispatch({
-          type: clientTypes.CLIENT_GET_ALL,
+          type: emailClientTypes.EMAIL_CLIENT_GET_ALL,
           data: response.data,
         });
     }).catch((err)=>{
@@ -29,7 +29,7 @@ export const find = () => dispatch => {
 
 export const filter = (data) => dispatch => {
     dispatch({
-      type: clientTypes.CLIENT_FILTER,
+      type: emailClientTypes.EMAIL_CLIENT_FILTER,
       data: data,
     });
 }
@@ -41,11 +41,11 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/client', formData, config)
+  axios.put('/emailClient', formData, config)
   .then(payload => {
 
     return dispatch({
-      type: clientTypes.CLIENT_UPDATE,
+      type: emailClientTypes.EMAIL_CLIENT_UPDATE,
       payload,
     });
 
@@ -60,11 +60,11 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/clients', formData, config)
+    axios.post('/emailClient', formData, config)
     .then(payload => {
 
     return dispatch({
-        type: clientTypes.CLIENT_CREATE,
+        type: emailClientTypes.EMAIL_CLIENT_CREATE,
         payload,
     });
 
@@ -79,10 +79,10 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/clients/${id}`, config)
+  axios.delete(`/emailClient/${id}`, config)
   .then((response)=>{
       dispatch({
-        type: clientTypes.CLIENT_DELETE,
+        type: emailClientTypes.EMAIL_CLIENT_DELETE,
         client: null,
       });
   }).catch((err)=>{

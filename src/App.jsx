@@ -11,7 +11,7 @@ import { alertActions } from './redux/alert/alert.actions';
 import HomePage from './pages/homepage/homepage.component';
 import { Login } from './pages/login/login.component';
 import Clientes from './pages/clientes/clientes.component';
-import CrudCliente from './pages/clientes/crud/cliente-crud.component';
+import ClienteTabs from './pages/clientes/crud/cliente-tabs.component';
 import Bancos from './pages/bancos/bancos.component';
 import CrudBanco from './pages/bancos/crud/banco-crud.component';
 import Cheques from './pages/cheques/cheques.component';
@@ -46,8 +46,8 @@ class App extends React.Component {
           <Switch>
             <PrivateRoute exact path='/' component={HomePage} />
             <PrivateRoute exact path='/clientes' component={Clientes} />
-            <PrivateRoute exact path='/clientes/crud' component={CrudCliente} />
-            <PrivateRoute exact path='/clientes/crud/:id' component={CrudCliente} />
+            <PrivateRoute exact path='/clientes/crud' component={ClienteTabs} />
+            <PrivateRoute exact path='/clientes/crud/:id' component={ClienteTabs} />
             <PrivateRoute exact path='/bancos' component={Bancos} />
             <PrivateRoute exact path='/bancos/crud' component={CrudBanco} />
             <PrivateRoute exact path='/bancos/crud/:id' component={CrudBanco} />

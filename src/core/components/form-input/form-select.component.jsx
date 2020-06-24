@@ -2,8 +2,8 @@ import React from 'react';
 
 import { FormControl, InputLabel, Select } from '@material-ui/core';
 
-const FormSelect = ({ handleChange, label, name, value, selects, ...props }) => (
-    <FormControl variant="outlined">
+const FormSelect = ({ handleChange, label, name, value, selects, fullWidth, ...props }) => (
+    <FormControl variant="outlined" fullWidth={fullWidth}>
         <InputLabel htmlFor={name}>{label}</InputLabel>
         <Select
             native

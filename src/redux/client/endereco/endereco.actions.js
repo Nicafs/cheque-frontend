@@ -1,13 +1,13 @@
-import { clientTypes } from './client.types';
+import { enderecoClientTypes } from './endereco.types';
 
-import axios from '../axios';
+import axios from '../../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/client/`&{id})
+  axios.get(`/enderecoClient/`&{id})
     .then(payload => {
      
       return dispatch({
-        type: clientTypes.CLIENT_GET,
+        type: enderecoClientTypes.ENDERECO_CLIENT_GET,
         payload,
       });
 
@@ -16,10 +16,10 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/clients')
+  axios.get('/enderecoClient')
     .then((response)=>{
         dispatch({
-          type: clientTypes.CLIENT_GET_ALL,
+          type: enderecoClientTypes.ENDERECO_CLIENT_GET_ALL,
           data: response.data,
         });
     }).catch((err)=>{
@@ -29,7 +29,7 @@ export const find = () => dispatch => {
 
 export const filter = (data) => dispatch => {
     dispatch({
-      type: clientTypes.CLIENT_FILTER,
+      type: enderecoClientTypes.ENDERECO_CLIENT_FILTER,
       data: data,
     });
 }
@@ -41,11 +41,11 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/client', formData, config)
+  axios.put('/enderecoClient', formData, config)
   .then(payload => {
 
     return dispatch({
-      type: clientTypes.CLIENT_UPDATE,
+      type: enderecoClientTypes.ENDERECO_CLIENT_UPDATE,
       payload,
     });
 
@@ -54,17 +54,19 @@ export const update = (formData, token) => dispatch => {
 }
 
 export const create = (formData, token) => dispatch => {
+  console.log("Entrou no create do Endfereço");
     const config = {
         headers: {
             'Authorization': token,
         }
     };
 
-    axios.post('/clients', formData, config)
+    console.log("Fazendo requisição post");
+    axios.post('/enderecoClient', formData, config)
     .then(payload => {
 
     return dispatch({
-        type: clientTypes.CLIENT_CREATE,
+        type: enderecoClientTypes.ENDERECO_CLIENT_CREATE,
         payload,
     });
 
@@ -79,10 +81,10 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/clients/${id}`, config)
+  axios.delete(`/enderecoClient/${id}`, config)
   .then((response)=>{
       dispatch({
-        type: clientTypes.CLIENT_DELETE,
+        type: enderecoClientTypes.ENDERECO_CLIENT_DELETE,
         client: null,
       });
   }).catch((err)=>{

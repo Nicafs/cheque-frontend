@@ -1,17 +1,9 @@
 import { clientTypes } from './client.types';
-
+import Client from '../../model/Client';
 
 const initialState = {
   loading: false,
-  client: {name: '',
-    email: '',
-    birthDate: null,
-    gender: '',
-    cpf: '',
-    phone: '',
-    address: '',
-    user_id: '',
-  },
+  client: Client,
   data: [],
   filteredData: [],
 }

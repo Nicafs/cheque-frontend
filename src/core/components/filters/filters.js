@@ -21,6 +21,7 @@ const useStyles = makeStyles(() => ({
 
 function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...otherProps}) {
   const classes = useStyles();
+  const [values, setValues] = useState(filters);
 
   const handleSubmitForm = async event => {
     event.preventDefault();
@@ -30,15 +31,12 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
 
   const handleChange = e => {
     const { name, value } = e.target
-
-    setValues(prevFilters => (prevFilters.map((filter) => {
-      if (filter.name === name) return { ...filter, value: value }
-      return filter;
+    
+    setValues(prevValues => (prevValues.map(v => {
+      if (v.name === name) return { ...v, value: value }
+      return v;
     })))
   }
-
-
-  const [values, setValues] = useState(filters);
 
   return (
     <Card variant="outlined">
@@ -47,52 +45,52 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
       <CardContent>
         <form className='filterForm' onSubmit={handleSubmitForm}>
           <Grid container spacing={1}>
-            {filters.map((filter, index) => {
+            {values.map((value, index) => {
                 return (
-                  <Grid item xs={filter.size} key={filter.name}>
+                  <Grid item xs={value.size} key={value.name}>
                     { (() => { 
-                        switch (filter.type) {
+                        switch (value.type) {
                           case 'date':
                             return <FormDate
-                                    key={filter.name}
-                                    name={filter.name}
-                                    value={filter.value}
+                                    key={value.name}
+                                    name={value.name}
+                                    value={value.value}
                                     fullWidth
-                                    onChange={date => handleChange({ target: { name: filter.name, value: date } })}
-                                    label={filter.label} />
+                                    onChange={date => handleChange({ target: { name: value.name, value: date } })}
+                                    label={value.label} />
 
                           case 'select':
                             return <FormSelect
-                              key={filter.name}
-                              name={filter.name}
-                              value={filter.value}
-                              onChange={handleChange}
-                              fullWidth
-                              label={filter.label}
-                              selects={filter.selects}
-                            />
+                                    key={value.name}
+                                    name={value.name}
+                                    value={value.value}
+                                    onChange={handleChange}
+                                    fullWidth={value.fullWidth}
+                                    label={value.label}
+                                    selects={value.selects}
+                                  />
 
                           case 'dialog':
                             return (
                               <Grid container item className={classes.groupItemButton}>
                                 <FormInput
-                                  key={filter.name}
-                                  type={filter.type}
-                                  name={filter.name}
-                                  value={filter.value}
+                                  key={value.name}
+                                  type={value.type}
+                                  name={value.name}
+                                  value={value.value}
                                   onChange={handleChange}
-                                  label={filter.label}
+                                  label={value.label}
                                 />
 
-                                <Button variant="contained" color="primary" onClick={filter.open}>
+                                <Button variant="contained" color="primary" onClick={value.open}>
                                   <ExitToAppIcon />
                                 </Button >
 
                                 <Grid item xs={8}>
                                   <FormInput
                                     type='text'
-                                    name={filter.name_disable}
-                                    value={filter.value_disable}
+                                    name={value.name_disable}
+                                    value={value.value_disable}
                                     onChange={handleChange}
                                     label='Descrição'
                                     disabled
@@ -104,14 +102,14 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...o
 
                           default:
                             return <FormInput
-                              key={filter.name}
-                              type={filter.type}
-                              name={filter.name}
-                              value={filter.value}
-                              fullWidth
-                              onChange={handleChange}
-                              label={filter.label}
-                            />
+                                    key={value.name}
+                                    type={value.type}
+                                    name={value.name}
+                                    value={value.value}
+                                    fullWidth
+                                    onChange={handleChange}
+                                    label={value.label}
+                                  />
                         }
                       })()
                     }

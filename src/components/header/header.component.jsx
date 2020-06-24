@@ -6,7 +6,7 @@ import { ReactComponent as Logo } from '../../assets/logo.svg';
 import './header.styles.scss';
 
 const Header = () => (
-  <header className='header'>
+  <header className='headerApp'>
     <div className='sistema-container'>
         <Link className='logo-container' to='/'>
             <Logo className='logo' />

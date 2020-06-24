@@ -1,22 +1,10 @@
 import { operacaoTypes } from './operacao.types';
+import Operacao from '../../model/Operacao';
 
 
 const initialState = {
   loading: false,
-  operacao: {
-    banco_id: '',
-    client_id: '',
-    agencia: '',
-    conta: '',
-    numero: '',
-    situacao: '',
-    dias: '',
-    data_vencimento: null,
-    data_quitacao: null,
-    valor_operacao: '',
-    valor_encargos: '',
-    emitente: ''
-  },
+  operacao: Operacao,
   data: [],
   filteredData: [],
 }

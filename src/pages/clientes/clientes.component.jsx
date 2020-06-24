@@ -13,11 +13,16 @@ import './clientes.styles.scss';
 function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
   const filters = [
-    { type: 'text', name: 'name', label: 'Nome', validators: 'requerid', value: '', size: 9 },
-    { type: 'date', name: 'birthDate', label: 'Data de Nascimento', validators: 'requerid', value: null, size: 3 },
-    { type: 'select', name: 'gender', label: 'Sexo', validators: 'requerid', value: '', selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }], size: 2 },
-    { type: 'text', name: 'phone', label: 'Telefone', validators: 'requerid', value: '', format: '(00) 00000-0000', size: 4 },
-    { type: 'text', name: 'address', label: 'Endereço', validators: 'requerid', value: '', size: 6 }
+    { type: 'text', name: 'name', label: 'Nome', value: '', size: 6 },
+    { type: 'text', name: 'nickname', label: 'Apelido', value: '', size: 6 },
+    { type: 'text', name: 'cpf', label: 'CPF', value: '', format: '000-000-000-00', size: 4 },
+    { type: 'text', name: 'rg', label: 'RG', value: '', format: '000000-0', size: 4 },
+    { type: 'select', name: 'gender', label: 'Sexo',
+      selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }], 
+      value: 'M', size: 4, fullWidth: true },
+    { type: 'number', name: 'credit', label: 'Crédito', value: '', size: 4 },
+    { type: 'number', name: 'limit', label: 'Limite', value: '', size: 4 },
+    { type: 'text', name: 'cargo', label: 'Cargo', value: '', size: 4 }
   ]
 
   const columns =  [
@@ -25,15 +30,26 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
       label: 'Nome', 
       field: 'name',
     },
-    { label: 'Data de nascimento', field: 'birthDate', },
-    { label: 'Sexo', field: 'gender' },
     {
-      label: 'Telefone',
-      field: 'phone',
+      label: 'Apelido', 
+      field: 'nickname',
+    },
+    { label: 'Data de nascimento', field: 'birthDate', },
+    {
+      label: 'Sexo',
+      field: 'gender',
     },
     {
-      label: 'Endereço',
-      field: 'addrress',
+      label: 'Crédito',
+      field: 'credit',
+    },
+    {
+      label: 'Limite',
+      field: 'limit',
+    },
+    {
+      label: 'Cargo',
+      field: 'cargo',
     },
   ]
 

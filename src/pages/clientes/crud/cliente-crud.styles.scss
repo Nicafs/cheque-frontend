@@ -1,6 +1,11 @@
 .clienteForm {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    gap: 10px;
+}
+
+.formField {
+    display: grid;
+    gap: 10px;
 }
 
 .MuiCard-root {

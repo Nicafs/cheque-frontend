@@ -1,13 +1,13 @@
-import { clientTypes } from './client.types';
+import { telefoneClientTypes } from './telefone.types';
 
-import axios from '../axios';
+import axios from '../../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/client/`&{id})
+  axios.get(`/telefoneClient/`&{id})
     .then(payload => {
      
       return dispatch({
-        type: clientTypes.CLIENT_GET,
+        type: telefoneClientTypes.TELEFONE_CLIENT_GET,
         payload,
       });
 
@@ -16,10 +16,10 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/clients')
+  axios.get('/telefoneClient')
     .then((response)=>{
         dispatch({
-          type: clientTypes.CLIENT_GET_ALL,
+          type: telefoneClientTypes.TELEFONE_CLIENT_GET_ALL,
           data: response.data,
         });
     }).catch((err)=>{
@@ -29,7 +29,7 @@ export const find = () => dispatch => {
 
 export const filter = (data) => dispatch => {
     dispatch({
-      type: clientTypes.CLIENT_FILTER,
+      type: telefoneClientTypes.TELEFONE_CLIENT_FILTER,
       data: data,
     });
 }
@@ -41,11 +41,11 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/client', formData, config)
+  axios.put('/telefoneClient', formData, config)
   .then(payload => {
 
     return dispatch({
-      type: clientTypes.CLIENT_UPDATE,
+      type: telefoneClientTypes.TELEFONE_CLIENT_UPDATE,
       payload,
     });
 
@@ -60,11 +60,11 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/clients', formData, config)
+    axios.post('/telefoneClient', formData, config)
     .then(payload => {
 
     return dispatch({
-        type: clientTypes.CLIENT_CREATE,
+        type: telefoneClientTypes.TELEFONE_CLIENT_CREATE,
         payload,
     });
 
@@ -79,10 +79,10 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/clients/${id}`, config)
+  axios.delete(`/telefoneClient/${id}`, config)
   .then((response)=>{
       dispatch({
-        type: clientTypes.CLIENT_DELETE,
+        type: telefoneClientTypes.TELEFONE_CLIENT_DELETE,
         client: null,
       });
   }).catch((err)=>{
