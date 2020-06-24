@@ -5,6 +5,7 @@ import EmailClient from './EmailClient';
 import ReferenciaClient from './ReferenciaClient';
 
 const Client = {
+    type: '',
     name: '',
     nickname: '',
     gender: '',

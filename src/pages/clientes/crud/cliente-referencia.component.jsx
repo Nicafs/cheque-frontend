@@ -51,6 +51,7 @@ function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient
             <FormField key={index} fields={referenciaForm} 
                       handleChange={(name, value) => handleChange(index, name, value, referencia)}
                       values={referencia}
+                      title="Referências"
                       handleDelete={() => handleDelete(referencia)} handleSubmit={handleSubmit}>
             </FormField>
           )

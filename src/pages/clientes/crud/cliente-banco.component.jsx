@@ -6,7 +6,6 @@ import FormField from '../../../core/components/form/form.component';
 function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient, createBancoClient }) {
   // const [newBancos, setNewBancos] = useState([]);
   
-  console.log("bancos:", bancos)
   const bancoForm = [
     { type: 'text', name: 'banco', label: 'Banco', size: 4 },
     { type: 'text', name: 'agencia', label: 'Agência', size: 4 },
@@ -53,6 +52,7 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
             <FormField key={index} fields={bancoForm} 
                       handleChange={(name, value) => handleChange(index, name, value, banco)}
                       values={banco}
+                      title="Bancos"
                       handleDelete={() => handleDelete(banco)} handleSubmit={handleSubmit}>
             </FormField>
           )

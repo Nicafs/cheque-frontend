@@ -51,6 +51,7 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
             <FormField key={index} fields={emailForm} 
                       handleChange={(name, value) => handleChange(index, name, value, email)}
                       values={email}
+                      title="E-mails"
                       handleDelete={() => handleDelete(email)} handleSubmit={handleSubmit}>
             </FormField>
           )

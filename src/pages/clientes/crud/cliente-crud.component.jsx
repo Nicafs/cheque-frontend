@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { connect } from 'react-redux';
+import React from "react";
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
@@ -7,34 +6,18 @@ import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@mater
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import axios from '../../../redux/axios';
-import { create, findById, update, deleteById } from '../../../redux/client/client.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate  from '../../../core/components/form-input/form-date.component';
 import FormSelect  from '../../../core/components/form-input/form-select.component';
 import './cliente-crud.styles.scss';
 
-function CrudClient ({ findClientById, createClient, updateClient, deleteClient, client, history, ...otherProps }) {
-  const [clientForm, setClient] = useState(client);
-  const id = otherProps.match.params.id;
+function CrudClient ({ createClient, updateClient, deleteClient, clientForm, setClient, history }) {
   const { enqueueSnackbar } = useSnackbar();
  
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`/clients/${id}`);
-      setClient(response.data);
-    };
- 
-    if(id){
-      fetchData();
-    }
-  }, [id]);
-
   const handleSubmit = async event => {
     event.preventDefault();
 
-    if(id){
-      clientForm['id'] = id;
+    if(clientForm.id){
       updateClient(clientForm);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
@@ -50,8 +33,8 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
 
   const handleDelete = () => {
     alert('Deseja deletar mesmo?');
-    if(id){
-      deleteClient(id);
+    if(clientForm.id){
+      deleteClient(clientForm.id);
     }
   };
 
@@ -62,7 +45,18 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
 
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid item xs={2}>
+              <FormSelect
+                name='type'
+                value={clientForm.type}
+                onChange={handleChange}
+                fullWidth={true}
+                label='Tipo de Pessoa'
+                selects={[{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }]}
+              />
+            </Grid>
+
+            <Grid item xs={5}>
               <FormInput
                 type='text'
                 name='name'
@@ -74,7 +68,7 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
               />
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid item xs={5}>
               <FormInput
                 type='text'
                 name='nickname'
@@ -256,20 +250,4 @@ function CrudClient ({ findClientById, createClient, updateClient, deleteClient,
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    client: state.clients.client
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  findClientById: (id) => dispatch(findById(id)),
-  createClient: (form) => dispatch(create(form)),
-  updateClient: (form) => dispatch(update(form)),
-  deleteClient: (id) => dispatch(deleteById(id))
-});
-
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CrudClient));
+export default withRouter(CrudClient);

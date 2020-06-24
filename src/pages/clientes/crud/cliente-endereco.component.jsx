@@ -59,6 +59,7 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
             <FormField key={index} fields={enderecoForm} 
                       handleChange={(name, value) => handleChange(index, name, value, endereco)}
                       values={endereco}
+                      title="Endereços"
                       handleDelete={() => handleDelete(endereco)} handleSubmit={handleSubmit}>
             </FormField>
           )

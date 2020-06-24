@@ -51,6 +51,7 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
             <FormField key={index} fields={telefoneForm} 
                       handleChange={(name, value) => handleChange(index, name, value, telefone)}
                       values={telefone}
+                      title="Telefones"
                       handleDelete={() => handleDelete(telefone)} handleSubmit={handleSubmit}>
             </FormField>
           )

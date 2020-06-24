@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+
+import axios from '../../../redux/axios';
 
 import { Container, Tab, Tabs, AppBar } from '@material-ui/core';
 
@@ -85,6 +87,19 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
   const [emailsForm, setEmails] = useState(emails);
   const [referenciasForm, setReferencias] = useState(referencias);
 
+  const id = otherProps.match.params.id;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`/clients/${id}`);
+      setClient(response.data);
+    };
+ 
+    if(id){
+      fetchData();
+    }
+  }, [id]);
+
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
   };
@@ -108,7 +123,10 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </AppBar>
 
       <TabPanel value={valueTab} index={0}>
-          <CrudClient client={clientForm} setClient={setClient}></CrudClient>
+          <CrudClient clientForm={clientForm} setClient={setClient} 
+            createClient={otherProps.createClient}
+            updateClient={otherProps.updateClient}
+            deleteClient={otherProps.deleteClient}></CrudClient>
       </TabPanel>
 
       <TabPanel value={valueTab} index={1}>
