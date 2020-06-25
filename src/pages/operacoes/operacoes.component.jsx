@@ -6,29 +6,33 @@ import {Container, Grid} from '@material-ui/core';
 import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/operacao/operacao.actions';
-import { find as findClient } from '../../redux/client/client.actions';
-import DialogCheque from './dialog-cheque/dialog-cheque.component';
+import DialogClient from './dialog-cheque/dialog-client.component';
 
-function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClient, clients }) {
+function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
 
   const [open, setOpen] = React.useState(false);
-
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (selected) => {
+    setFilters(prevFilters => (prevFilters.map(prevFilter => {
+      if (prevFilter.name === 'client_id') return { ...prevFilter, value: selected.id, value_disable: selected.name }
+      return prevFilter;
+    })))
+    
     setOpen(false);
   };
 
-  const filters = [
+  const [filters, setFilters] = React.useState([
     { type: 'date', name: 'data_ini_cadastro', label: 'Data Inicial de Cadastro', validators: '', value: null, size: 4 },
     { type: 'date', name: 'data_ini_aprovacao', label: 'Data Inicial de Aprovação', validators: '', value: null, size: 4 },
     { type: 'date', name: 'data_ini_quitacao', label: 'Data Inicial de Quitação', validators: '', value: null, size: 4 },
     { type: 'date', name: 'data_final_cadastro', label: 'Data Final de Cadastro', validators: '', value: null, size: 4 },
     { type: 'date', name: 'data_final_aprovacao', label: 'Data Final de Aprovação', validators: '', value: null, size: 4 },
     { type: 'date', name: 'data_final_quitacao', label: 'Data Final de Quitação', validators: '', value: null, size: 4 },
-    { type: 'dialog', name: 'client_id', label: 'Cliente', validators: '', value: '', selects: clients, size: 12, 
+    { type: 'dialog', name: 'client_id', label: 'Cliente', validators: '', value: '', size: 12, 
       name_disable: 'client_name', value_disable: '', open: handleClickOpen },
     { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: '', size: 6 },
     { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: '', selects:
@@ -36,7 +40,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
      {value:'analise', description: '2 - Em Análise'},
      {value:'aprovado', description: '3 - Aprovado'},
      {value:'quitado', description: '4 - Quitado'} ], size: 6 }
-  ]
+  ]);
 
   const columns =  [
     { label: 'Data de Operação', field: 'data_operacao', type: 'date' },
@@ -50,8 +54,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
 
   useEffect(() => {
     findOperacoes();
-    selectClient();
-  }, [findOperacoes, selectClient]);
+  }, [findOperacoes]);
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
@@ -75,7 +78,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit, selectClie
         <Filters filters={filters} handleSubmit={handleSubmit} label="Buscar Operações"
                  linkTo='/operacoes/crud' linkPrev='/' className="form" />
         
-        <DialogCheque open={open} handleClose={handleClose}></DialogCheque>
+        <DialogClient open={open} handleClose={handleClose}></DialogClient>
       </Grid>
 
       {filteredData ?
@@ -89,15 +92,13 @@ const mapStateToProps = (state) => {
   return {
     data: state.operacoes.data,
     filteredData: state.operacoes.filteredData,
-    bancos: state.bancos.data,
-    clients: state.clients.data,
+    bancos: state.bancos.data
   };
 }
 
 const mapDispatchToProps = dispatch => ({
   filterSubmit: (data) => dispatch(filter(data)),
-  findOperacoes: () => dispatch(find()),
-  selectClient: () => dispatch(findClient())
+  findOperacoes: () => dispatch(find())
 });
 
 export default connect(

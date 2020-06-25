@@ -10,7 +10,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import ChequeOperacoes from '../cheque-operacao/cheque-operacao.component';
-import DialogCheque from '../dialog-cheque/dialog-cheque.component';
+import DialogClient from '../dialog-cheque/dialog-client.component';
 import axios from '../../../redux/axios';
 import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
 import FormInput from '../../../core/components/form-input/form-input.component';
@@ -38,6 +38,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     const fetchData = async () => {
       const response = await axios.get(`/operacoes/${id}`);
       setOperacao(response.data);
+      console.log("response.data:", response.data);
     };
     
     if(id){
@@ -76,7 +77,10 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = (selected) => {
+    if(selected) {
+      setOperacao({...operacaoForm, client_nome: selected.name, client_id: selected.id });
+    }
     setOpen(false);
   };
   
@@ -96,8 +100,8 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                   <FormInput
                     className={classes.maginRight}
                     type='number'
-                    name='operacao'
-                    value={operacaoForm.operacao}
+                    name='id'
+                    value={operacaoForm.id}
                     onChange={handleChange}
                     label='Operação'
                     disabled
@@ -134,7 +138,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                 <FormInput
                   type='number'
                   name='perc_mes'
-                  value={operacaoForm.perc_mes}
+                  value={operacaoForm.percentual}
                   onChange={handleChange}
                   label='% ao mês'
                 />
@@ -175,7 +179,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                 <FormInput
                   type='number'
                   name='disponivel'
-                  value={operacaoForm.acrescimos}
+                  value={operacaoForm.disponivel}
                   onChange={handleChange}
                   label='Disponível'
                   disabled
@@ -183,7 +187,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
               </Grid>
             </Grid>
 
-            <DialogCheque open={open} handleClose={handleClose}></DialogCheque>
+            <DialogClient open={open} handleClose={handleClose}></DialogClient>
 
           </form>
         </CardContent>
@@ -193,7 +197,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">
-          <Button variant="contained" type="submit" color="primary">
+          <Button variant="contained" type="button" color="primary" onClick={handleSubmit}>
             Salvar
           </Button>
           <Button variant="contained" type="button" color="default" 

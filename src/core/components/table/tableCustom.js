@@ -113,11 +113,10 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
   };
 
   const getValue = (row, field, type) => {
-    console.log("row:", row, " row[field]:", row[field], " field:", field, " type:", type)
     if(row[field]) {
       switch(type) {
         case 'date':
-          return row[field].toLocaleDateString();
+          return new Date(row[field]).toLocaleDateString();
         case 'numeric':
           return row[field];
         default:
@@ -179,9 +178,9 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
 
                         {columns.map(column => (
                           <TableCell key={column.field} align={column.type === 'numeric' ? 'right' : 'left'}>
-                            {
-                              getValue(row, column.field, column.type)
-                            }
+                              {
+                                getValue(row, column.field, column.type)
+                              }
                           </TableCell>
                         ))}
                       </TableRow>

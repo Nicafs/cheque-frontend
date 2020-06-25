@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,9 +19,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history, ...otherProps}) {
+function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history }) {
   const classes = useStyles();
   const [values, setValues] = useState(filters);
+
+  useEffect(() => {
+    setValues(prevValues => (prevValues.map(prevValue => {
+      if (prevValue.type === 'dialog') {
+        const filter = filters.find(filter => filter.name === prevValue.name && filter.value !== prevValue.value );
+        if (filter)
+        {
+          return { ...prevValue, value: filter.value, value_disable: filter.value_disable }
+        }
+
+        return prevValue;
+      }
+      return prevValue;
+    })));
+  }, [filters]);
 
   const handleSubmitForm = async event => {
     event.preventDefault();

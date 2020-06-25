@@ -39,8 +39,9 @@ export default function ChequeOperacoes() {
   };
 
   const handleClose = (chequeOperacao) => {
-    console.log("1234 - chequeOperacao:", chequeOperacao);
-    setChequesOperacao([...chequesOperacao, chequeOperacao]);
+    if(chequeOperacao){
+      setChequesOperacao([...chequesOperacao, chequeOperacao]);
+    }
     setOpen({...open, 'add': false});
   };
 

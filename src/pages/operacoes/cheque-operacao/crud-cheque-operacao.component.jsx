@@ -38,7 +38,9 @@ function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
   };
 
   const handleClose = (selected) => {
-    setChequeOperacao({...chequeOperacaoForm, banco_nome: selected.descricao, banco_id: selected.id });
+    if(selected) {
+      setChequeOperacao({...chequeOperacaoForm, banco_nome: selected.descricao, banco_id: selected.id });
+    }
     setOpen(false);
   };
 

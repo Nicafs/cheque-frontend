@@ -34,7 +34,7 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
       label: 'Apelido', 
       field: 'nickname',
     },
-    { label: 'Data de nascimento', field: 'birthDate', },
+    { label: 'Data de nascimento', field: 'birthDate', type: "date" },
     {
       label: 'Sexo',
       field: 'gender',
