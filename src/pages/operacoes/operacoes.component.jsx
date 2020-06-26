@@ -34,12 +34,12 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
     { type: 'date', name: 'data_final_quitacao', label: 'Data Final de Quitação', validators: '', value: null, size: 4 },
     { type: 'dialog', name: 'client_id', label: 'Cliente', validators: '', value: '', size: 12, 
       name_disable: 'client_name', value_disable: '', open: handleClickOpen },
-    { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: '', size: 6 },
+    { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: '', size: 10 },
     { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: '', selects:
     [{value:'todas', description: '1 - Todas'},
      {value:'analise', description: '2 - Em Análise'},
      {value:'aprovado', description: '3 - Aprovado'},
-     {value:'quitado', description: '4 - Quitado'} ], size: 6 }
+     {value:'quitado', description: '4 - Quitado'} ], fullWidth: true, size: 2 }
   ]);
 
   const columns =  [

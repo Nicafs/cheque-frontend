@@ -3,6 +3,9 @@
 const Operacao = {
     id: '',
     client_id: '',
+    client_name: '',
+    client_limit: 0,
+    client_disponivel: '',
     user_id: '',
     situacao: '',
     percentual: 0,

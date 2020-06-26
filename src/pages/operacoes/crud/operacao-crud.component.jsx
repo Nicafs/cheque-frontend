@@ -36,9 +36,29 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/operacoes/${id}`);
-      setOperacao(response.data);
-      console.log("response.data:", response.data);
+      const response = await axios.get(`/operacoes/${id}`).then(r => { return r.data[0]});
+
+      const operacaoData = {
+        id: response.id,
+        client_id: response.client.id,
+        client_name: response.client.name,
+        client_limit: response.client.limit,
+        client_disponivel: 0,
+        user_id: '',
+        situacao: response.situacao,
+        percentual: response.percentual,
+        tarifa: response.tarifa,
+        data_operacao: response.data_operacao,
+        acrescimos: response.acrescimos,
+        tarifa_bordero: response.tarifa_bordero,
+        total_operacao: response.total_operacao,
+        total_encargos: response.total_encargos,
+        total_liquido: response.total_liquido,
+        total_outros: response.total_outros,
+        obs: response.obs,
+        chequeOperacao: response.chequeOperacao,
+      }
+      setOperacao(operacaoData);
     };
 
     if(id){
@@ -79,7 +99,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const handleClose = (selected) => {
     if(selected) {
-      setOperacao({...operacaoForm, client_nome: selected.name, client_id: selected.id });
+      setOperacao({...operacaoForm, client_name: selected.name, client_id: selected.id });
     }
     setOpen(false);
   };
@@ -123,7 +143,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                   <Grid item xs={6}>
                     <FormInput
                       type='text'
-                      value={operacaoForm.client_nome}
+                      value={operacaoForm.client_name}
                       onChange={handleChange}
                       label=''
                       disabled
@@ -170,7 +190,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                 <FormInput
                   type='number'
                   name='limite'
-                  value={operacaoForm.limite}
+                  value={operacaoForm.client_limit}
                   onChange={handleChange}
                   label='Limite'
                   disabled
@@ -179,7 +199,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                 <FormInput
                   type='number'
                   name='disponivel'
-                  value={operacaoForm.disponivel}
+                  value={operacaoForm.client_disponivel}
                   onChange={handleChange}
                   label='Disponível'
                   disabled

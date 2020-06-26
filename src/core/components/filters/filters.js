@@ -12,11 +12,12 @@ import './filters.styles.scss';
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '0px 10px 10px 5px', },
+    '& .MuiButtonBase-root': { margin: '10px 0px 10px 0px', },
   },
   groupItem: {
     '& .MuiFormControl-root': { margin: '0px 10px 10px 0px', },
   },
+  grow: { flexGrow: 1},
 }));
 
 function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history }) {
@@ -101,7 +102,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, history }) {
                                   <ExitToAppIcon />
                                 </Button >
 
-                                <Grid item xs={8}>
+                                <Grid item className={classes.grow}>
                                   <FormInput
                                     type='text'
                                     name={value.name_disable}
