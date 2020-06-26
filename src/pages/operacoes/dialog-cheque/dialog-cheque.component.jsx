@@ -14,10 +14,11 @@ export default function DialogCheque({open, handleClose, chequeOperacaoForm}) {
 
   const handleCheque = (chequeOperacaoReturn) => {
     if(chequeOperacaoReturn){
+      console.log("chequeOperacaoReturn:", chequeOperacaoReturn);
       setChequeOperacao(chequeOperacaoReturn);
     }
   };
- 
+
   return (
       <Dialog fullWidth={true} maxWidth="lg" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Incluir um Cheque</DialogTitle>

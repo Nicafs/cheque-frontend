@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
-
+console.log("chequeOperacao:", chequeOperacao);
   const [chequeOperacaoForm, setChequeOperacao] = useState(chequeOperacao);
 
   const handleChange = e => {
@@ -138,8 +138,8 @@ function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
 
               <FormInput
                 type='number'
-                name='valor'
-                value={chequeOperacaoForm.valor}
+                name='valor_operacao'
+                value={chequeOperacaoForm.valor_operacao}
                 onChange={handleChange}
                 label='Valor'
                 required

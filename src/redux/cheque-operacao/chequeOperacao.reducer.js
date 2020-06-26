@@ -1,20 +1,9 @@
 import { chequeOperacaoTypes } from './chequeOperacao.types';
-
+import ChequeOperacao from '../../model/ChequeOperacao';
 
 const initialState = {
   loading: false,
-  chequeOperacao: {
-    banco_id: '',
-    banco_nome: '',
-    tipo: '',
-    agencia: '',
-    conta: '',
-    numero: '',
-    dias: '',
-    data_vencimento: null,
-    valor: '',
-    emitente: ''
-  },
+  chequeOperacao: ChequeOperacao,
   data: [],
   filteredData: [],
 }

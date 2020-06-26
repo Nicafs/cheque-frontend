@@ -1,4 +1,4 @@
-import ChequeOperacao from './ChequeOperacao';
+// import ChequeOperacao from './ChequeOperacao';
 
 const Operacao = {
     id: '',
@@ -15,7 +15,7 @@ const Operacao = {
     total_liquido: 0,
     total_outros: 0,
     obs: '',
-    chequeOperacao: ChequeOperacao,
+    chequeOperacao: [],
   }
 
   export default Operacao;

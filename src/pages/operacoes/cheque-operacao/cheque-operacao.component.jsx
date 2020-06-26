@@ -8,11 +8,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import DialogCheque from '../dialog-cheque/dialog-cheque.component';
 import TableCustom from '../../../core/components/table/tableCustom';
-// import { find, filter } from '../../../redux/cheque-operacao/chequeOperacao.actions';
 
-export default function ChequeOperacoes() {
+import ChequeOperacao from '../../../model/ChequeOperacao';
 
-  const [chequesOperacao, setChequesOperacao] = useState([]);
+export default function ChequeOperacoes({chequeOperacao}) {
+
+  // const [chequesOperacao, setChequesOperacao] = useState([]);
 
   const columns =  [
     { label: 'Tipo', field: 'tipo' },
@@ -28,19 +29,18 @@ export default function ChequeOperacoes() {
     { label: 'Emitente', field: 'emitente' },
   ]
 
-  // useEffect(() => {
-  //   findChequeOperacao();
-  // }, [findChequeOperacao]);
-
   const [open, setOpen] = useState({add: false, view: false, delete: false, situacao: false});
 
   const handleClickOpen = (button) => {
     setOpen({...open, [button]: true});
   };
 
-  const handleClose = (chequeOperacao) => {
-    if(chequeOperacao){
-      setChequesOperacao([...chequesOperacao, chequeOperacao]);
+  const handleClose = (newChequeOperacao) => {
+    if(newChequeOperacao){
+      console.log("newChequeOperacao:", newChequeOperacao)
+      newChequeOperacao.status = 'NP';
+      chequeOperacao.push(newChequeOperacao);
+      // setChequesOperacao([...chequesOperacao, chequeOperacao]);
     }
     setOpen({...open, 'add': false});
   };
@@ -82,29 +82,11 @@ export default function ChequeOperacoes() {
           </Button>
       </ButtonGroup>
 
-      <DialogCheque open={open.add} handleClose={handleClose} chequeOperacaoForm={chequesOperacao}></DialogCheque>
+      <DialogCheque open={open.add} handleClose={handleClose} chequeOperacaoForm={ChequeOperacao}></DialogCheque>
 
-      {chequesOperacao ?
-      (<TableCustom className="ChequeOperacoes" data={chequesOperacao} columns={columns} />)
+      {chequeOperacao ?
+      (<TableCustom className="ChequeOperacoes" data={chequeOperacao} columns={columns} />)
       : null}
     </>
   );
 };
-
-// const mapStateToProps = (state) => {
-//   return {
-//     data: state.cheques.data,
-//     filteredData: state.cheques.filteredData
-//   };
-// }
-
-// const mapDispatchToProps = dispatch => ({
-//   filterSubmit: (data) => dispatch(filter(data))
-//   findChequeOperacao: () => dispatch(find())
-// });
-
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(ChequeOperacoes);

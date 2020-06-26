@@ -33,19 +33,19 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const [operacaoForm, setOperacao] = useState(operacao);
   const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`/operacoes/${id}`);
       setOperacao(response.data);
       console.log("response.data:", response.data);
     };
-    
+
     if(id){
       fetchData();
     }
   }, [id]);
-  
+
   const handleSubmit = async event => {
     event.preventDefault();
 
@@ -83,7 +83,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     }
     setOpen(false);
   };
-  
+
   const classes = useStyles();
 
   return (
@@ -119,7 +119,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                   <Button variant="contained" color="primary" onClick={handleClickOpen}>
                     <ExitToAppIcon />
                   </Button >
-                  
+
                   <Grid item xs={6}>
                     <FormInput
                       type='text'
@@ -137,7 +137,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
               <Grid item xs={12} className={classes.groupItem}>
                 <FormInput
                   type='number'
-                  name='perc_mes'
+                  name='percentual'
                   value={operacaoForm.percentual}
                   onChange={handleChange}
                   label='% ao mês'
@@ -193,18 +193,18 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
         </CardContent>
       </Card>
 
-      <ChequeOperacoes></ChequeOperacoes>
+      <ChequeOperacoes chequeOperacao={operacaoForm.chequeOperacao}></ChequeOperacoes>
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">
           <Button variant="contained" type="button" color="primary" onClick={handleSubmit}>
             Salvar
           </Button>
-          <Button variant="contained" type="button" color="default" 
+          <Button variant="contained" type="button" color="default"
               onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
             Voltar
           </Button>
-          <Button variant="contained" type="button" color="secondary" 
+          <Button variant="contained" type="button" color="secondary"
               onClick={handleDelete} startIcon={<DeleteIcon />}>
             Excluir
           </Button>
