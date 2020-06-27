@@ -50,7 +50,6 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
 
   const handleChange = e => {
     const { name, value } = e.target
-    console.log("e:", e, " name:", name, " value", value)
     setCheque({...chequeForm, [name]: value});
   }
 
@@ -62,7 +61,6 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
   };
   const bancoSelects = bancos.map(banco =>{ return {value: banco.id, description: banco.descricao}});
   const clientSelects = clients.map(client =>{ return {value: client.id, description: client.name}});
-  console.log("chequeForm:",chequeForm, "bancoSelects:", bancoSelects, "clientSelects", clientSelects)
 
   return (
     <Card variant="outlined">

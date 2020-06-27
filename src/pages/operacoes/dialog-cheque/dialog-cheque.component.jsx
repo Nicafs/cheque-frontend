@@ -14,7 +14,6 @@ export default function DialogCheque({open, handleClose, chequeOperacaoForm}) {
 
   const handleCheque = (chequeOperacaoReturn) => {
     if(chequeOperacaoReturn){
-      console.log("chequeOperacaoReturn:", chequeOperacaoReturn);
       setChequeOperacao(chequeOperacaoReturn);
     }
   };

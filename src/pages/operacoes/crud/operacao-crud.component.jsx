@@ -68,10 +68,10 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const handleSubmit = async event => {
     event.preventDefault();
-
+    
     if(id){
       operacaoForm['id'] = id;
-      updateOperacao(operacaoForm);
+      updateOperacao(id, operacaoForm);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
       createOperacao(operacaoForm);
@@ -243,7 +243,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   findOperacaoById: (id) => dispatch(findById(id)),
   createOperacao: (form) => dispatch(create(form)),
-  updateOperacao: (form) => dispatch(update(form)),
+  updateOperacao: (id, form) => dispatch(update(id, form)),
   deleteOperacao: (id) => dispatch(deleteById(id)),
 });
 

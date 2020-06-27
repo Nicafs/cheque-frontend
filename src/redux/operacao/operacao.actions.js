@@ -3,7 +3,7 @@ import { operacaoTypes } from './operacao.types';
 import axios from '../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/operacoes/`&{id})
+  axios.get(`/operacoes/${id}`)
     .then(response => {
      
       return dispatch({
@@ -34,14 +34,16 @@ export const filter = (data) => dispatch => {
     });
 }
 
-export const update = (formData, token) => dispatch => {
+export const update = (id, formData, token) => dispatch => {
   const config = {
     headers: {
       'Authorization': token,
     }
   };
 
-  axios.put('/operacoes', formData, config)
+  console.log("No Udate - formData:", formData, " id:", id)
+  
+  axios.put(`/operacoes/${id}`, formData, config)
   .then(response => {
 
     return dispatch({

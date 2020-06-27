@@ -37,7 +37,6 @@ export default function ChequeOperacoes({chequeOperacao}) {
 
   const handleClose = (newChequeOperacao) => {
     if(newChequeOperacao){
-      console.log("newChequeOperacao:", newChequeOperacao)
       newChequeOperacao.status = 'NP';
       chequeOperacao.push(newChequeOperacao);
       // setChequesOperacao([...chequesOperacao, chequeOperacao]);

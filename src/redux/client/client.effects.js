@@ -50,8 +50,7 @@ export const update = (formData, token) => dispatch => {
 }
 
 export const create = (formData) => dispatch => {
-
-    console.log("Entrou no create - formData:", formData);dispatch({
+    dispatch({
         type: clientTypes.CLIENT_CREATE,
     })
     return api.post(url, formData)

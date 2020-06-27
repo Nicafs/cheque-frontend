@@ -166,26 +166,6 @@ const EnhancedTable = ({
     setData(newData)
   }
 
-  console.log("usando a table: ", useTable(
-    {
-      columns,
-      data,
-      defaultColumn,
-      autoResetPage: !skipPageReset,
-      // updateMyData isn't part of the API, but
-      // anything we put into these options will
-      // automatically be available on the instance.
-      // That way we can call this function from our
-      // cell renderer!
-      updateMyData,
-    },
-    useGlobalFilter,
-    useSortBy,
-    usePagination,
-    useRowSelect
-  )
-  );
-
   // Render the UI for your table
   return (
     <TableContainer>

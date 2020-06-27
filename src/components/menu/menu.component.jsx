@@ -3,6 +3,12 @@ import React from 'react';
 import MenuItem from './menu-item/menu-item.component';
 
 import './menu.styles.scss';
+import ClientImg from '../../assets/client.jpg';
+import BancoImg from '../../assets/banco.jpg';
+import ChequeImg from '../../assets/cheque.png';
+import OperacoesImg from '../../assets/operacoes_credito.jpg';
+import HistoricoImg from '../../assets/historico.jpg';
+import RelatorioImg from '../../assets/relatorio.png';
 
 class Menu extends React.Component {
   constructor() {
@@ -12,37 +18,37 @@ class Menu extends React.Component {
       sections: [
         {
           title: 'Clientes',
-          imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
+          imageUrl: ClientImg,
           id: 1,
           linkUrl: 'clientes'
         },
         {
           title: 'Bancos',
-          imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
+          imageUrl: BancoImg,
           id: 2,
           linkUrl: 'bancos'
         },
         {
           title: 'Cheques',
-          imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
+          imageUrl: ChequeImg,
           id: 3,
           linkUrl: 'cheques'
         },
         {
           title: 'Operação de Crédito',
-          imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png',
+          imageUrl: OperacoesImg,
           id: 4,
           linkUrl: 'operacoes'
         },
         {
           title: 'Histórico',
-          imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png',
+          imageUrl: HistoricoImg,
           id: 5,
           linkUrl: 'historico'
         },
         {
           title: 'Relatório',
-          imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
+          imageUrl: RelatorioImg,
           id: 6,
           linkUrl: 'relatorio'
         }
