@@ -9,6 +9,7 @@ import bancosClient from './client/banco/banco.reducer';
 import referenciasClient from './client/referencia/referencia.reducer';
 import cheques from './cheque/cheque.reducer';
 import chequesOperacao from './cheque-operacao/chequeOperacao.reducer';
+import historicoOperacoes from './historico-operacoes/historico-operacoes.reducer';
 import bancos from './banco/banco.reducer';
 import operacoes from './operacao/operacao.reducer';
 import { alert } from './alert/alert.reducer';
@@ -24,6 +25,7 @@ export default combineReducers({
   referenciasClient: referenciasClient,
   cheques: cheques,
   chequesOperacao: chequesOperacao,
+  historicoOperacoes: historicoOperacoes,
   bancos: bancos,
   operacoes: operacoes,
   alert: alert,

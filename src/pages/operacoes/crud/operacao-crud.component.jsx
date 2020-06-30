@@ -36,7 +36,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/operacoes/${id}`).then(r => { return r.data[0]});
+      const response = await axios.get(`/operacoes/${id}`).then(r => { return r.data});
 
       const operacaoData = {
         id: response.id,
@@ -80,7 +80,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   }
 
   const handleChange = e => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setOperacao({...operacaoForm, [name]: value});
   }
 
@@ -96,12 +96,30 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const handleOnBlurClient = async e => {
+    const { value } = e.target;
 
+    if (value) {
+      const response = await axios.get(`/clients/${value}`).then(r => { return r.data});
+      if(response){
+        setOperacao({...operacaoForm, client_name: response.name, client_id: response.id });
+      } else {
+        setOperacao({...operacaoForm, client_name: '', client_id: "" });
+      }
+    }
+  };
+  
   const handleClose = (selected) => {
     if(selected) {
       setOperacao({...operacaoForm, client_name: selected.name, client_id: selected.id });
     }
     setOpen(false);
+  };
+
+  const handleUpdate = (chequeOperacao) => {
+    if(chequeOperacao) {
+      setOperacao({...operacaoForm, chequeOperacao: chequeOperacao });
+    }
   };
 
   const classes = useStyles();
@@ -132,6 +150,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                     name='client_id'
                     value={operacaoForm.client_id}
                     onChange={handleChange}
+                    onBlur={handleOnBlurClient}
                     label='Cliente'
                     required
                   />
@@ -144,11 +163,9 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                     <FormInput
                       type='text'
                       value={operacaoForm.client_name}
-                      onChange={handleChange}
-                      label=''
+                      label='Descrição'
                       disabled
                       fullWidth
-                      required
                     />
                   </Grid>
                 </Grid>
@@ -213,7 +230,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
         </CardContent>
       </Card>
 
-      <ChequeOperacoes chequeOperacao={operacaoForm.chequeOperacao}></ChequeOperacoes>
+      <ChequeOperacoes chequeOperacao={operacaoForm.chequeOperacao} handleUpdate={handleUpdate}></ChequeOperacoes>
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">

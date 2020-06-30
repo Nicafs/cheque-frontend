@@ -9,25 +9,24 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import CrudChequeOperacao from '../cheque-operacao/crud-cheque-operacao.component';
 
 export default function DialogCheque({open, handleClose, chequeOperacaoForm}) {
-
-  const [chequeOperacao, setChequeOperacao] = useState({});
+  const [chequeOperacao, setChequeOperacao] = useState(chequeOperacaoForm);
 
   const handleCheque = (chequeOperacaoReturn) => {
     if(chequeOperacaoReturn){
       setChequeOperacao(chequeOperacaoReturn);
     }
   };
-
+  
   return (
-      <Dialog fullWidth={true} maxWidth="lg" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog fullWidth={true} maxWidth="lg" open={open} onClose={() => handleClose(null)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Incluir um Cheque</DialogTitle>
 
         <DialogContent>
-          <CrudChequeOperacao handleCheque={handleCheque}/>
+          <CrudChequeOperacao data={chequeOperacaoForm} handleCheque={handleCheque}/>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={() => handleClose()} color="primary">
+          <Button onClick={() => handleClose(null)} color="primary">
             Fechar
           </Button>
           <Button onClick={() => handleClose(chequeOperacao)} color="primary">

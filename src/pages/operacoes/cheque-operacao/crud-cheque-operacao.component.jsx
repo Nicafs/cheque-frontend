@@ -20,8 +20,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
-  const [chequeOperacaoForm, setChequeOperacao] = useState(chequeOperacao);
+function CrudChequeOperacao({ data, handleCheque }) {
+  const dataMod = data;
+  dataMod.banco_id = data.banco.id;
+  dataMod.banco_nome = data.banco.descricao;
+  const [chequeOperacaoForm, setChequeOperacao] = useState(dataMod);
 
   const handleChange = e => {
     const { name, value } = e.target
@@ -48,7 +51,7 @@ function CrudChequeOperacao({ handleSubmit, chequeOperacao, handleCheque }) {
   return (
     <Card variant="outlined">
       <CardContent>
-        <form className='chequeOperacaoForm' onSubmit={(event) => { event.preventDefault(); handleSubmit(chequeOperacaoForm);} }>
+        <form className='chequeOperacaoForm' onSubmit={(event) => { event.preventDefault(); handleCheque(chequeOperacaoForm);} }>
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <FormSelect

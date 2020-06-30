@@ -44,7 +44,7 @@ class Menu extends React.Component {
           title: 'Histórico',
           imageUrl: HistoricoImg,
           id: 5,
-          linkUrl: 'historico'
+          linkUrl: 'historicoOperacoes'
         },
         {
           title: 'Relatório',

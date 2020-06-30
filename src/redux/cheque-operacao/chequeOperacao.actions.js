@@ -3,7 +3,7 @@ import { chequeOperacaoTypes } from './chequeOperacao.types';
 import axios from '../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/chequesoperacao/`&{id})
+  axios.get(`/chequeOperacao/`&{id})
     .then(response => {
      
       return dispatch({
@@ -16,7 +16,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/chequesoperacao')
+  axios.get('/chequeOperacao')
     .then((response)=>{
         dispatch({
           type: chequeOperacaoTypes.CHEQUE_OPERACAO_GET_ALL,
@@ -41,7 +41,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/chequesoperacao', formData, config)
+  axios.put('/chequeOperacao', formData, config)
   .then(response => {
 
     return dispatch({
@@ -60,7 +60,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/chequesoperacao', formData, config)
+    axios.post('/chequeOperacao', formData, config)
     .then(response => {
 
     return dispatch({
@@ -79,7 +79,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/chequesoperacao/${id}`, config)
+  axios.delete(`/chequeOperacao/${id}`, config)
   .then((response)=>{
       dispatch({
         type: chequeOperacaoTypes.CHEQUE_OPERACAO_DELETE,

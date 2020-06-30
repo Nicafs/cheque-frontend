@@ -113,6 +113,24 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
   };
 
   const getValue = (row, field, type) => {
+    if(type === 'compost') {
+      const splits = field.split('.');
+      let retorno = row;
+      splits.map(split => { 
+          if(retorno[split]) { 
+          retorno = retorno[split]; 
+        } else { 
+          retorno = '';
+        } 
+        return retorno;
+      })
+
+      if(retorno) {
+        return retorno;
+      }
+      return '';
+    }
+
     if(row[field]) {
       switch(type) {
         case 'date':

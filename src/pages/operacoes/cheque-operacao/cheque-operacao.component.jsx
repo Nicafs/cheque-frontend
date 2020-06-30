@@ -5,19 +5,26 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { useSnackbar } from 'notistack';
+
+import axios from '../../../redux/axios';
 
 import DialogCheque from '../dialog-cheque/dialog-cheque.component';
+import DialogSituacao from './dialog-situacao.component';
+import DialogDelete from './dialog-delete.component';
 import TableCustom from '../../../core/components/table/tableCustom';
 
 import ChequeOperacao from '../../../model/ChequeOperacao';
 
-export default function ChequeOperacoes({chequeOperacao}) {
-
-  // const [chequesOperacao, setChequesOperacao] = useState([]);
+export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
+  const [selected, setSelected] = useState({});
+  const [flgEdit, setFlgEdit] = useState(false);
+  const [chequeOperacaoForm, setChequeOperacaoForm] = useState(ChequeOperacao);
+  const { enqueueSnackbar } = useSnackbar();
 
   const columns =  [
     { label: 'Tipo', field: 'tipo' },
-    { label: 'Banco', field: 'banco_nome' },
+    { label: 'Banco', field: 'banco.descricao', type: 'compost' },
     { label: 'Agencia', field: 'agencia', type: 'numeric' },
     { label: 'Conta', field: 'conta', type: 'numeric' },
     { label: 'Docto/Chq', field: 'numero' },
@@ -31,17 +38,102 @@ export default function ChequeOperacoes({chequeOperacao}) {
 
   const [open, setOpen] = useState({add: false, view: false, delete: false, situacao: false});
 
-  const handleClickOpen = (button) => {
+  const handleClickOpen = (button, edit) => {
+    setFlgEdit(edit);
+    if(edit) {
+      setChequeOperacaoForm(selected);
+    } else {
+      setChequeOperacaoForm(ChequeOperacao);
+    }
+    
     setOpen({...open, [button]: true});
   };
 
-  const handleClose = (newChequeOperacao) => {
-    if(newChequeOperacao){
-      newChequeOperacao.status = 'NP';
-      chequeOperacao.push(newChequeOperacao);
-      // setChequesOperacao([...chequesOperacao, chequeOperacao]);
+  const handleOpenSituacao = () => {
+    if(selected?.id) {
+      if(!selected?.data_quitacao) {
+        setOpen({...open, 'situacao': true});
+      } else {
+        enqueueSnackbar('O cheque selecionado já foi quitado!!')
+      }
+    } else {
+      enqueueSnackbar('Selecione o cheque a ser quitado!!')
     }
+  };
+  
+  const handleOpenDelete = () => {
+    if(selected?.id) {
+        setOpen({...open, 'delete': true});
+    } else {
+      enqueueSnackbar('Selecione o cheque a ser excluido!!')
+    }
+  };
+
+  const handleCloseAdd = (newChequeOperacao) => {
+    if(newChequeOperacao) {
+      if(flgEdit) {
+        chequeOperacao = chequeOperacao.map(cheque => {
+          if(cheque.id === newChequeOperacao.id) {
+            return newChequeOperacao; 
+          }
+          return cheque;
+        });
+
+        handleUpdate(chequeOperacao);
+        setFlgEdit(false);
+      } else {
+        newChequeOperacao.status = 'NP';
+        chequeOperacao.push(newChequeOperacao);
+        // setChequesOperacao([...chequesOperacao, chequeOperacao]);
+      }
+    }
+
     setOpen({...open, 'add': false});
+  };
+
+  const handleCloseSituacao = async (answer) => {
+    if(answer){
+      if(selected?.id) {
+       const retorno = await axios.put(`/chequeOperacao/quitacao/${selected.id}`).then(r => { return r.data});
+
+       if (retorno) {
+          setSelected(retorno);
+          enqueueSnackbar('O cheque foi Quitado !!')
+
+          chequeOperacao = chequeOperacao.map(cheque => {
+            if(cheque.id === retorno.id) {
+              return retorno; 
+            }
+            return cheque;
+          });
+
+          handleUpdate(chequeOperacao);
+        }
+      }
+    }
+    setOpen({...open, 'situacao': false});
+  };
+
+  const handleCloseDelete = async (answer) => {
+    if(answer){
+      if(selected?.id) {
+       const retorno = await axios.delete(`/chequeOperacao/${selected.id}`).then(r => { return r.data});
+
+       if (retorno) {
+          enqueueSnackbar('O cheque foi Deletado !!')
+          const index = chequeOperacao.indexOf(cheque => cheque.id === selected.id);
+          chequeOperacao.splice(index, 1);
+
+          handleUpdate(chequeOperacao);
+          setSelected(null);
+        }
+      }
+    }
+    setOpen({...open, 'delete': false});
+  };
+
+  const handleSelected = (row) => {
+    setSelected(row);
   };
 
   return (
@@ -51,7 +143,7 @@ export default function ChequeOperacoes({chequeOperacao}) {
               variant="contained"
               color="primary"
               startIcon={<AddCircleIcon />}
-              onClick={() => handleClickOpen('add')}
+              onClick={() => handleClickOpen('add', false)}
           >
               Incluir
           </Button>
@@ -59,7 +151,7 @@ export default function ChequeOperacoes({chequeOperacao}) {
               variant="contained"
               color="primary"
               startIcon={<VisibilityIcon />}
-              onClick={() => handleClickOpen('view')}
+              onClick={() => handleClickOpen('add', true)}
           >
               Visualizar
           </Button>
@@ -67,7 +159,7 @@ export default function ChequeOperacoes({chequeOperacao}) {
               variant="contained"
               color="secondary"
               startIcon={<DeleteIcon />}
-              onClick={() => handleClickOpen('delete')}
+              onClick={handleOpenDelete}
           >
               Excluir
           </Button>
@@ -75,16 +167,20 @@ export default function ChequeOperacoes({chequeOperacao}) {
               variant="contained"
               color="default"
               startIcon={<HelpOutlineIcon />}
-              onClick={() => handleClickOpen('situacao')}
+              onClick={handleOpenSituacao}
           >
               Situações
           </Button>
       </ButtonGroup>
 
-      <DialogCheque open={open.add} handleClose={handleClose} chequeOperacaoForm={ChequeOperacao}></DialogCheque>
+      <DialogCheque open={open.add} handleClose={handleCloseAdd} chequeOperacaoForm={chequeOperacaoForm}></DialogCheque>
+
+      <DialogSituacao open={open.situacao} handleClose={handleCloseSituacao}></DialogSituacao>
+
+      <DialogDelete open={open.delete} handleClose={handleCloseDelete}></DialogDelete>
 
       {chequeOperacao ?
-      (<TableCustom className="ChequeOperacoes" data={chequeOperacao} columns={columns} />)
+      (<TableCustom className="ChequeOperacoes" data={chequeOperacao} columns={columns} isSelectable={true} handleSelected={handleSelected} />)
       : null}
     </>
   );
