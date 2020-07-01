@@ -123,7 +123,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </AppBar>
 
       <TabPanel value={valueTab} index={0}>
-          <CrudClient clientForm={clientForm} setClient={setClient} 
+          <CrudClient client={clientForm} setClient={setClient} 
             createClient={otherProps.createClient}
             updateClient={otherProps.updateClient}
             deleteClient={otherProps.deleteClient}></CrudClient>

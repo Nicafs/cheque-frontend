@@ -1,10 +1,12 @@
 import React from "react";
+import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@material-ui/core';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
@@ -19,7 +21,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function FormField({ fields, values, handleSubmit, handleDelete, handleChange, title }) {
+function FormField({ fields, values, handleSubmit, handleDelete, handleChange, title, history }) {
   const classes = useStyles();
   
   // const handleChange = e => {
@@ -128,6 +130,10 @@ function FormField({ fields, values, handleSubmit, handleDelete, handleChange, t
       <Button variant="contained" type="submit" color="primary">
         Salvar
       </Button>
+      <Button variant="contained" type="button" color="default" 
+          onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+        Voltar
+      </Button>
       <Button variant="contained" type="button" color="secondary" 
           onClick={handleDelete} startIcon={<DeleteIcon />}>
         Excluir
@@ -137,4 +143,4 @@ function FormField({ fields, values, handleSubmit, handleDelete, handleChange, t
   );
 }
 
-export default FormField;
+export default withRouter(FormField);

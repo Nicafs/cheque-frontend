@@ -2,17 +2,37 @@ import React from "react";
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import FormField from '../../../core/components/form/form.component';
 
-import FormInput from '../../../core/components/form-input/form-input.component';
-import FormDate  from '../../../core/components/form-input/form-date.component';
-import FormSelect  from '../../../core/components/form-input/form-select.component';
 import './cliente-crud.styles.scss';
 
-function CrudClient ({ createClient, updateClient, deleteClient, clientForm, setClient, history }) {
+function CrudClient ({ client, setClient, deleteClient, updateClient, createClient }) {
   const { enqueueSnackbar } = useSnackbar();
+
+  const clientForm = [
+    { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2, 
+      selects: [{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }],
+      value: 'PC', fullWidth: true },
+    { type: 'text', name: 'name', label: 'Nome', size: 5 },
+    { type: 'text', name: 'nickname', label: 'Apelido', size: 5 },
+    { type: 'text', name: 'cpf', label: 'CPF', size: 3 },
+    { type: 'text', name: 'rg', label: 'RG', size: 3 },
+    { type: 'select', name: 'sexo', label: 'Sexo', size: 3, 
+      selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }],
+      value: 'PC', fullWidth: true },
+    { type: 'date', name: 'birthDate', label: 'Data de Nascimento', size: 3 },
+    { type: 'text', name: 'nome_mae', label: 'Nome da Mãe', size: 6 },
+    { type: 'text', name: 'nome_pai', label: 'Nome do Pai', size: 6 },
+    { type: 'select', name: 'estado_civil', label: 'Estado Civil', size: 3, 
+      selects: [{ description: 'Solteiro', value: 'S' }, { description: 'Casado', value: 'C' }],
+      value: 'PC', fullWidth: true },
+    { type: 'text', name: 'credit', label: 'Crédito', size: 3 },
+    { type: 'text', name: 'limit', label: 'Limite', size: 3 },
+    { type: 'text', name: 'acrescimo', label: 'Acréscimo', size: 3 },
+    { type: 'text', name: 'local_trabalho', label: 'Local de Trabalho', size: 4 },
+    { type: 'text', name: 'renda_mensal', label: 'Renda Mensal', size: 2 },
+    { type: 'text', name: 'cargo', label: 'Cargo', size: 6 },
+  ];
  
   const handleSubmit = async event => {
     event.preventDefault();
@@ -26,9 +46,8 @@ function CrudClient ({ createClient, updateClient, deleteClient, clientForm, set
     }
   }
 
-  const handleChange = e => {
-    const { name, value } = e.target
-    setClient({...clientForm, [name]: value});
+  const handleChange = (name, value) => {
+    setClient({...client, [name]: value})
   }
 
   const handleDelete = () => {
@@ -37,216 +56,17 @@ function CrudClient ({ createClient, updateClient, deleteClient, clientForm, set
       deleteClient(clientForm.id);
     }
   };
-
+  
   return (
-    <form className='clienteForm' onSubmit={handleSubmit}>
-      <Card variant="outlined" className="ClientesCrud">
-        <CardHeader title="Criar um Cliente"/>
-
-        <CardContent>
-          <Grid container spacing={1}>
-            <Grid item xs={2}>
-              <FormSelect
-                name='type'
-                value={clientForm.type}
-                onChange={handleChange}
-                fullWidth={true}
-                label='Tipo de Pessoa'
-                selects={[{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }]}
-              />
-            </Grid>
-
-            <Grid item xs={5}>
-              <FormInput
-                type='text'
-                name='name'
-                value={clientForm.name}
-                onChange={handleChange}
-                label='Nome'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={5}>
-              <FormInput
-                type='text'
-                name='nickname'
-                value={clientForm.nickname}
-                onChange={handleChange}
-                label='Apelido'
-                fullWidth
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormInput
-                type='text'
-                name='cpf'
-                value={clientForm.cpf}
-                onChange={handleChange}
-                label='CPF'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormInput
-                type='text'
-                name='rg'
-                value={clientForm.rg}
-                onChange={handleChange}
-                label='RG'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormSelect
-                name='sexo'
-                value={clientForm.gender}
-                onChange={handleChange}
-                fullWidth={true}
-                label='Sexo'
-                selects={[{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }]}
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormDate
-                name='birthDate'
-                value={clientForm.birthDate}
-                onChange={date => handleChange({ target: { name: 'birthDate', value: date } })}
-                label='Data de Nascimento'
-                fullWidth />
-            </Grid>
-
-            <Grid item xs={6}>
-              <FormInput
-                type='text'
-                name='nome_mae'
-                value={clientForm.nome_mae}
-                onChange={handleChange}
-                label='Nome da Mãe'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <FormInput
-                type='text'
-                name='nome_pai'
-                value={clientForm.nome_pai}
-                onChange={handleChange}
-                label='Nome do Pai'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormSelect
-                name='estado_civil'
-                value={clientForm.estado_civil}
-                onChange={handleChange}
-                fullWidth={true}
-                label='Estado Civil'
-                selects={[{ description: 'Solteiro', value: 'S' }, { description: 'Casado', value: 'C' }]}
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormInput
-                type='number'
-                name='credit'
-                value={clientForm.credit}
-                onChange={handleChange}
-                label='Crédito'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormInput
-                type='number'
-                name='limit'
-                value={clientForm.limit}
-                onChange={handleChange}
-                label='Limite'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={3}>
-              <FormInput
-                type='number'
-                name='acrescimo'
-                value={clientForm.acrescimo}
-                onChange={handleChange}
-                label='acrescimo'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={4}>
-              <FormInput
-                type='text'
-                name='local_trabalho'
-                value={clientForm.local_trabalho}
-                onChange={handleChange}
-                label='Local de Trabalho'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={2}>
-              <FormInput
-                type='number'
-                name='renda_mensal'
-                value={clientForm.renda_mensal}
-                onChange={handleChange}
-                label='Renda Mensal'
-                fullWidth
-                required
-              />
-            </Grid>
-
-            <Grid item xs={6}>
-              <FormInput
-                type='text'
-                name='cargo'
-                value={clientForm.cargo}
-                onChange={handleChange}
-                label='Cargo'
-                fullWidth
-                required
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      <ButtonGroup className="btn-group">
-        <Button variant="contained" type="submit" color="primary">
-          Salvar
-        </Button>
-        <Button variant="contained" type="button" color="default" 
-            onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
-          Voltar
-        </Button>
-        <Button variant="contained" type="button" color="secondary" 
-            onClick={handleDelete} startIcon={<DeleteIcon />}>
-          Excluir
-        </Button>
-      </ButtonGroup>
-    </form>
+    <>
+      <FormField fields={clientForm} className="clientsCrud"
+                handleChange={(name, value) => handleChange(name, value)}
+                values={client}
+                title="Criar um Cliente"
+                handleDelete={handleDelete} handleSubmit={handleSubmit}>
+      </FormField>
+    </>
+        
   );
 }
 

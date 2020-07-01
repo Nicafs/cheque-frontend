@@ -5,6 +5,7 @@ const initialState = {
   loading: false,
   client: Client,
   data: [],
+  clients: [Client],
   filteredData: [],
 }
 
