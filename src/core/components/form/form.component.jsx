@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@material-ui/core';
-
+import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import DoneIcon from '@material-ui/icons/Done';
+import ClearIcon from '@material-ui/icons/Clear';
 
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
@@ -21,18 +20,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function FormField({ fields, values, handleSubmit, handleDelete, handleChange, title, history }) {
+function FormField({ fields, values, handleSubmit, handleChange, handleClear, title, isMultiple }) {
+  // const [newValues, setNewValues] = useState(EnderecoClient);
   const classes = useStyles();
-  
-  // const handleChange = e => {
-  //   const { name, value } = e.target
-    
-  //   setfields(prevFields => (prevFields.map(v => {
-  //     if (v.name === name) return { ...v, value: value }
-  //     return v;
-  //   })))
-  // }
-
+console.log("values:", values)
   return (
   <form className='formField' onSubmit={handleSubmit}>
     <Card variant="outlined">
@@ -123,22 +114,23 @@ function FormField({ fields, values, handleSubmit, handleDelete, handleChange, t
           })
         }
       </Grid>
+
+      {isMultiple ? (
+          <ButtonGroup className="btn-group">
+            <Button variant="contained" type="button" color="primary"
+              onClick={handleSubmit}  startIcon={<DoneIcon />}>
+              Salvar
+            </Button>
+            <Button variant="contained" type="button" color="default" 
+                onClick={handleClear} startIcon={<ClearIcon />}>
+              Limpar
+            </Button>
+          </ButtonGroup>
+        )
+        : null
+      }
     </CardContent>
     </Card>
-      
-    <ButtonGroup className="btn-group">
-      <Button variant="contained" type="submit" color="primary">
-        Salvar
-      </Button>
-      <Button variant="contained" type="button" color="default" 
-          onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
-        Voltar
-      </Button>
-      <Button variant="contained" type="button" color="secondary" 
-          onClick={handleDelete} startIcon={<DeleteIcon />}>
-        Excluir
-      </Button>
-    </ButtonGroup>
   </form>
   );
 }

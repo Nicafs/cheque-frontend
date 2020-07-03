@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 import axios from '../../../redux/axios';
 
-import { Container, Tab, Tabs, AppBar } from '@material-ui/core';
+import { Container, Tab, Tabs, AppBar, ButtonGroup, Button } from '@material-ui/core';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HomeIcon from '@material-ui/icons/Home';
@@ -78,14 +82,16 @@ function scrollable(index) {
   };
 }
 
-function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias, ...otherProps }) {
+function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias, history, 
+                      createClient, updateClient, deleteClient, ...otherProps }) {
   const [valueTab, setValueTab] = useState(0);
   const [clientForm, setClient] = useState(client);
-  const [enderecosForm, setEnderecos] = useState(enderecos);
-  const [bancosForm, setBancos] = useState(bancos);
-  const [telefonesForm, setTelefones] = useState(telefones);
-  const [emailsForm, setEmails] = useState(emails);
-  const [referenciasForm, setReferencias] = useState(referencias);
+  const [enderecosForm, setEnderecos] = useState(null);
+  const [bancosForm, setBancos] = useState(null);
+  const [telefonesForm, setTelefones] = useState(null);
+  const [emailsForm, setEmails] = useState(null);
+  const [referenciasForm, setReferencias] = useState(null);
+  const { enqueueSnackbar } = useSnackbar();
 
   const id = otherProps.match.params.id;
 
@@ -102,6 +108,36 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
   const handleChangeTab = (event, newValue) => {
     setValueTab(newValue);
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+    console.log("bancosForm:", bancosForm);
+    console.log("enderecosForm:", enderecosForm);
+    console.log("telefonesForm:", telefonesForm);
+    console.log("emailsForm:", emailsForm);
+    console.log("referenciasForm:", referenciasForm);
+    clientForm.bancoClient = bancosForm;
+    clientForm.enderecoClient = enderecosForm;
+    clientForm.telefoneClient = telefonesForm;
+    clientForm.emailClient = emailsForm;
+    clientForm.referenciaClient = referenciasForm;
+
+    console.log("Final - clientForm:", clientForm);
+    if(clientForm.id){
+      updateClient(clientForm);
+      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    } else {
+      createClient(clientForm);
+      enqueueSnackbar('Foi Criado com Sucesso !!')
+    }
+  }
+
+  const handleDelete = () => {
+    alert('Deseja deletar mesmo?');
+    if(clientForm.id){
+      deleteClient(clientForm.id);
+    }
   };
 
   return (
@@ -163,6 +199,21 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
             updateReferenciaClient={otherProps.updateReferenciaClient}
             deleteReferenciaClient={otherProps.deleteReferenciaClient}></ReferenciaClient>
       </TabPanel>
+      
+      <ButtonGroup className="btn-group">
+        <Button variant="contained" type="button" color="primary"
+          onClick={handleSubmit}  startIcon={<DoneOutlineIcon />}>
+          Salvar
+        </Button>
+        <Button variant="contained" type="button" color="default" 
+            onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+          Voltar
+        </Button>
+        <Button variant="contained" type="button" color="secondary" 
+            onClick={handleDelete} startIcon={<DeleteIcon />}>
+          Excluir
+        </Button>
+      </ButtonGroup>
     </Container>
   )
 }

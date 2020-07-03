@@ -1,6 +1,7 @@
 import React from "react";
 import { useSnackbar } from 'notistack';
 
+import { EnderecoClient as initialState } from '../../../model/EnderecoClient';
 import FormField from '../../../core/components/form/form.component';
 
 function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, updateEnderecoClient, createEnderecoClient }) {
@@ -51,20 +52,23 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
       deleteEnderecoClient(endereco.id);
     }
   };
-
+console.log("initialState:", initialState);
   return (
     <>
-      {enderecos.map((endereco, index) => {
-        return (
-            <FormField key={index} fields={enderecoForm} 
-                      handleChange={(name, value) => handleChange(index, name, value, endereco)}
-                      values={endereco}
+      {/* {enderecos.map((endereco, index) => {
+        return ( */}
+            <FormField
+                      fields={enderecoForm} 
+                      handleChange={(name, value) => handleChange(name, value)}
+                      values={initialState}
                       title="Endereços"
-                      handleDelete={() => handleDelete(endereco)} handleSubmit={handleSubmit}>
+                      handleDelete={handleDelete} 
+                      handleSubmit={handleSubmit}
+                      isMultiple={true}>
             </FormField>
-          )
+          {/* )
         })
-      }
+      } */}
     </>
   );
 }

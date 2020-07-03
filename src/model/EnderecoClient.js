@@ -1,4 +1,4 @@
-const EnderecoClient = {
+export const EnderecoClient = {
     id: '',
     tipo: '',
     bairro: '',
@@ -13,4 +13,5 @@ const EnderecoClient = {
     user_id: '',
     client_id: ''
 }
+
 export default EnderecoClient;

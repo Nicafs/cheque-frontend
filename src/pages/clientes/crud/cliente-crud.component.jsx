@@ -1,13 +1,10 @@
 import React from "react";
-import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 
 import FormField from '../../../core/components/form/form.component';
 
 import './cliente-crud.styles.scss';
 
-function CrudClient ({ client, setClient, deleteClient, updateClient, createClient }) {
-  const { enqueueSnackbar } = useSnackbar();
+function CrudClient ({ client, setClient }) {
 
   const clientForm = [
     { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2, 
@@ -34,40 +31,20 @@ function CrudClient ({ client, setClient, deleteClient, updateClient, createClie
     { type: 'text', name: 'cargo', label: 'Cargo', size: 6 },
   ];
  
-  const handleSubmit = async event => {
-    event.preventDefault();
-
-    if(clientForm.id){
-      updateClient(clientForm);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
-    } else {
-      createClient(clientForm);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
-    }
-  }
-
   const handleChange = (name, value) => {
     setClient({...client, [name]: value})
   }
-
-  const handleDelete = () => {
-    alert('Deseja deletar mesmo?');
-    if(clientForm.id){
-      deleteClient(clientForm.id);
-    }
-  };
   
   return (
     <>
       <FormField fields={clientForm} className="clientsCrud"
                 handleChange={(name, value) => handleChange(name, value)}
                 values={client}
-                title="Criar um Cliente"
-                handleDelete={handleDelete} handleSubmit={handleSubmit}>
+                title="Criar um Cliente">
       </FormField>
     </>
         
   );
 }
 
-export default withRouter(CrudClient);
+export default CrudClient;

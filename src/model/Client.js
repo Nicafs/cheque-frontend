@@ -1,9 +1,3 @@
-import BancoClient from './BancoClient';
-import EnderecoClient from './EnderecoClient';
-import TelefoneClient from './TelefoneClient';
-import EmailClient from './EmailClient';
-import ReferenciaClient from './ReferenciaClient';
-
 const Client = {
     type: '',
     name: '',
@@ -23,11 +17,11 @@ const Client = {
     renda_mensal: '',
     cargo: '',
     user_id: '',
-    bancoClient: BancoClient,
-    enderecoClient: EnderecoClient,
-    telefoneClient: TelefoneClient,
-    emailClient: EmailClient,
-    referenciaClient: ReferenciaClient,
+    bancoClient: null,
+    enderecoClient: null,
+    telefoneClient: null,
+    emailClient: null,
+    referenciaClient: null,
   }
 
   export default Client;
