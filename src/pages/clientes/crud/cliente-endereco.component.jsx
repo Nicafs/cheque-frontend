@@ -1,11 +1,25 @@
-import React from "react";
-import { useSnackbar } from 'notistack';
+import React, { useState } from "react";
+// import { useSnackbar } from 'notistack';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 import { EnderecoClient as initialState } from '../../../model/EnderecoClient';
 import FormField from '../../../core/components/form/form.component';
+import ViewFormField from '../../../core/components/form/view-form.component';
 
-function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, updateEnderecoClient, createEnderecoClient }) {
-  // const [newEnderecos, setNewEnderecos] = useState([]);
+const useStyles = makeStyles(() => ({
+  multipleForm: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '10px',
+  },
+}));
+
+let flgEdit = null;
+
+function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, updateEnderecoClient, createEnderecoClient, clientId }) {
+  const [newEnderecos, setNewEnderecos] = useState(initialState);
+  const classes = useStyles();
   
   const enderecoForm = [
     { type: 'text', name: 'tipo', label: 'Tipo', size: 3 },
@@ -20,56 +34,71 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
     { type: 'text', name: 'referencia', label: 'Referência', size: 6 }
   ];
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event, endereco) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    enderecos.map(endereco => {
-      if(endereco.id){
-        updateEnderecoClient(endereco);
-        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    if(clientId){
+      if(newEnderecos.id){
+        updateEnderecoClient(newEnderecos);
       } else {
-        createEnderecoClient(endereco);
-        enqueueSnackbar('Foi Criado com Sucesso !!')
+        newEnderecos.client_id = clientId;
+        createEnderecoClient(newEnderecos);
       }
-
-      return null;
-    })
-  }
-
-  const handleChange = (index, name, value, endereco) => {  
-    endereco[name] = value;
-    setEnderecos(prevEnderecos => (prevEnderecos.map(v => {
-          if (v === index) return { ...v, [index]: endereco }
-          return v;
-        })));
-  }
-
-  const handleDelete = (endereco) => {
-    alert('Deseja deletar mesmo?');
-    if(endereco.id){
-      deleteEnderecoClient(endereco.id);
     }
+
+    if(flgEdit != null) {
+      enderecos[flgEdit] = newEnderecos;
+      setEnderecos(enderecos);
+    } else {
+      setEnderecos(enderecos => [...enderecos, newEnderecos]);
+    }
+
+    setNewEnderecos(initialState);
+    flgEdit = null;
+  }
+
+  const handleChange = (name, value) => {
+    setNewEnderecos({...newEnderecos, [name]: value });
+  }
+
+  const handleEdit = (index) => {
+    setNewEnderecos(enderecos[index]);
+    flgEdit = index;
   };
-console.log("initialState:", initialState);
+
+  const handleDelete = (index) => {
+    alert('Deseja deletar mesmo?');
+    if(enderecos[index].id){
+      deleteEnderecoClient(enderecos[index].id);
+    }
+
+    setEnderecos(enderecos.filter((end, i) => i !== index));
+  };
+
   return (
-    <>
-      {/* {enderecos.map((endereco, index) => {
-        return ( */}
-            <FormField
-                      fields={enderecoForm} 
-                      handleChange={(name, value) => handleChange(name, value)}
-                      values={initialState}
-                      title="Endereços"
-                      handleDelete={handleDelete} 
-                      handleSubmit={handleSubmit}
-                      isMultiple={true}>
-            </FormField>
-          {/* )
-        })
-      } */}
-    </>
+    <div className={classes.multipleForm}>
+      <FormField
+                fields={enderecoForm} 
+                handleChange={(name, value) => handleChange(name, value)}
+                values={newEnderecos}
+                title="Endereços"
+                handleDelete={handleDelete} 
+                handleSubmit={handleSubmit}
+                isMultiple={true}>
+      </FormField>
+
+      {enderecos ? enderecos.map((endereco, index) => {
+        return (
+        <ViewFormField key={index}
+                fields={enderecoForm} 
+                values={endereco}
+                handleEdit={() => handleEdit(index)}
+                handleDelete={() => handleDelete(index)}>
+        </ViewFormField>
+      )}) : null }
+    </div>
   );
 }
 

@@ -1,63 +1,96 @@
-import React from "react";
-import { useSnackbar } from 'notistack';
+import React, { useState } from "react";
+// import { useSnackbar } from 'notistack';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+import { EmailClient as initialState } from '../../../model/EmailClient';
 import FormField from '../../../core/components/form/form.component';
+import ViewFormField from '../../../core/components/form/view-form.component';
 
-function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient, createEmailClient }) {
-  // const [newEmails, setNewEmails] = useState([]);
+const useStyles = makeStyles(() => ({
+  multipleForm: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '10px',
+  },
+}));
+
+let flgEdit = null;
+
+function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient, createEmailClient, clientId }) {
+  const [newEmails, setNewEmails] = useState(initialState);
+  const classes = useStyles();
   
   const emailForm = [
     { type: 'text', name: 'email', label: 'Email', size: 10 },
     { type: 'text', name: 'principal', label: 'Principal', size: 2 },
   ];
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event, email) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    emails.map(email => {
-      if(email.id){
-        updateEmailClient(email);
-        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    if(clientId){
+      if(newEmails.id){
+        updateEmailClient(newEmails);
       } else {
-        createEmailClient(email);
-        enqueueSnackbar('Foi Criado com Sucesso !!')
+        newEmails.client_id = clientId;
+        createEmailClient(newEmails);
       }
-
-      return null;
-    })
-  }
-
-  const handleChange = (index, name, value, email) => {  
-    email[name] = value;
-    setEmails(prevEmails => (prevEmails.map(v => {
-          if (v === index) return { ...v, [index]: email }
-          return v;
-        })));
-  }
-
-  const handleDelete = (email) => {
-    alert('Deseja deletar mesmo?');
-    if(email.id){
-      deleteEmailClient(email.id);
     }
+
+    if(flgEdit != null) {
+      emails[flgEdit] = newEmails;
+      setEmails(emails);
+    } else {
+      setEmails(emails => [...emails, newEmails]);
+    }
+
+    setNewEmails(initialState);
+    flgEdit = null;
+  }
+
+  const handleChange = (name, value) => {
+    setNewEmails({...newEmails, [name]: value });
+  }
+
+  const handleEdit = (index) => {
+    setNewEmails(emails[index]);
+    flgEdit = index;
+  };
+
+  const handleDelete = (index) => {
+    alert('Deseja deletar mesmo?');
+    if(emails[index].id){
+      deleteEmailClient(emails[index].id);
+    }
+
+    setEmails(emails.filter((end, i) => i !== index));
   };
 
   return (
-    <>
-      {emails.map((email, index) => {
+    <div className={classes.multipleForm}>
+      <FormField
+                fields={emailForm} 
+                handleChange={(name, value) => handleChange(name, value)}
+                values={newEmails}
+                title="E-mails"
+                handleDelete={handleDelete} 
+                handleSubmit={handleSubmit}
+                isMultiple={true}>
+      </FormField>
+
+      {emails ? emails.map((email, index) => {
         return (
-            <FormField key={index} fields={emailForm} 
-                      handleChange={(name, value) => handleChange(index, name, value, email)}
-                      values={email}
-                      title="E-mails"
-                      handleDelete={() => handleDelete(email)} handleSubmit={handleSubmit}>
-            </FormField>
-          )
-        })
-      }
-    </>
+        <ViewFormField key={index}
+                fields={emailForm} 
+                values={email}
+                handleEdit={() => handleEdit(index)}
+                handleDelete={() => handleDelete(index)}>
+        </ViewFormField>
+      )}) : null }
+    </div>
   );
 }
 

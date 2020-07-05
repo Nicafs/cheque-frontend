@@ -1,63 +1,96 @@
-import React from "react";
-import { useSnackbar } from 'notistack';
+import React, { useState } from "react";
+// import { useSnackbar } from 'notistack';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+import { TelefoneClient as initialState } from '../../../model/TelefoneClient';
 import FormField from '../../../core/components/form/form.component';
+import ViewFormField from '../../../core/components/form/view-form.component';
 
-function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, updateTelefoneCLient, createTelefoneCLient }) {
-  // const [newTelefones, setNewTelefones] = useState([]);
+const useStyles = makeStyles(() => ({
+  multipleForm: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '10px',
+  },
+}));
+
+let flgEdit = null;
+
+function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, updateTelefoneCLient, createTelefoneClient, clientId }) {
+  const [newTelefone, setNewTelefone] = useState(initialState);
+  const classes = useStyles();
   
   const telefoneForm = [
     { type: 'text', name: 'tipo', label: 'Tipo', size: 2 },
     { type: 'text', name: 'numero', label: 'Número', size: 3 },
   ];
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event, telefone) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    telefones.map(telefone => {
-      if(telefone.id){
-        updateTelefoneCLient(telefone);
-        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    if(clientId){
+      if(newTelefone.id){
+        updateTelefoneCLient(newTelefone);
       } else {
-        createTelefoneCLient(telefone);
-        enqueueSnackbar('Foi Criado com Sucesso !!')
+        newTelefone.client_id = clientId;
+        createTelefoneClient(newTelefone);
       }
-
-      return null;
-    })
-  }
-
-  const handleChange = (index, name, value, telefone) => {  
-    telefone[name] = value;
-    setTelefones(prevTelefones => (prevTelefones.map(v => {
-          if (v === index) return { ...v, [index]: telefone }
-          return v;
-        })));
-  }
-
-  const handleDelete = (telefone) => {
-    alert('Deseja deletar mesmo?');
-    if(telefone.id){
-      deleteTelefoneCLient(telefone.id);
     }
+
+    if(flgEdit != null) {
+      telefones[flgEdit] = newTelefone;
+      setTelefones(telefones);
+    } else {
+      setTelefones(telefones => [...telefones, newTelefone]);
+    }
+
+    setNewTelefone(initialState);
+    flgEdit = null;
+  }
+
+  const handleChange = (name, value) => {
+    setNewTelefone({...newTelefone, [name]: value });
+  }
+
+  const handleEdit = (index) => {
+    setNewTelefone(telefones[index]);
+    flgEdit = index;
+  };
+
+  const handleDelete = (index) => {
+    alert('Deseja deletar mesmo?');
+    if(telefones[index].id){
+      deleteTelefoneCLient(telefones[index].id);
+    }
+
+    setTelefones(telefones.filter((end, i) => i !== index));
   };
 
   return (
-    <>
-      {telefones.map((telefone, index) => {
+    <div className={classes.multipleForm}>
+      <FormField
+                fields={telefoneForm} 
+                handleChange={(name, value) => handleChange(name, value)}
+                values={newTelefone}
+                title="Telefones"
+                handleDelete={handleDelete} 
+                handleSubmit={handleSubmit}
+                isMultiple={true}>
+      </FormField>
+
+      {telefones ? telefones.map((telefone, index) => {
         return (
-            <FormField key={index} fields={telefoneForm} 
-                      handleChange={(name, value) => handleChange(index, name, value, telefone)}
-                      values={telefone}
-                      title="Telefones"
-                      handleDelete={() => handleDelete(telefone)} handleSubmit={handleSubmit}>
-            </FormField>
-          )
-        })
-      }
-    </>
+        <ViewFormField key={index}
+                fields={telefoneForm} 
+                values={telefone}
+                handleEdit={() => handleEdit(index)}
+                handleDelete={() => handleDelete(index)}>
+        </ViewFormField>
+      )}) : null }
+    </div>
   );
 }
 

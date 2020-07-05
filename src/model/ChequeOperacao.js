@@ -2,7 +2,7 @@ const ChequeOperacao = {
     id: '',
     operacao_id: '',
     user_id: '',
-    banco_id: '',
+    banco: {id: '', descricao: ''},
     tipo: '',
     agencia: 0,
     conta: 0,

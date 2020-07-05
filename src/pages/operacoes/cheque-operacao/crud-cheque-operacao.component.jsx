@@ -22,15 +22,16 @@ const useStyles = makeStyles(() => ({
 
 function CrudChequeOperacao({ data, handleCheque }) {
   const dataMod = data;
-  dataMod.banco_id = data.banco.id;
-  dataMod.banco_nome = data.banco.descricao;
+  dataMod.banco_id = data?.banco?.id;
+  dataMod.banco_nome = data?.banco?.descricao;
   const [chequeOperacaoForm, setChequeOperacao] = useState(dataMod);
 
   const handleChange = e => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
+ 
     setChequeOperacao({...chequeOperacaoForm, [name]: value});
 
-    handleCheque(chequeOperacaoForm);
+    handleCheque({...chequeOperacaoForm, [name]: value});
   }
 
   const [open, setOpen] = React.useState(false);
@@ -41,7 +42,7 @@ function CrudChequeOperacao({ data, handleCheque }) {
 
   const handleClose = (selected) => {
     if(selected) {
-      setChequeOperacao({...chequeOperacaoForm, banco_nome: selected.descricao, banco_id: selected.id });
+      setChequeOperacao({...chequeOperacaoForm, banco: {id: selected.id, descricao: selected.descricao } });
     }
     setOpen(false);
   };
@@ -68,7 +69,7 @@ function CrudChequeOperacao({ data, handleCheque }) {
               <FormInput
                 type='text'
                 name='banco_id'
-                value={chequeOperacaoForm.banco_id}
+                value={chequeOperacaoForm.banco.id}
                 onChange={handleChange}
                 label='Banco'
                 required
@@ -82,7 +83,7 @@ function CrudChequeOperacao({ data, handleCheque }) {
                 <FormInput
                   type='text'
                   name='banco_nome'
-                  value={chequeOperacaoForm.banco_nome}
+                  value={chequeOperacaoForm.banco.descricao}
                   onChange={handleChange}
                   label='Descrição'
                   disabled

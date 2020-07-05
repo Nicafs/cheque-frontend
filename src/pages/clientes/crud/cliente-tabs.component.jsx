@@ -84,13 +84,14 @@ function scrollable(index) {
 
 function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias, history, 
                       createClient, updateClient, deleteClient, ...otherProps }) {
+                        
   const [valueTab, setValueTab] = useState(0);
   const [clientForm, setClient] = useState(client);
-  const [enderecosForm, setEnderecos] = useState(null);
-  const [bancosForm, setBancos] = useState(null);
-  const [telefonesForm, setTelefones] = useState(null);
-  const [emailsForm, setEmails] = useState(null);
-  const [referenciasForm, setReferencias] = useState(null);
+  const [enderecosForm, setEnderecos] = useState([]);
+  const [bancosForm, setBancos] = useState([]);
+  const [telefonesForm, setTelefones] = useState([]);
+  const [emailsForm, setEmails] = useState([]);
+  const [referenciasForm, setReferencias] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
   const id = otherProps.match.params.id;
@@ -99,6 +100,11 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
     const fetchData = async () => {
       const response = await axios.get(`/clients/${id}`);
       setClient(response.data);
+      setEnderecos(response.data.enderecoClient);
+      setTelefones(response.data.telefoneClient);
+      setEmails(response.data.emailClient);
+      setBancos(response.data.bancoClient);
+      setReferencias(response.data.referenciaClient);
     };
  
     if(id){
@@ -112,20 +118,14 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
   const handleSubmit = async event => {
     event.preventDefault();
-    console.log("bancosForm:", bancosForm);
-    console.log("enderecosForm:", enderecosForm);
-    console.log("telefonesForm:", telefonesForm);
-    console.log("emailsForm:", emailsForm);
-    console.log("referenciasForm:", referenciasForm);
     clientForm.bancoClient = bancosForm;
     clientForm.enderecoClient = enderecosForm;
     clientForm.telefoneClient = telefonesForm;
     clientForm.emailClient = emailsForm;
     clientForm.referenciaClient = referenciasForm;
 
-    console.log("Final - clientForm:", clientForm);
     if(clientForm.id){
-      updateClient(clientForm);
+      updateClient(clientForm.id, clientForm);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
       createClient(clientForm);
@@ -167,6 +167,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={1}>
           <EnderecoClient enderecos={enderecosForm} setEnderecos={setEnderecos} 
+            clientId={id}
             createEnderecoClient={otherProps.createEnderecoClient}
             updateEnderecoClient={otherProps.updateEnderecoClient}
             deleteEnderecoClient={otherProps.deleteEnderecoClient}></EnderecoClient>
@@ -174,6 +175,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={2}>
           <TelefoneClient telefones={telefonesForm} setTelefones={setTelefones} 
+            clientId={id}
             createTelefoneClient={otherProps.createTelefoneClient}
             updateTelefoneClient={otherProps.updateTelefoneClient}
             deleteTelefoneClient={otherProps.deleteTelefoneClient}></TelefoneClient>
@@ -181,6 +183,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={3}>
           <EmailClient emails={emailsForm} setEmails={setEmails} 
+            clientId={id}
             createEmailClient={otherProps.createEmailClient}
             updateEmailClient={otherProps.updateEmailClient}
             deleteEmailClient={otherProps.deleteEmailClient}></EmailClient>
@@ -188,6 +191,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={4}>
           <BancoClient bancos={bancosForm} setBancos={setBancos} 
+            clientId={id}
             createBancoClient={otherProps.createBancoClient}
             updateBancoClient={otherProps.updateBancoClient}
             deleteBancoClient={otherProps.deleteBancoClient}></BancoClient>
@@ -195,6 +199,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={5}>
           <ReferenciaClient referencias={referenciasForm} setReferencias={setReferencias} 
+            clientId={id}
             createReferenciaClient={otherProps.createReferenciaClient}
             updateReferenciaClient={otherProps.updateReferenciaClient}
             deleteReferenciaClient={otherProps.deleteReferenciaClient}></ReferenciaClient>
@@ -232,7 +237,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   findClientById: (id) => dispatch(findById(id)),
   createClient: (form) => dispatch(create(form)),
-  updateClient: (form) => dispatch(update(form)),
+  updateClient: (id, form) => dispatch(update(id, form)),
   deleteClient: (id) => dispatch(deleteById(id)),
   
   createEnderecoClient: (form) => dispatch(createEnderecoClient(form)),

@@ -1,4 +1,4 @@
-const BancoClient = {
+export const BancoClient = {
     id: '',
     banco: '',
     agencia: '',

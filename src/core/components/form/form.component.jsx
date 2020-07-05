@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,16 +20,18 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function FormField({ fields, values, handleSubmit, handleChange, handleClear, title, isMultiple }) {
+function FormField({ fields, values, valuesOld, handleSubmit, handleChange, handleClear, title, isMultiple }) {
   // const [newValues, setNewValues] = useState(EnderecoClient);
   const classes = useStyles();
-console.log("values:", values)
+
   return (
   <form className='formField' onSubmit={handleSubmit}>
     <Card variant="outlined">
     <CardHeader title={title} />
 
     <CardContent>
+      
+
       <Grid container spacing={1}>
         { Object.keys(values).map(key => {
           const field = fields.find( f => { return f.name === key; })

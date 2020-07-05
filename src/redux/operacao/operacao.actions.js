@@ -40,8 +40,6 @@ export const update = (id, formData, token) => dispatch => {
       'Authorization': token,
     }
   };
-
-  console.log("No Udate - formData:", formData, " id:", id)
   
   axios.put(`/operacoes/${id}`, formData, config)
   .then(response => {

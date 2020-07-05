@@ -80,7 +80,7 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
       </Grid>
 
       {filteredData ?
-        (<TableCustom data={filteredData} columns={columns}/>)
+        (<TableCustom data={filteredData} columns={columns} linkTo='/clientes/crud' isEditable='true'/>)
         : ''}
     </Container >
   );

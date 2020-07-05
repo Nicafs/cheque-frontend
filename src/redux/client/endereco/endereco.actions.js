@@ -54,14 +54,12 @@ export const update = (formData, token) => dispatch => {
 }
 
 export const create = (formData, token) => dispatch => {
-  console.log("Entrou no create do Endfereço");
     const config = {
         headers: {
             'Authorization': token,
         }
     };
 
-    console.log("Fazendo requisição post");
     axios.post('/enderecoClient', formData, config)
     .then(payload => {
 

@@ -1,4 +1,4 @@
-const ReferenciaClient = {
+export const ReferenciaClient = {
     id: '',
     nome: '',
     telefone: '',

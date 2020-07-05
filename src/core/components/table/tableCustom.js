@@ -99,8 +99,13 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
     //   );
     // }
     
-    handleSelected(row);
-    setSelected(row);
+    if(selected !== row) {
+      handleSelected(row);
+      setSelected(row);
+    } else {
+      handleSelected({});
+      setSelected({});
+    }
   };
 
   const handleChangePage = (event, newPage) => {

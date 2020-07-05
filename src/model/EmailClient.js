@@ -1,4 +1,4 @@
-const EmailClient = {
+export const EmailClient = {
     id: '',
     email: '',
     principal: false,

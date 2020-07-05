@@ -3,7 +3,7 @@ import { clientTypes } from './client.types';
 import axios from '../axios';
 
 export const findById = id => dispatch => {
-  axios.get(`/client/`&{id})
+  axios.get(`/clients/`&{id})
     .then(payload => {
      
       return dispatch({
@@ -34,19 +34,19 @@ export const filter = (data) => dispatch => {
     });
 }
 
-export const update = (formData, token) => dispatch => {
+export const update = (id, formData, token) => dispatch => {
   const config = {
     headers: {
       'Authorization': token,
     }
   };
 
-  axios.put('/client', formData, config)
-  .then(payload => {
+  axios.put(`/clients/${id}`, formData, config)
+  .then(response => {
 
     return dispatch({
       type: clientTypes.CLIENT_UPDATE,
-      payload,
+      payload: response.data,
     });
 
   })

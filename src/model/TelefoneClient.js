@@ -1,4 +1,4 @@
-const TelefoneClient = {
+export const TelefoneClient = {
     id: '',
     tipo: '',
     numero: '',

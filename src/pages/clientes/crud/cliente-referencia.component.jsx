@@ -1,63 +1,96 @@
-import React from "react";
-import { useSnackbar } from 'notistack';
+import React, { useState } from "react";
+// import { useSnackbar } from 'notistack';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+import { ReferenciaClient as initialState } from '../../../model/ReferenciaClient';
 import FormField from '../../../core/components/form/form.component';
+import ViewFormField from '../../../core/components/form/view-form.component';
 
-function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient, updateReferenciaClient, createReferenciaClient }) {
-  // const [newReferencias, setNewReferencias] = useState([]);
+const useStyles = makeStyles(() => ({
+  multipleForm: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '10px',
+  },
+}));
+
+let flgEdit = null;
+
+function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient, updateReferenciaClient, createReferenciaClient, clientId }) {
+  const [newReferencias, setNewReferencias] = useState(initialState);
+  const classes = useStyles();
   
   const referenciaForm = [
     { type: 'text', name: 'nome', label: 'Nome', size: 6 },
     { type: 'text', name: 'telefone', label: 'Telefone',  size: 3 },
   ];
 
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event, referencia) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    referencias.map(referencia => {
-      if(referencia.id){
-        updateReferenciaClient(referencia);
-        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+    if(clientId){
+      if(newReferencias.id){
+        updateReferenciaClient(newReferencias);
       } else {
-        createReferenciaClient(referencia);
-        enqueueSnackbar('Foi Criado com Sucesso !!')
+        newReferencias.client_id = clientId;
+        createReferenciaClient(newReferencias);
       }
-
-      return null;
-    })
-  }
-
-  const handleChange = (index, name, value, referencia) => {  
-    referencia[name] = value;
-    setReferencias(prevReferencias => (prevReferencias.map(v => {
-          if (v === index) return { ...v, [index]: referencia }
-          return v;
-        })));
-  }
-
-  const handleDelete = (referencia) => {
-    alert('Deseja deletar mesmo?');
-    if(referencia.id){
-      deleteReferenciaClient(referencia.id);
     }
+
+    if(flgEdit != null) {
+      referencias[flgEdit] = newReferencias;
+      setReferencias(referencias);
+    } else {
+      setReferencias(referencias => [...referencias, newReferencias]);
+    }
+
+    setNewReferencias(initialState);
+    flgEdit = null;
+  }
+
+  const handleChange = (name, value) => {
+    setNewReferencias({...newReferencias, [name]: value });
+  }
+
+  const handleEdit = (index) => {
+    setNewReferencias(referencias[index]);
+    flgEdit = index;
+  };
+
+  const handleDelete = (index) => {
+    alert('Deseja deletar mesmo?');
+    if(referencias[index].id){
+      deleteReferenciaClient(referencias[index].id);
+    }
+
+    setReferencias(referencias.filter((ref, i) => i !== index));
   };
 
   return (
-    <>
-      {referencias.map((referencia, index) => {
+    <div className={classes.multipleForm}>
+      <FormField 
+                fields={referenciaForm} 
+                handleChange={(name, value) => handleChange(name, value)}
+                values={newReferencias}
+                title="Referências"
+                handleDelete={handleDelete} 
+                handleSubmit={handleSubmit}
+                isMultiple={true}>
+      </FormField>
+
+      {referencias ? referencias.map((referencia, index) => {
         return (
-            <FormField key={index} fields={referenciaForm} 
-                      handleChange={(name, value) => handleChange(index, name, value, referencia)}
-                      values={referencia}
-                      title="Referências"
-                      handleDelete={() => handleDelete(referencia)} handleSubmit={handleSubmit}>
-            </FormField>
-          )
-        })
-      }
-    </>
+        <ViewFormField key={index}
+                fields={referenciaForm} 
+                values={referencia}
+                handleEdit={() => handleEdit(index)}
+                handleDelete={() => handleDelete(index)}>
+        </ViewFormField>
+    )}) : null }
+    </div>
   );
 }
 
