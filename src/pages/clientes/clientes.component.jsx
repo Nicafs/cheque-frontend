@@ -34,18 +34,25 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
       label: 'Apelido', 
       field: 'nickname',
     },
-    { label: 'Data de nascimento', field: 'birthDate', type: "date" },
+    { label: 'Data de nascimento', field: 'birthDate', type: "date", align: 'center', },
     {
       label: 'Sexo',
       field: 'gender',
+      type: 'select',
+      selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }],
+      align: 'center',
     },
     {
       label: 'Crédito',
       field: 'credit',
+      type: 'money',
+      align: 'right',
     },
     {
       label: 'Limite',
       field: 'limit',
+      type: 'money',
+      align: 'right',
     },
     {
       label: 'Cargo',
@@ -72,6 +79,8 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
     filterSubmit(filteredData);
   }
+
+  console.log("filteredData:", filteredData);
 
   return (
     <Container className="Clientes">

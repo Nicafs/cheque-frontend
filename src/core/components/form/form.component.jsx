@@ -1,8 +1,8 @@
 import React from "react";
-import { withRouter } from 'react-router-dom';
+  import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
+import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid} from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -10,6 +10,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
+import FormNumberMaskInput from '../../../core/components/form-input/form-number-mask.component';
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
@@ -30,8 +31,6 @@ function FormField({ fields, values, valuesOld, handleSubmit, handleChange, hand
     <CardHeader title={title} />
 
     <CardContent>
-      
-
       <Grid container spacing={1}>
         { Object.keys(values).map(key => {
           const field = fields.find( f => { return f.name === key; })
@@ -92,6 +91,43 @@ function FormField({ fields, values, valuesOld, handleSubmit, handleChange, hand
                             </Grid>
                         </Grid>
                         )
+
+                    case 'numeric':
+                      return <FormNumberMaskInput
+                                key={key}
+                                name={key}
+                                value={value}
+                                thousandSeparator={true}
+                                decimalSeparator={'.'}
+                                decimalScale={2}
+                                fixedDecimalScale
+                                fullWidth
+                                onChange={({ value: v }) =>  handleChange(key, v)}
+                                label={field.label}
+                            />
+
+                    case 'money':
+                      return <FormNumberMaskInput
+                                key={key}
+                                name={key}
+                                value={value}
+                                thousandSeparator={true}
+                                prefix={'R$ '}
+                                fullWidth
+                                onChange={({ value: v }) =>  handleChange(key, v)}
+                                label={field.label}
+                            />
+
+                    case 'maskNumero':
+                      return <FormNumberMaskInput
+                                key={key}
+                                name={key}
+                                value={value}
+                                format={field.mask || null}
+                                fullWidth
+                                onChange={({ value: v }) =>  handleChange(key, v)}
+                                label={field.label}
+                            />
 
                     case 'text':
                       return <FormInput

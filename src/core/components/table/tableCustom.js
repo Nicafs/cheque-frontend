@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from 'react-router-dom';
+import NumberFormat from 'react-number-format';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -117,7 +118,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
     setPage(0);
   };
 
-  const getValue = (row, field, type) => {
+  const getValue = (row, { field, type, selects }) => {
     if(type === 'compost') {
       const splits = field.split('.');
       let retorno = row;
@@ -142,6 +143,11 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
           return new Date(row[field]).toLocaleDateString();
         case 'numeric':
           return row[field];
+        case 'select':
+          const select = selects.find(select => select.value === row[field]);
+          return select.description;
+        case 'money':
+          return <NumberFormat value={row[field]} prefix={'R$ '} displayType={'text'} renderText={value =><span>{value}</span>} />;
         default:
           return row[field];
       }
@@ -200,9 +206,9 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
                         : null}
 
                         {columns.map(column => (
-                          <TableCell key={column.field} align={column.type === 'numeric' ? 'right' : 'left'}>
+                          <TableCell key={column.field} align={column.type === 'numeric' ? 'right' : (column.align ? column.align : 'left')}>
                               {
-                                getValue(row, column.field, column.type)
+                                getValue(row, column)
                               }
                           </TableCell>
                         ))}

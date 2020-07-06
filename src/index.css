@@ -29,3 +29,7 @@ h1, h2, h3 {
 .MuiGrid-item .MuiFormControl-root { padding: 0px 4px; }
 /* .MuiGrid-container .MuiGrid-item { padding-top: 0px !important; padding-bottom: 0px !important;} */
 .filterForm .MuiButtonGroup-root, .MuiCardContent-root .MuiButtonGroup-root { margin-top: 12px; }
+
+.MuiTableSortLabel-root { position: relative; }
+.MuiTableSortLabel-icon { position: absolute; right: -27px; display: none !important;}
+.MuiTableCell-head:hover .MuiTableSortLabel-root .MuiTableSortLabel-icon { display: block !important;}
