@@ -11,6 +11,7 @@ import FormInput from '../../../core/components/form-input/form-input.component'
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
 import FormNumberMaskInput from '../../../core/components/form-input/form-number-mask.component';
+import FormNumberTextInput from '../../../core/components/form-input/form-text-mask.component';
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
@@ -60,6 +61,19 @@ function FormField({ fields, values, valuesOld, handleSubmit, handleChange, hand
                                 fullWidth={field.fullWidth}
                                 label={field.label}
                                 selects={field.selects}
+                            />
+
+                    case 'selectDependent':
+                        return <FormSelect
+                                key={key}
+                                name={key}
+                                value={value}
+                                onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                fullWidth={field.fullWidth}
+                                label={field.label}
+                                selects={field.selects}
+                                dependentName={field.dependentName}
+                                parentValue={values[field.parentValue]}
                             />
 
                     case 'dialog':
@@ -112,6 +126,8 @@ function FormField({ fields, values, valuesOld, handleSubmit, handleChange, hand
                                 name={key}
                                 value={value}
                                 thousandSeparator={true}
+                                decimalSeparator={'.'}
+                                decimalScale={2}
                                 prefix={'R$ '}
                                 fullWidth
                                 onChange={({ value: v }) =>  handleChange(key, v)}
@@ -120,6 +136,18 @@ function FormField({ fields, values, valuesOld, handleSubmit, handleChange, hand
 
                     case 'maskNumero':
                       return <FormNumberMaskInput
+                                key={key}
+                                name={key}
+                                value={value}
+                                format={field.format || null}
+                                mask={field.mask || null}
+                                fullWidth
+                                onChange={({ value: v }) =>  handleChange(key, v)}
+                                label={field.label}
+                            />
+
+                    case 'maskText':
+                      return <FormNumberTextInput
                                 key={key}
                                 name={key}
                                 value={value}

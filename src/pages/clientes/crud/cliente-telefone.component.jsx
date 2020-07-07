@@ -22,8 +22,12 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
   const classes = useStyles();
   
   const telefoneForm = [
-    { type: 'text', name: 'tipo', label: 'Tipo', size: 2 },
-    { type: 'text', name: 'numero', label: 'Número', size: 3 },
+    { type: 'select', name: 'tipo', label: 'Tipo', size: 2, 
+    selects: [{ description: 'Pessoal', value: 'Pessoal' }, 
+              { description: 'Comercial', value: 'Comercial' }, 
+              { description: 'Outros', value: 'Outros' }],
+    value: '', fullWidth: true },
+    { type: 'maskNumero', name: 'numero', label: 'Número', size: 3, format: '(##) # ####-####', mask:'_' },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();

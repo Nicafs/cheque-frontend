@@ -23,7 +23,9 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
   
   const emailForm = [
     { type: 'text', name: 'email', label: 'Email', size: 10 },
-    { type: 'text', name: 'principal', label: 'Principal', size: 2 },
+    { type: 'select', name: 'principal', label: 'Principal', size: 2, 
+      selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
+      value: 'true', fullWidth: true },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();

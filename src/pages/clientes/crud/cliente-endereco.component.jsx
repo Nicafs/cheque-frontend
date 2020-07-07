@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 
 import { EnderecoClient as initialState } from '../../../model/EnderecoClient';
+import { UfEnum } from '../../../model/enums/Estado';
+import { EstadosCidades } from '../../../model/enums/EstadoCidade';
+
 import FormField from '../../../core/components/form/form.component';
 import ViewFormField from '../../../core/components/form/view-form.component';
 
@@ -22,14 +25,39 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
   const classes = useStyles();
   
   const enderecoForm = [
-    { type: 'text', name: 'tipo', label: 'Tipo', size: 3 },
+    { type: 'select', name: 'tipo', label: 'Tipo', size: 3,
+      selects: [{ description: 'Residencial', value: 'Residencial' }, 
+                { description: 'Comercial', value: 'Comercial' }, 
+                { description: 'Outros', value: 'Outros' }
+              ],
+      value: '', fullWidth: true },
     { type: 'text', name: 'cep', label: 'CEP', format: '000-000-000-00', size: 3 },
-    { type: 'text', name: 'tipo_logradouro', label: 'Tipo de Logradouro', size: 3 },
+    { type: 'select', name: 'tipo_logradouro', label: 'Tipo de Logradouro', size: 3,
+      selects: [{ description: 'Alameda', value: 'Alameda' }, 
+                { description: 'Alto', value: 'Alto' }, 
+                { description: 'Avenida', value: 'Avenida' },
+                { description: 'Estrada', value: 'Estrada' },
+                { description: 'Ladeira', value: 'Ladeira' },
+                { description: 'Linha', value: 'Linha' },
+                { description: 'Paralela', value: 'Paralela' },
+                { description: 'Praça', value: 'Praça' },
+                { description: 'Quadra', value: 'Quadra' },
+                { description: 'Rua', value: 'Rua' },
+                { description: 'Rodovia', value: 'Rodovia' },
+                { description: 'Subida', value: 'Subida' },
+                { description: 'Travessa', value: 'Travessa' },
+                { description: 'Outros', value: 'Outros' },
+              ],
+      value: '', fullWidth: true },
     { type: 'text', name: 'logradouro', label: 'Logradouro', size: 3 },
     { type: 'text', name: 'numero', label: 'Número', size: 2 },
     { type: 'text', name: 'bairro', label: 'Bairro', size: 4 },
-    { type: 'text', name: 'cidade', label: 'Cidade', size: 3 },
-    { type: 'text', name: 'estado', label: 'Estado', size: 3 },
+    { type: 'selectDependent', name: 'cidade', label: 'Cidade', size: 3,
+      selects: EstadosCidades, dependentName: 'cidades', parentValue: 'estado',
+      value: '', fullWidth: true },
+    { type: 'select', name: 'estado', label: 'Estado', size: 3,
+      selects: UfEnum,
+      value: '', fullWidth: true },
     { type: 'text', name: 'complemento', label: 'Complemento', size: 6 },
     { type: 'text', name: 'referencia', label: 'Referência', size: 6 }
   ];

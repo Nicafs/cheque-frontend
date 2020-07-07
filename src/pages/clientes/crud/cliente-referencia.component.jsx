@@ -23,7 +23,7 @@ function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient
   
   const referenciaForm = [
     { type: 'text', name: 'nome', label: 'Nome', size: 6 },
-    { type: 'text', name: 'telefone', label: 'Telefone',  size: 3 },
+    { type: 'maskNumero', name: 'telefone', label: 'Telefone', size: 3, format: '(##) # ####-####', mask:'_' },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();
