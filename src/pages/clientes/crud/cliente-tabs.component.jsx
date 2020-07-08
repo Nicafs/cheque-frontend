@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useForm } from "react-hook-form";
 
 import axios from '../../../redux/axios';
 
@@ -94,6 +95,8 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
   const [referenciasForm, setReferencias] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
+  const { ...hookForm } = useForm();
+
   const id = otherProps.match.params.id;
 
   useEffect(() => {
@@ -117,7 +120,6 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
   };
 
   const handleSubmit = async event => {
-    event.preventDefault();
     clientForm.bancoClient = bancosForm;
     clientForm.enderecoClient = enderecosForm;
     clientForm.telefoneClient = telefonesForm;
@@ -160,6 +162,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
       <TabPanel value={valueTab} index={0}>
           <CrudClient client={clientForm} setClient={setClient} 
+            hookForm={hookForm}
             createClient={otherProps.createClient}
             updateClient={otherProps.updateClient}
             deleteClient={otherProps.deleteClient}></CrudClient>
@@ -207,7 +210,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       
       <ButtonGroup className="btn-group">
         <Button variant="contained" type="button" color="primary"
-          onClick={handleSubmit}  startIcon={<DoneOutlineIcon />}>
+          onClick={hookForm.handleSubmit(handleSubmit)}  startIcon={<DoneOutlineIcon />}>
           Salvar
         </Button>
         <Button variant="contained" type="button" color="default" 

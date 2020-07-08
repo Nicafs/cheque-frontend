@@ -4,13 +4,15 @@ import FormField from '../../../core/components/form/form.component';
 
 import './cliente-crud.styles.scss';
 
-function CrudClient ({ client, setClient }) {
-
+function CrudClient ({ client, setClient, hookForm }) {
+  
   const clientForm = [
     { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2, 
       selects: [{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }],
-      value: 'PC', fullWidth: true },
-    { type: 'text', name: 'name', label: 'Nome', size: 5 },
+      value: 'PC', fullWidth: true,
+      errors: { required: { value: true, message: "Escolha o Tipo do Cliente" }} },
+    { type: 'text', name: 'name', label: 'Nome', size: 5,
+      errors: { required: { value: true, message: "Informe o Nome do Cliente" }} },
     { type: 'text', name: 'nickname', label: 'Apelido', size: 5 },
     { type: 'maskNumero', name: 'cpf', label: 'CPF', size: 3, format: '###.###.###-##' },
     { type: 'maskNumero', name: 'rg', label: 'RG', size: 3, format: '#######-#' },
@@ -39,6 +41,7 @@ function CrudClient ({ client, setClient }) {
     <>
       <FormField fields={clientForm} className="clientsCrud"
                 handleChange={(name, value) => handleChange(name, value)}
+                hookFormCustom={hookForm}
                 values={client}
                 title="Criar um Cliente">
       </FormField>

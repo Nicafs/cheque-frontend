@@ -1,8 +1,9 @@
 import React from "react";
-  import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid} from '@material-ui/core';
+import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -22,182 +23,216 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-function FormField({ fields, values, valuesOld, handleSubmit, handleChange, handleClear, title, isMultiple }) {
+function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange, handleClear, title, isMultiple }) {
   // const [newValues, setNewValues] = useState(EnderecoClient);
   const classes = useStyles();
+  let { register, errors, ...hookForm } = useForm();
+
+  if (hookFormCustom){
+    register = hookFormCustom.register;
+    errors = hookFormCustom.errors;
+    hookForm.handleSubmit = hookFormCustom.handleSubmit;
+  }
 
   return (
-  <form className='formField' onSubmit={handleSubmit}>
-    <Card variant="outlined">
-    <CardHeader title={title} />
+    <form className='formField' onSubmit={hookForm.handleSubmit(handleSubmit)}>
+      <Card variant="outlined">
+      <CardHeader title={title} />
 
-    <CardContent>
-      <Grid container spacing={1}>
-        { Object.keys(values).map(key => {
-          const field = fields.find( f => { return f.name === key; })
-          const order = fields.findIndex( f => { return f.name === key; })
-          const value = values[key];
-          
-          if(field) {
-            return (
-              <Grid item xs={field.size} key={key} style={{order: order}}>
-                { (() => { 
-                  switch (field.type) {
-                    case 'date':
-                      return <FormDate
-                              key={key}
-                              name={key}
-                              value={value}
-                              fullWidth
-                              onChange={date => handleChange(key, date)}
-                              label={field.label} />
+      <CardContent>
+        <Grid container spacing={1}>
+          { Object.keys(values).map(key => {
+            const field = fields.find( f => { return f.name === key; })
+            const order = fields.findIndex( f => { return f.name === key; })
+            const value = values[key];
+            
+            if(field) {
+              return (
+                <Grid item xs={field.size} key={key} style={{order: order}}>
+                  { (() => { 
+                    switch (field.type) {
+                      case 'date':
+                        return <FormDate
+                                  key={key}
+                                  name={key}
+                                  value={value}
+                                  fullWidth
+                                  onChange={date => handleChange(key, date)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null} />
 
-                    case 'select':
-                        return <FormSelect
+                      case 'select':
+                          return <FormSelect
+                                    key={key}
+                                    name={key}
+                                    value={value}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                    fullWidth={field.fullWidth}
+                                    label={field.label}
+                                    selects={field.selects}
+                                    error={errors[key] ? true : false}
+                                    inputRef={register(field.errors)}
+                                    helperText={errors[key] ? errors[key].message : null}
+                                />
+
+                      case 'selectDependent':
+                          return <FormSelect
+                                    key={key}
+                                    name={key}
+                                    value={value}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                    fullWidth={field.fullWidth}
+                                    label={field.label}
+                                    selects={field.selects}
+                                    dependentName={field.dependentName}
+                                    parentValue={values[field.parentValue]}
+                                    error={errors[key] ? true : false}
+                                    inputRef={register(field.errors)}
+                                    helperText={errors[key] ? errors[key].message : null}
+                                />
+
+                      case 'dialog':
+                          return (
+                          <Grid container item className={classes.groupItemButton}>
+                              <FormInput
                                 key={key}
+                                type={field.type}
                                 name={key}
                                 value={value}
                                 onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                fullWidth={field.fullWidth}
                                 label={field.label}
-                                selects={field.selects}
-                            />
+                                error={errors[key] ? true : false}
+                                inputRef={register(field.errors)}
+                                helperText={errors[key] ? errors[key].message : null}
+                                />
 
-                    case 'selectDependent':
-                        return <FormSelect
-                                key={key}
-                                name={key}
-                                value={value}
-                                onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                fullWidth={field.fullWidth}
-                                label={field.label}
-                                selects={field.selects}
-                                dependentName={field.dependentName}
-                                parentValue={values[field.parentValue]}
-                            />
+                              <Button variant="contained" color="primary" onClick={field.open}>
+                                <ExitToAppIcon />
+                              </Button >
 
-                    case 'dialog':
-                        return (
-                        <Grid container item className={classes.groupItemButton}>
-                            <FormInput
-                              key={key}
-                              type={field.type}
-                              name={key}
-                              value={value}
-                              onChange={(e) => handleChange(e.target.name, e.target.value)}
-                              label={field.label}
+                              <Grid item xs={8}>
+                              <FormInput
+                                  type='text'
+                                  name={field.key_disable}
+                                  value={field.value_disable}
+                                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                  label='Descrição'
+                                  disabled
+                                  fullWidth
+                              />
+                              </Grid>
+                          </Grid>
+                          )
+
+                      case 'numeric':
+                        return <FormNumberMaskInput
+                                  key={key}
+                                  name={key}
+                                  value={value}
+                                  thousandSeparator={true}
+                                  decimalSeparator={'.'}
+                                  decimalScale={2}
+                                  fixedDecimalScale
+                                  fullWidth
+                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null}
                               />
 
-                            <Button variant="contained" color="primary" onClick={field.open}>
-                              <ExitToAppIcon />
-                            </Button >
+                      case 'money':
+                        return <FormNumberMaskInput
+                                  key={key}
+                                  name={key}
+                                  value={value}
+                                  thousandSeparator={true}
+                                  decimalSeparator={'.'}
+                                  decimalScale={2}
+                                  prefix={'R$ '}
+                                  fullWidth
+                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null}
+                              />
 
-                            <Grid item xs={8}>
-                            <FormInput
-                                type='text'
-                                name={field.key_disable}
-                                value={field.value_disable}
-                                onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                label='Descrição'
-                                disabled
-                                fullWidth
-                            />
-                            </Grid>
-                        </Grid>
-                        )
+                      case 'maskNumero':
+                        return <FormNumberMaskInput
+                                  key={key}
+                                  name={key}
+                                  value={value}
+                                  format={field.format || null}
+                                  mask={field.mask || null}
+                                  fullWidth
+                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null}
+                              />
 
-                    case 'numeric':
-                      return <FormNumberMaskInput
-                                key={key}
-                                name={key}
-                                value={value}
-                                thousandSeparator={true}
-                                decimalSeparator={'.'}
-                                decimalScale={2}
-                                fixedDecimalScale
-                                fullWidth
-                                onChange={({ value: v }) =>  handleChange(key, v)}
-                                label={field.label}
-                            />
+                      case 'maskText':
+                        return <FormNumberTextInput
+                                  key={key}
+                                  name={key}
+                                  value={value}
+                                  format={field.mask || null}
+                                  fullWidth
+                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null}
+                              />
 
-                    case 'money':
-                      return <FormNumberMaskInput
-                                key={key}
-                                name={key}
-                                value={value}
-                                thousandSeparator={true}
-                                decimalSeparator={'.'}
-                                decimalScale={2}
-                                prefix={'R$ '}
-                                fullWidth
-                                onChange={({ value: v }) =>  handleChange(key, v)}
-                                label={field.label}
-                            />
+                      case 'text':
+                        return <FormInput
+                                  key={key}
+                                  type={field.type}
+                                  name={key}
+                                  value={value}
+                                  fullWidth
+                                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                  label={field.label}
+                                  error={errors[key] ? true : false}
+                                  inputRef={register(field.errors)}
+                                  helperText={errors[key] ? errors[key].message : null}
+                              />
+                      default:
+                        return '';
+                      }
+                    })()
+                  }
+                </Grid>
+                )
+            }
 
-                    case 'maskNumero':
-                      return <FormNumberMaskInput
-                                key={key}
-                                name={key}
-                                value={value}
-                                format={field.format || null}
-                                mask={field.mask || null}
-                                fullWidth
-                                onChange={({ value: v }) =>  handleChange(key, v)}
-                                label={field.label}
-                            />
-
-                    case 'maskText':
-                      return <FormNumberTextInput
-                                key={key}
-                                name={key}
-                                value={value}
-                                format={field.mask || null}
-                                fullWidth
-                                onChange={({ value: v }) =>  handleChange(key, v)}
-                                label={field.label}
-                            />
-
-                    case 'text':
-                      return <FormInput
-                              key={key}
-                              type={field.type}
-                              name={key}
-                              value={value}
-                              fullWidth
-                              onChange={(e) => handleChange(e.target.name, e.target.value)}
-                              label={field.label}
-                          />
-                    default:
-                      return '';
-                    }
-                  })()
-                }
-              </Grid>
-              )
+            return ''
+            })
           }
+        </Grid>
 
-          return ''
-          })
+        {isMultiple ? (
+            <ButtonGroup className="btn-group">
+              <Button variant="contained" type="submit" color="primary"
+                startIcon={<DoneIcon />}>
+                Salvar
+              </Button>
+              <Button variant="contained" type="button" color="default" 
+                  onClick={handleClear} startIcon={<ClearIcon />}>
+                Limpar
+              </Button>
+            </ButtonGroup>
+          )
+          : null
         }
-      </Grid>
-
-      {isMultiple ? (
-          <ButtonGroup className="btn-group">
-            <Button variant="contained" type="button" color="primary"
-              onClick={handleSubmit}  startIcon={<DoneIcon />}>
-              Salvar
-            </Button>
-            <Button variant="contained" type="button" color="default" 
-                onClick={handleClear} startIcon={<ClearIcon />}>
-              Limpar
-            </Button>
-          </ButtonGroup>
-        )
-        : null
-      }
-    </CardContent>
-    </Card>
-  </form>
+      </CardContent>
+      </Card>
+    </form>
   );
 }
 
