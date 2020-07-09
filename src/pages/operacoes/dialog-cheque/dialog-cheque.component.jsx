@@ -12,7 +12,6 @@ export default function DialogCheque({open, handleClose, chequeOperacaoForm}) {
   const [chequeOperacao, setChequeOperacao] = useState(chequeOperacaoForm);
 
   const handleCheque = (chequeOperacaoReturn) => {
-    console.log("2 handleCheque - chequeOperacaoReturn:", chequeOperacaoReturn);
     if(chequeOperacaoReturn){
       setChequeOperacao(chequeOperacaoReturn);
     }

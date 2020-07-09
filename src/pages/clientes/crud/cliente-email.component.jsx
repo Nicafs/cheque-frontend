@@ -20,9 +20,14 @@ let flgEdit = null;
 function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient, createEmailClient, clientId }) {
   const [newEmails, setNewEmails] = useState(initialState);
   const classes = useStyles();
+
+  
+  const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
   
   const emailForm = [
-    { type: 'text', name: 'email', label: 'Email', size: 10 },
+    { type: 'email', name: 'email *', label: 'Email', size: 10,
+      errors: { required: { value: true, message: "Informe o E-mail *" }, 
+                pattern: { value: isEmail, message: "E-mail inválido *"} } },
     { type: 'select', name: 'principal', label: 'Principal', size: 2, 
       selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
       value: 'true', fullWidth: true },

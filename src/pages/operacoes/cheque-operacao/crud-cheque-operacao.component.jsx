@@ -1,40 +1,34 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import axios from '../../../redux/axios';
 
-import { Card, CardContent, Grid, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-
-import FormInput from '../../../core/components/form-input/form-input.component';
-import FormDate from '../../../core/components/form-input/form-date.component';
-import FormSelect from '../../../core/components/form-input/form-select.component';
+import FormField from '../../../core/components/form/form.component';
 import DialogBanco from './dialog-banco/dialog-banco.component';
-
-const useStyles = makeStyles(() => ({
-  groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '0px 10px 0px 5px', },
-  },
-  groupItem: {
-    '& .MuiFormControl-root': { marginRight: '6px', },
-  },
-}));
 
 function CrudChequeOperacao({ data, handleCheque }) {
   const dataMod = data;
   dataMod.banco_id = data?.banco?.id;
   dataMod.banco_nome = data?.banco?.descricao;
-  const [chequeOperacaoForm, setChequeOperacao] = useState(dataMod);
+  const [chequeOperacao, setChequeOperacao] = useState(dataMod);
+  const [open, setOpen] = useState(false);
 
   const handleChange = e => {
     const { name, value } = e.target;
- 
-    setChequeOperacao({...chequeOperacaoForm, [name]: value});
+    const nameCompost = name.split('.');
 
-    handleCheque({...chequeOperacaoForm, [name]: value});
+    if(nameCompost.length > 1){
+      setChequeOperacao({...chequeOperacao, 
+        [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
+      });
+
+      handleCheque({...chequeOperacao, 
+        [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
+      });
+    } else {
+      setChequeOperacao({...chequeOperacao, [name]: value});
+      handleCheque({...chequeOperacao, [name]: value});
+    }
   }
-
-  const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,143 +36,57 @@ function CrudChequeOperacao({ data, handleCheque }) {
 
   const handleClose = (selected) => {
     if(selected) {
-      setChequeOperacao({...chequeOperacaoForm, banco: {id: selected.id, descricao: selected.descricao } });
+      setChequeOperacao({...chequeOperacao, banco: {id: selected.id, descricao: selected.descricao } });
     }
     setOpen(false);
   };
+  
+  const handleOnBlurBanco = async e => {
+    const { value } = e.target;
 
-  const classes = useStyles();
+    if (value) {
+      const response = await axios.get(`/bancos/${value}`).then(r => { return r.data});
+      if(response){
+        setChequeOperacao({...chequeOperacao, banco: {id: response.id, descricao: response.descricao }});
+      } else {
+        setChequeOperacao({...chequeOperacao, banco: {id: "", descricao: "" }});
+      }
+    }
+  };
+
+  const chequeOperacaoForm = [
+    { type: 'select', name: 'tipo', label: 'tipo', size: 3, fullWidth: true,
+    selects:[{value:'cheque', description: 'Cheque'}, 
+             {value:'duplicata', description: 'Duplicata'}]
+    },
+    { type: 'dialog', name: 'banco', label: 'Banco *', size: 9, 
+      name_disable: 'descricao', value_disable: '', open: handleClickOpen,
+      onBlur: handleOnBlurBanco },
+    { type: 'number', name: 'agencia', label: 'Agência', size: 3 },
+    { type: 'number', name: 'conta', label: 'Conta', size: 3 },
+    { type: 'number', name: 'numero', label: 'Número', size: 3,
+      errors: { required: { value: true, message: "Informe o Número do Cheque *" }} },
+    { type: 'number', name: 'dias', label: 'Dias', size: 3 },
+    { type: 'date', name: 'data_vencimento', label: 'Data de Vencimento', size: 3,
+      errors: { required: { value: true, message: "Informe a Data de Vencimento *" }} },
+    { type: 'number', name: 'valor_operacao', label: 'Valor', size: 3,
+      errors: { required: { value: true, message: "Informe o Valor *" }} },
+    { type: 'text', name: 'emitente', label: 'Emitente', size: 12,
+      errors: { required: { value: true, message: "Informe o Emitente *" }}},
+  ];
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <form className='chequeOperacaoForm' onSubmit={(event) => { event.preventDefault(); handleCheque(chequeOperacaoForm);} }>
-          <Grid container spacing={1}>
-            <Grid item xs={12}>
-              <FormSelect
-                name='tipo'
-                value={chequeOperacaoForm.tipo}
-                selects={[{value:'cheque', description: 'Cheque'}, {value:'duplicata', description: 'Duplicata'}]}
-                onChange={handleChange}
-                label='Tipo'
-                required
-              />
-            </Grid>
+    <>
+      <FormField fields={chequeOperacaoForm} className="chequeOperacaoForm"
+                  handleChange={(name, value) => handleChange(name, value)}
+                  values={chequeOperacao}
+                  title="Criar uma Operação">
+      </FormField>
 
-            <Grid container item className={classes.groupItemButton}>
-              <FormInput
-                type='text'
-                name='banco_id'
-                value={chequeOperacaoForm.banco.id}
-                onChange={handleChange}
-                label='Banco'
-                required
-              />
 
-              <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                <ExitToAppIcon />
-              </Button >
-
-              <Grid item xs={8}>
-                <FormInput
-                  type='text'
-                  name='banco_nome'
-                  value={chequeOperacaoForm.banco.descricao}
-                  onChange={handleChange}
-                  label='Descrição'
-                  disabled
-                  fullWidth
-                  required
-                />
-              </Grid>
-            </Grid>
-
-            <Grid item xs={12} className={classes.groupItem}>
-              <FormInput
-                type='text'
-                name='agencia'
-                value={chequeOperacaoForm.agencia}
-                onChange={handleChange}
-                label='Agencia'
-                required
-              />
-
-              <FormInput
-                type='text'
-                name='conta'
-                value={chequeOperacaoForm.conta}
-                onChange={handleChange}
-                label='Conta'
-                required
-              />
-
-              <FormInput
-                type='text'
-                name='numero'
-                value={chequeOperacaoForm.numero}
-                onChange={handleChange}
-                label='Docto/cheque'
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12} className={classes.groupItem}>
-              <FormInput
-                type='number'
-                name='dias'
-                value={chequeOperacaoForm.dias}
-                onChange={handleChange}
-                label='Dias'
-                required
-              />
-
-              <FormDate
-                name='data_vencimento'
-                value={chequeOperacaoForm.data_vencimento}
-                onChange={date => handleChange({ target: { name: 'data_vencimento', value: date } })}
-                label='Data de Vencimento'
-                required />
-
-              <FormInput
-                type='number'
-                name='valor_operacao'
-                value={chequeOperacaoForm.valor_operacao}
-                onChange={handleChange}
-                label='Valor'
-                required
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormInput
-                type='text'
-                name='emitente'
-                value={chequeOperacaoForm.emitente}
-                onChange={handleChange}
-                label='Emitente'
-                required
-              />
-            </Grid>
-          </Grid>
-        </form>
-
-        <DialogBanco open={open} handleClose={handleClose}></DialogBanco>
-      </CardContent>
-    </Card>
+      <DialogBanco open={open} handleClose={handleClose}></DialogBanco>
+    </>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    chequeOperacao: state.chequesOperacao.chequeOperacao
-  };
-}
-
-// const mapDispatchToProps = dispatch => ({
-//   createChequeOperacao: (form) => dispatch(create(form))
-// });
-
-export default withRouter(connect(
-  mapStateToProps,
-  null
-)(CrudChequeOperacao));
+export default withRouter(CrudChequeOperacao);

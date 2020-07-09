@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { BancoClient as initialState } from '../../../model/BancoClient';
 import FormField from '../../../core/components/form/form.component';
 import ViewFormField from '../../../core/components/form/view-form.component';
+import DialogBanco from '../../operacoes/cheque-operacao/dialog-banco/dialog-banco.component';
 
 const useStyles = makeStyles(() => ({
   multipleForm: {
@@ -19,12 +20,27 @@ let flgEdit = null;
 
 function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient, createBancoClient, clientId }) {
   const [newBancos, setNewBancos] = useState(initialState);
+  const [open, setOpen] = useState(false);
   const classes = useStyles();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (selected) => {
+    setNewBancos({...newBancos, banco: selected.id, banco_descricao: selected.name });
+    
+    setOpen(false);
+  };
   
   const bancoForm = [
-    { type: 'text', name: 'banco', label: 'Banco', size: 4 },
-    { type: 'text', name: 'agencia', label: 'Agência', size: 4 },
-    { type: 'text', name: 'conta', label: 'Conta', size: 4 },
+    { type: 'dialog', name: 'banco', label: 'Banco', size: 6, 
+      name_disable: 'banco_descricao', value_disable: '', open: handleClickOpen,
+      errors: { required: { value: true, message: "Informe o Banco *" }} },
+    { type: 'text', name: 'agencia', label: 'Agência', size: 3,
+      errors: { required: { value: true, message: "Informe a Agência *" }} },
+    { type: 'text', name: 'conta', label: 'Conta', size: 3,
+      errors: { required: { value: true, message: "Informe a Conta *" }} },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();
@@ -80,6 +96,8 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
                 handleSubmit={handleSubmit}
                 isMultiple={true}>
       </FormField>
+
+      <DialogBanco open={open} handleClose={handleClose}></DialogBanco>
 
       {bancos ? bancos.map((banco, index) => {
         return (

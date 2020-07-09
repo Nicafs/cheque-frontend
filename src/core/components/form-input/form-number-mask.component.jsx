@@ -3,7 +3,7 @@ import NumberFormat from 'react-number-format';
 
 import { OutlinedInput, FormControl, InputLabel, FormHelperText } from '@material-ui/core';
 
-const FormNumberMaskInput = ({ handleChange, label, format, mask, fullWidth, 
+const FormNumberMaskInput = ({ label, format, mask, fullWidth, 
                                 thousandSeparator, prefix, decimalSeparator, 
                                 helperText, error, ...props }) => (
     <FormControl variant="outlined" fullWidth={fullWidth} error={error}>
@@ -17,12 +17,12 @@ const FormNumberMaskInput = ({ handleChange, label, format, mask, fullWidth,
             customInput={OutlinedInput}
             format={format || null}
             mask={mask || ''}
-            onValueChange={handleChange}
             type="text"
+            isNumericString
             thousandSeparator={thousandSeparator}
             decimalSeparator={decimalSeparator}
             prefix={prefix ? prefix : ''}
-            labelWidth={label.length > 5 ? label.length * 8 : 50}
+            labelWidth={label.length > 5 ? label.length * 10 : 50}
             {...props}
         />
 

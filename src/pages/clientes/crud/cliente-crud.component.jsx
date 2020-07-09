@@ -5,17 +5,45 @@ import FormField from '../../../core/components/form/form.component';
 import './cliente-crud.styles.scss';
 
 function CrudClient ({ client, setClient, hookForm }) {
+
+  const isValidCPF = (value) => {
+    let unformated = value; 
+    unformated = unformated.trim();
+    unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
+
+    if(!unformated) {
+      return true;
+    }
+    
+    const regexp = /^\d{11}$/;
+    return regexp.exec(unformated) !== null
+  }
+
+  const isValidRG = (value) => {
+    let unformated = value; 
+    unformated = unformated.trim();
+    unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
+    
+    if(!unformated) {
+      return true;
+    }
+    
+    const regexp = /^\d{8}$/;
+    return regexp.exec(unformated) !== null
+  }
   
   const clientForm = [
     { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2, 
       selects: [{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }],
       value: 'PC', fullWidth: true,
-      errors: { required: { value: true, message: "Escolha o Tipo do Cliente" }} },
-    { type: 'text', name: 'name', label: 'Nome', size: 5,
-      errors: { required: { value: true, message: "Informe o Nome do Cliente" }} },
+      errors: { required: { value: true, message: "Escolha o Tipo do Cliente *" }} },
+    { type: 'text', name: 'name', label: 'Nome *', size: 5,
+      errors: { required: { value: true, message: "Informe o Nome do Cliente *" }} },
     { type: 'text', name: 'nickname', label: 'Apelido', size: 5 },
-    { type: 'maskNumero', name: 'cpf', label: 'CPF', size: 3, format: '###.###.###-##' },
-    { type: 'maskNumero', name: 'rg', label: 'RG', size: 3, format: '#######-#' },
+    { type: 'maskNumero', name: 'cpf', label: 'CPF', size: 3, format: '###.###.###-##', 
+      errors: { validate: { validate: values => isValidCPF(values) || "Formato do CPF Inválido *" } }},
+    { type: 'maskNumero', name: 'rg', label: 'RG', size: 3, format: '#######-#', 
+      errors: { validate: { validate: values => isValidRG(values) || "Formato do RG Inválido *" } }},
     { type: 'select', name: 'gender', label: 'Sexo', size: 3, 
       selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }],
       value: 'PC', fullWidth: true },

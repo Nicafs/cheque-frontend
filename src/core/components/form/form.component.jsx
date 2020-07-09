@@ -16,11 +16,12 @@ import FormNumberTextInput from '../../../core/components/form-input/form-text-m
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '0px 10px 10px 5px', },
+    '& button': { margin: '0px 5px'}
   },
   groupItem: {
     '& .MuiFormControl-root': { margin: '0px 10px 10px 0px', },
   },
+  grow: { flexGrow: 1},
 }));
 
 function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange, handleClear, title, isMultiple }) {
@@ -33,6 +34,10 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
     errors = hookFormCustom.errors;
     hookForm.handleSubmit = hookFormCustom.handleSubmit;
   }
+
+  console.log("fields:", fields);
+
+  console.log("values:", values);
 
   return (
     <form className='formField' onSubmit={hookForm.handleSubmit(handleSubmit)}>
@@ -61,7 +66,8 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   label={field.label}
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null} />
+                                  helperText={errors[key] ? errors[key].message : null}
+                                  disabled={field.disabled || false} />
 
                       case 'select':
                           return <FormSelect
@@ -75,6 +81,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     error={errors[key] ? true : false}
                                     inputRef={register(field.errors)}
                                     helperText={errors[key] ? errors[key].message : null}
+                                    disabled={field.disabled || false}
                                 />
 
                       case 'selectDependent':
@@ -91,37 +98,42 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     error={errors[key] ? true : false}
                                     inputRef={register(field.errors)}
                                     helperText={errors[key] ? errors[key].message : null}
+                                    disabled={field.disabled || false}
                                 />
 
                       case 'dialog':
+                          const keyCompost = `${key}.id`;
+                          const keyCompostDisable = `${key}.${field.key_disable}`;
                           return (
                           <Grid container item className={classes.groupItemButton}>
                               <FormInput
-                                key={key}
+                                key={keyCompost}
                                 type={field.type}
-                                name={key}
-                                value={value}
+                                name={keyCompost}
+                                value={value.id}
                                 onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                onBlur={field.onBlur || null}
                                 label={field.label}
-                                error={errors[key] ? true : false}
+                                error={errors[keyCompost] ? true : false}
                                 inputRef={register(field.errors)}
-                                helperText={errors[key] ? errors[key].message : null}
+                                helperText={errors[keyCompost] ? errors[keyCompost].message : null}
+                                disabled={field.disabled || false}
                                 />
 
                               <Button variant="contained" color="primary" onClick={field.open}>
                                 <ExitToAppIcon />
                               </Button >
 
-                              <Grid item xs={8}>
-                              <FormInput
-                                  type='text'
-                                  name={field.key_disable}
-                                  value={field.value_disable}
-                                  onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                  label='Descrição'
-                                  disabled
-                                  fullWidth
-                              />
+                              <Grid item className={classes.grow}>
+                                <FormInput
+                                    type='text'
+                                    name={keyCompostDisable}
+                                    value={values[key][field.key_disable]}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                    label='Descrição'
+                                    disabled
+                                    fullWidth
+                                />
                               </Grid>
                           </Grid>
                           )
@@ -130,66 +142,70 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                         return <FormNumberMaskInput
                                   key={key}
                                   name={key}
-                                  value={value}
+                                  defaultValue={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
                                   fixedDecimalScale
                                   fullWidth
-                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
                                   label={field.label}
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[key] ? errors[key].message : null}
+                                  disabled={field.disabled || false}
                               />
 
                       case 'money':
                         return <FormNumberMaskInput
                                   key={key}
                                   name={key}
-                                  value={value}
+                                  defaultValue={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
                                   prefix={'R$ '}
                                   fullWidth
-                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
                                   label={field.label}
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[key] ? errors[key].message : null}
+                                  disabled={field.disabled || false}
                               />
 
                       case 'maskNumero':
                         return <FormNumberMaskInput
                                   key={key}
                                   name={key}
-                                  value={value}
+                                  defaultValue={value}
                                   format={field.format || null}
                                   mask={field.mask || null}
                                   fullWidth
-                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
                                   label={field.label}
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[key] ? errors[key].message : null}
+                                  disabled={field.disabled || false}
                               />
 
                       case 'maskText':
                         return <FormNumberTextInput
                                   key={key}
                                   name={key}
-                                  value={value}
+                                  defaultValue={value}
                                   format={field.mask || null}
                                   fullWidth
-                                  onChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
                                   label={field.label}
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[key] ? errors[key].message : null}
+                                  disabled={field.disabled || false}
                               />
 
-                      case 'text':
+                      default:
                         return <FormInput
                                   key={key}
                                   type={field.type}
@@ -201,9 +217,8 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[key] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[key] ? errors[key].message : null}
-                              />
-                      default:
-                        return '';
+                                  disabled={field.disabled || false}
+                              />;
                       }
                     })()
                   }

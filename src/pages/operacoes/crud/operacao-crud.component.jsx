@@ -2,35 +2,25 @@ import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { useForm } from "react-hook-form";
+import axios from '../../../redux/axios';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid, Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import FormField from '../../../core/components/form/form.component';
 import ChequeOperacoes from '../cheque-operacao/cheque-operacao.component';
 import DialogClient from '../dialog-cheque/dialog-client.component';
-import axios from '../../../redux/axios';
 import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
-import FormInput from '../../../core/components/form-input/form-input.component';
-import FormDate from '../../../core/components/form-input/form-date.component';
 import './operacao-crud.styles.scss';
 
-const useStyles = makeStyles(() => ({
-  groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '0px 10px 0px 5px', },
-  },
-  groupItem: {
-    '& .MuiFormControl-root': { margin: '0px 10px 0px 0px', },
-  },
-  maginRight: {
-    marginRight: '10px'
-  }
-}));
+function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao, 
+                        operacaoInitial, history, ...otherProps }) {
+  const [operacao, setOperacao] = useState(operacaoInitial);
+  const [open, setOpen] = useState(false);
+  const { ...hookForm } = useForm();
 
-function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao, operacao, history, ...otherProps }) {
-  const [operacaoForm, setOperacao] = useState(operacao);
   const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
 
@@ -70,18 +60,18 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     event.preventDefault();
     
     if(id){
-      operacaoForm['id'] = id;
-      updateOperacao(id, operacaoForm);
+      operacao['id'] = id;
+      updateOperacao(id, operacao);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
-      createOperacao(operacaoForm);
+      createOperacao(operacao);
       enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setOperacao({...operacaoForm, [name]: value});
+    setOperacao({...operacao, [name]: value});
   }
 
   const handleDelete = () => {
@@ -91,150 +81,67 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
+  
   const handleOnBlurClient = async e => {
     const { value } = e.target;
 
     if (value) {
       const response = await axios.get(`/clients/${value}`).then(r => { return r.data});
       if(response){
-        setOperacao({...operacaoForm, client_name: response.name, client_id: response.id });
+        setOperacao({...operacao, client_name: response.name, client_id: response.id });
       } else {
-        setOperacao({...operacaoForm, client_name: '', client_id: "" });
+        setOperacao({...operacao, client_name: '', client_id: "" });
       }
     }
   };
   
   const handleClose = (selected) => {
     if(selected) {
-      setOperacao({...operacaoForm, client_name: selected.name, client_id: selected.id });
+      setOperacao({...operacao, client_name: selected.name, client_id: selected.id });
     }
     setOpen(false);
   };
 
   const handleUpdate = (chequeOperacao) => {
     if(chequeOperacao) {
-      setOperacao({...operacaoForm, chequeOperacao: chequeOperacao });
+      setOperacao({...operacao, chequeOperacao: chequeOperacao });
     }
   };
 
-  const classes = useStyles();
+  const operacaoForm = [
+    { type: 'number', name: 'id', label: 'Operação', size: 3, disabled: true },
+    { type: 'dialog', name: 'client_id', label: 'Cliente *', size: 9, 
+      name_disable: 'client_name', value_disable: '', open: handleClickOpen,
+      onBlur: handleOnBlurClient,
+      errors: { required: { value: true, message: "Informe o Cliente *" }} },
+    { type: 'number', name: 'percentual', label: '% ao mês', size: 3 },
+    { type: 'date', name: 'data_operacao', label: 'Data de Operação', size: 3 },
+    { type: 'number', name: 'tarifa', label: 'Tarifa', size: 3 },
+    { type: 'number', name: 'acrescimos', label: 'Acréscimos', size: 3 },
+    { type: 'number', name: 'client_limit', label: 'Limite', size: 3, disabled: true },
+    { type: 'number', name: 'client_disponivel', label: 'Disponível', size: 3, disabled: true },
+  ];
 
   return (
     <Container className="Operacoes">
-      <Card variant="outlined">
-        <CardHeader title="Criar uma Operação" />
+      <FormField fields={operacaoForm} className="operacoesCrud"
+                handleChange={(name, value) => handleChange(name, value)}
+                hookFormCustom={hookForm}
+                values={operacao}
+                title="Criar uma Operação">
+      </FormField>
 
-        <CardContent>
-          <form className='operacaoForm' onSubmit={handleSubmit}>
+      <DialogClient open={open} handleClose={handleClose}></DialogClient>
 
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Grid container item className={classes.groupItemButton}>
-                  <FormInput
-                    className={classes.maginRight}
-                    type='number'
-                    name='id'
-                    value={operacaoForm.id}
-                    onChange={handleChange}
-                    label='Operação'
-                    disabled
-                  />
-
-                  <FormInput
-                    type='text'
-                    name='client_id'
-                    value={operacaoForm.client_id}
-                    onChange={handleChange}
-                    onBlur={handleOnBlurClient}
-                    label='Cliente'
-                    required
-                  />
-
-                  <Button variant="contained" color="primary" onClick={handleClickOpen}>
-                    <ExitToAppIcon />
-                  </Button >
-
-                  <Grid item xs={6}>
-                    <FormInput
-                      type='text'
-                      value={operacaoForm.client_name}
-                      label='Descrição'
-                      disabled
-                      fullWidth
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} className={classes.groupItem}>
-                <FormInput
-                  type='number'
-                  name='percentual'
-                  value={operacaoForm.percentual}
-                  onChange={handleChange}
-                  label='% ao mês'
-                />
-
-                <FormDate
-                  name='data_operacao'
-                  value={operacaoForm.data_operacao}
-                  onChange={date => handleChange({ target: { name: 'data_operacao', value: date } })}
-                  label='Data de Operação' />
-
-                <FormInput
-                  type='number'
-                  name='tarifa'
-                  value={operacaoForm.tarifa}
-                  onChange={handleChange}
-                  label='Tarifa'
-                />
-              </Grid>
-
-              <Grid item xs={12} className={classes.groupItem}>
-                <FormInput
-                  type='number'
-                  name='acrescimos'
-                  value={operacaoForm.acrescimos}
-                  onChange={handleChange}
-                  label='Acréscimos'
-                />
-
-                <FormInput
-                  type='number'
-                  name='limite'
-                  value={operacaoForm.client_limit}
-                  onChange={handleChange}
-                  label='Limite'
-                  disabled
-                />
-
-                <FormInput
-                  type='number'
-                  name='disponivel'
-                  value={operacaoForm.client_disponivel}
-                  onChange={handleChange}
-                  label='Disponível'
-                  disabled
-                />
-              </Grid>
-            </Grid>
-
-            <DialogClient open={open} handleClose={handleClose}></DialogClient>
-
-          </form>
-        </CardContent>
-      </Card>
-
-      <ChequeOperacoes chequeOperacao={operacaoForm.chequeOperacao} handleUpdate={handleUpdate}></ChequeOperacoes>
+      <ChequeOperacoes chequeOperacao={operacao.chequeOperacao} handleUpdate={handleUpdate}></ChequeOperacoes>
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">
-          <Button variant="contained" type="button" color="primary" onClick={handleSubmit}>
+          <Button variant="contained" type="button" color="primary" 
+            onClick={hookForm.handleSubmit(handleSubmit)}>
             Salvar
           </Button>
           <Button variant="contained" type="button" color="default"
@@ -253,7 +160,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
 const mapStateToProps = (state) => {
   return {
-    operacao: state.operacoes.operacao,
+    operacaoInitial: state.operacoes.operacao,
   };
 }
 

@@ -20,14 +20,30 @@ let flgEdit = null;
 function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, updateTelefoneCLient, createTelefoneClient, clientId }) {
   const [newTelefone, setNewTelefone] = useState(initialState);
   const classes = useStyles();
+
+  const isValidPhoneNumber = (value) => {
+    let unformated = value; 
+    unformated = unformated.trim();
+    unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
+    
+    if(!unformated) {
+      return true;
+    }
+    
+    const regexp = /^\d{11}$/;
+    return regexp.exec(unformated) !== null
+  }
   
   const telefoneForm = [
     { type: 'select', name: 'tipo', label: 'Tipo', size: 2, 
     selects: [{ description: 'Pessoal', value: 'Pessoal' }, 
               { description: 'Comercial', value: 'Comercial' }, 
               { description: 'Outros', value: 'Outros' }],
-    value: '', fullWidth: true },
-    { type: 'maskNumero', name: 'numero', label: 'Número', size: 3, format: '(##) # ####-####', mask:'_' },
+    value: '', fullWidth: true,
+    errors: { required: { value: true, message: "Informe o Tipo de Telefone *" }} },
+    { type: 'maskNumero', name: 'numero', label: 'Número *', size: 3, format: '(##) # ####-####', mask:'_',
+    errors: { required: { value: true, message: "Informe o Número do Telefone *" }, 
+              validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();

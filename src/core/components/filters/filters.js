@@ -12,7 +12,7 @@ import './filters.styles.scss';
 
 const useStyles = makeStyles(() => ({
   groupItemButton: {
-    '& .MuiButtonBase-root': { margin: '10px 0px 10px 0px', },
+    '& button': { margin: '0px 5px'}
   },
   groupItem: {
     '& .MuiFormControl-root': { margin: '0px 10px 10px 0px', },
