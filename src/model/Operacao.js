@@ -1,11 +1,8 @@
-// import ChequeOperacao from './ChequeOperacao';
+import Client from './Client';
 
 const Operacao = {
     id: '',
-    client_id: '',
-    client_name: '',
-    client_limit: 0,
-    client_disponivel: '',
+    client: Client,
     user_id: '',
     situacao: '',
     percentual: 0,

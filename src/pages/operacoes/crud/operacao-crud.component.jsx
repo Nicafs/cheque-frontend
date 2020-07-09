@@ -28,27 +28,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     const fetchData = async () => {
       const response = await axios.get(`/operacoes/${id}`).then(r => { return r.data});
 
-      const operacaoData = {
-        id: response.id,
-        client_id: response.client.id,
-        client_name: response.client.name,
-        client_limit: response.client.limit,
-        client_disponivel: 0,
-        user_id: '',
-        situacao: response.situacao,
-        percentual: response.percentual,
-        tarifa: response.tarifa,
-        data_operacao: response.data_operacao,
-        acrescimos: response.acrescimos,
-        tarifa_bordero: response.tarifa_bordero,
-        total_operacao: response.total_operacao,
-        total_encargos: response.total_encargos,
-        total_liquido: response.total_liquido,
-        total_outros: response.total_outros,
-        obs: response.obs,
-        chequeOperacao: response.chequeOperacao,
-      }
-      setOperacao(operacaoData);
+      setOperacao(response);
     };
 
     if(id){
@@ -69,9 +49,16 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     }
   }
 
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setOperacao({...operacao, [name]: value});
+  const handleChange = ( name, value ) => {
+    const nameCompost = name.split('.');
+
+    if(nameCompost.length > 1){
+      setOperacao({...operacao, 
+        [nameCompost[0]]: {...operacao[nameCompost[0]], [nameCompost[1]]: value}
+      });
+    } else {
+      setOperacao({...operacao, [name]: value});
+    }
   }
 
   const handleDelete = () => {
@@ -91,16 +78,20 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     if (value) {
       const response = await axios.get(`/clients/${value}`).then(r => { return r.data});
       if(response){
-        setOperacao({...operacao, client_name: response.name, client_id: response.id });
+        setOperacao({...operacao, client: { name: response.name, id: response.id, 
+                      limit: response.limit, credit: response.credit  }});
       } else {
-        setOperacao({...operacao, client_name: '', client_id: "" });
+        setOperacao({...operacao, client: { name: '', id: "", limit: "", credit: "" } });
       }
     }
+    console.log("operacao:", operacao);
   };
   
   const handleClose = (selected) => {
+    console.log("selected:", selected);
     if(selected) {
-      setOperacao({...operacao, client_name: selected.name, client_id: selected.id });
+      setOperacao({...operacao, client: { name: selected.name, id: selected.id, 
+        limit: selected.limit, credit: selected.credit  } });
     }
     setOpen(false);
   };
@@ -113,16 +104,16 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const operacaoForm = [
     { type: 'number', name: 'id', label: 'Operação', size: 3, disabled: true },
-    { type: 'dialog', name: 'client_id', label: 'Cliente *', size: 9, 
-      name_disable: 'client_name', value_disable: '', open: handleClickOpen,
+    { type: 'dialog', name: 'client.id', label: 'Cliente *', size: 9, 
+      name_disable: 'client.name', value_disable: '', open: handleClickOpen,
       onBlur: handleOnBlurClient,
       errors: { required: { value: true, message: "Informe o Cliente *" }} },
     { type: 'number', name: 'percentual', label: '% ao mês', size: 3 },
     { type: 'date', name: 'data_operacao', label: 'Data de Operação', size: 3 },
     { type: 'number', name: 'tarifa', label: 'Tarifa', size: 3 },
     { type: 'number', name: 'acrescimos', label: 'Acréscimos', size: 3 },
-    { type: 'number', name: 'client_limit', label: 'Limite', size: 3, disabled: true },
-    { type: 'number', name: 'client_disponivel', label: 'Disponível', size: 3, disabled: true },
+    { type: 'number', name: 'client.limit', label: 'Limite', size: 3, disabled: true },
+    { type: 'number', name: 'client.credit', label: 'Disponível', size: 3, disabled: true },
   ];
 
   return (

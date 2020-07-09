@@ -35,10 +35,6 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
     hookForm.handleSubmit = hookFormCustom.handleSubmit;
   }
 
-  console.log("fields:", fields);
-
-  console.log("values:", values);
-
   return (
     <form className='formField' onSubmit={hookForm.handleSubmit(handleSubmit)}>
       <Card variant="outlined">
@@ -46,48 +42,61 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
 
       <CardContent>
         <Grid container spacing={1}>
-          { Object.keys(values).map(key => {
-            const field = fields.find( f => { return f.name === key; })
-            const order = fields.findIndex( f => { return f.name === key; })
-            const value = values[key];
+          { fields.map((field, index) => {
+
+            const split = field.name.split('.')
+            let value;
+
+            if(split.length > 1) {
+              Object.keys(values).find( key => { 
+                if(key === split[0]) 
+                  Object.keys(values[key]).find( k => {
+                    if(k === split[1]) value = values[key][k];
+                    return k === split[1];
+                  }) 
+                  return key === split[0];
+                })
+            } else {
+              Object.keys(values).find( key => { if(key === field.name) value = values[key]; return key === field.name; })
+            }
             
             if(field) {
               return (
-                <Grid item xs={field.size} key={key} style={{order: order}}>
+                <Grid item xs={field.size} key={field.name} style={{order: index}}>
                   { (() => { 
                     switch (field.type) {
                       case 'date':
                         return <FormDate
-                                  key={key}
-                                  name={key}
+                                  key={field.name}
+                                  name={field.name}
                                   value={value}
                                   fullWidth
-                                  onChange={date => handleChange(key, date)}
+                                  onChange={date => handleChange(field.name, date)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false} />
 
                       case 'select':
                           return <FormSelect
-                                    key={key}
-                                    name={key}
+                                    key={field.name}
+                                    name={field.name}
                                     value={value}
                                     onChange={(e) => handleChange(e.target.name, e.target.value)}
                                     fullWidth={field.fullWidth}
                                     label={field.label}
                                     selects={field.selects}
-                                    error={errors[key] ? true : false}
+                                    error={errors[field.name] ? true : false}
                                     inputRef={register(field.errors)}
-                                    helperText={errors[key] ? errors[key].message : null}
+                                    helperText={errors[field.name] ? errors[field.name].message : null}
                                     disabled={field.disabled || false}
                                 />
 
                       case 'selectDependent':
                           return <FormSelect
-                                    key={key}
-                                    name={key}
+                                    key={field.name}
+                                    name={field.name}
                                     value={value}
                                     onChange={(e) => handleChange(e.target.name, e.target.value)}
                                     fullWidth={field.fullWidth}
@@ -95,128 +104,129 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     selects={field.selects}
                                     dependentName={field.dependentName}
                                     parentValue={values[field.parentValue]}
-                                    error={errors[key] ? true : false}
+                                    error={errors[field.name] ? true : false}
                                     inputRef={register(field.errors)}
-                                    helperText={errors[key] ? errors[key].message : null}
+                                    helperText={errors[field.name] ? errors[field.name].message : null}
                                     disabled={field.disabled || false}
                                 />
 
                       case 'dialog':
-                          const keyCompost = `${key}.id`;
-                          const keyCompostDisable = `${key}.${field.key_disable}`;
+                          // const keyCompost = `${key}.id`;
+                          const keyCompostDisable = field.name_disable.split('.');
+
                           return (
                           <Grid container item className={classes.groupItemButton}>
+                            <FormInput
+                              key={field.name}
+                              type={field.type}
+                              name={field.name}
+                              value={value}
+                              onChange={(e) =>  handleChange(e.target.name, e.target.value)}
+                              onBlur={field.onBlur || null}
+                              label={field.label}
+                              error={errors[field.name] ? true : false}
+                              inputRef={register(field.errors)}
+                              helperText={errors[field.name] ? errors[field.name].message : null}
+                              disabled={field.disabled || false}
+                              />
+
+                            <Button variant="contained" color="primary" onClick={field.open}>
+                              <ExitToAppIcon />
+                            </Button >
+
+                            <Grid item className={classes.grow}>
                               <FormInput
-                                key={keyCompost}
-                                type={field.type}
-                                name={keyCompost}
-                                value={value.id}
-                                onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                onBlur={field.onBlur || null}
-                                label={field.label}
-                                error={errors[keyCompost] ? true : false}
-                                inputRef={register(field.errors)}
-                                helperText={errors[keyCompost] ? errors[keyCompost].message : null}
-                                disabled={field.disabled || false}
-                                />
-
-                              <Button variant="contained" color="primary" onClick={field.open}>
-                                <ExitToAppIcon />
-                              </Button >
-
-                              <Grid item className={classes.grow}>
-                                <FormInput
-                                    type='text'
-                                    name={keyCompostDisable}
-                                    value={values[key][field.key_disable]}
-                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
-                                    label='Descrição'
-                                    disabled
-                                    fullWidth
-                                />
-                              </Grid>
+                                  type='text'
+                                  name={field.name_disable}
+                                  value={values[keyCompostDisable[0]][keyCompostDisable[1]]}
+                                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                  label='Descrição'
+                                  disabled
+                                  fullWidth
+                              />
+                            </Grid>
                           </Grid>
                           )
 
                       case 'numeric':
                         return <FormNumberMaskInput
-                                  key={key}
-                                  name={key}
+                                  key={field.name}
+                                  name={field.name}
                                   defaultValue={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
                                   fixedDecimalScale
                                   fullWidth
-                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(field.name, v)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false}
                               />
 
                       case 'money':
                         return <FormNumberMaskInput
-                                  key={key}
-                                  name={key}
+                                  key={field.name}
+                                  name={field.name}
                                   defaultValue={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
                                   prefix={'R$ '}
                                   fullWidth
-                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(field.name, v)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false}
                               />
 
                       case 'maskNumero':
                         return <FormNumberMaskInput
-                                  key={key}
-                                  name={key}
+                                  key={field.name}
+                                  name={field.name}
                                   defaultValue={value}
                                   format={field.format || null}
                                   mask={field.mask || null}
                                   fullWidth
-                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(field.name, v)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false}
                               />
 
                       case 'maskText':
                         return <FormNumberTextInput
-                                  key={key}
-                                  name={key}
+                                  key={field.name}
+                                  name={field.name}
                                   defaultValue={value}
                                   format={field.mask || null}
                                   fullWidth
-                                  onValueChange={({ value: v }) =>  handleChange(key, v)}
+                                  onValueChange={({ value: v }) =>  handleChange(field.name, v)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false}
                               />
 
                       default:
                         return <FormInput
-                                  key={key}
+                                  key={field.name}
                                   type={field.type}
-                                  name={key}
+                                  name={field.name}
                                   value={value}
                                   fullWidth
                                   onChange={(e) => handleChange(e.target.name, e.target.value)}
                                   label={field.label}
-                                  error={errors[key] ? true : false}
+                                  error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
-                                  helperText={errors[key] ? errors[key].message : null}
+                                  helperText={errors[field.name] ? errors[field.name].message : null}
                                   disabled={field.disabled || false}
                               />;
                       }

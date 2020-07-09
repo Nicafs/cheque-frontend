@@ -1,4 +1,5 @@
 const Client = {
+    id: '',
     type: '',
     name: '',
     nickname: '',

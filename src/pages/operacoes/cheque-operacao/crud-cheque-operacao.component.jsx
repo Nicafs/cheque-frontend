@@ -12,8 +12,7 @@ function CrudChequeOperacao({ data, handleCheque }) {
   const [chequeOperacao, setChequeOperacao] = useState(dataMod);
   const [open, setOpen] = useState(false);
 
-  const handleChange = e => {
-    const { name, value } = e.target;
+  const handleChange = (name, value) => {
     const nameCompost = name.split('.');
 
     if(nameCompost.length > 1){
@@ -43,7 +42,7 @@ function CrudChequeOperacao({ data, handleCheque }) {
   
   const handleOnBlurBanco = async e => {
     const { value } = e.target;
-
+    
     if (value) {
       const response = await axios.get(`/bancos/${value}`).then(r => { return r.data});
       if(response){
@@ -59,8 +58,8 @@ function CrudChequeOperacao({ data, handleCheque }) {
     selects:[{value:'cheque', description: 'Cheque'}, 
              {value:'duplicata', description: 'Duplicata'}]
     },
-    { type: 'dialog', name: 'banco', label: 'Banco *', size: 9, 
-      name_disable: 'descricao', value_disable: '', open: handleClickOpen,
+    { type: 'dialog', name: 'banco.id', label: 'Banco *', size: 9, 
+      name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,
       onBlur: handleOnBlurBanco },
     { type: 'number', name: 'agencia', label: 'Agência', size: 3 },
     { type: 'number', name: 'conta', label: 'Conta', size: 3 },
