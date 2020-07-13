@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { TelefoneClient as initialState } from '../../../model/TelefoneClient';
 import FormField from '../../../core/components/form/form.component';
-import ViewFormField from '../../../core/components/form/view-form.component';
 
 const useStyles = makeStyles(() => ({
   multipleForm: {
@@ -22,35 +21,33 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
   const classes = useStyles();
 
   const isValidPhoneNumber = (value) => {
-    let unformated = value; 
+    let unformated = value;
     unformated = unformated.trim();
     unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
-    
+
     if(!unformated) {
       return true;
     }
-    
+
     const regexp = /^\d{11}$/;
     return regexp.exec(unformated) !== null
   }
-  
+
   const telefoneForm = [
-    { type: 'select', name: 'tipo', label: 'Tipo', size: 2, 
-    selects: [{ description: 'Pessoal', value: 'Pessoal' }, 
-              { description: 'Comercial', value: 'Comercial' }, 
+    { type: 'select', name: 'tipo', label: 'Tipo', size: 2,
+    selects: [{ description: 'Pessoal', value: 'Pessoal' },
+              { description: 'Comercial', value: 'Comercial' },
               { description: 'Outros', value: 'Outros' }],
     value: '', fullWidth: true,
     errors: { required: { value: true, message: "Informe o Tipo de Telefone *" }} },
     { type: 'maskNumero', name: 'numero', label: 'Número *', size: 3, format: '(##) # ####-####', mask:'_',
-    errors: { required: { value: true, message: "Informe o Número do Telefone *" }, 
+    errors: { required: { value: true, message: "Informe o Número do Telefone *" },
               validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     if(clientId){
       if(newTelefone.id){
         updateTelefoneCLient(newTelefone);
@@ -92,23 +89,24 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
   return (
     <div className={classes.multipleForm}>
       <FormField
-                fields={telefoneForm} 
+                fields={telefoneForm}
                 handleChange={(name, value) => handleChange(name, value)}
                 values={newTelefone}
                 title="Telefones"
-                handleDelete={handleDelete} 
+                handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
                 isMultiple={true}>
       </FormField>
 
       {telefones ? telefones.map((telefone, index) => {
         return (
-        <ViewFormField key={index}
-                fields={telefoneForm} 
+        <FormField key={index}
+                fields={telefoneForm}
                 values={telefone}
                 handleEdit={() => handleEdit(index)}
-                handleDelete={() => handleDelete(index)}>
-        </ViewFormField>
+                handleDelete={() => handleDelete(index)}
+                disable={true}>
+        </FormField>
       )}) : null }
     </div>
   );

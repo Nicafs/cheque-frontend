@@ -7,7 +7,7 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useSnackbar } from 'notistack';
 
-import axios from '../../../redux/axios';
+import api from '../../../core/services/api';
 
 import DialogCheque from '../dialog-cheque/dialog-cheque.component';
 import DialogSituacao from './dialog-situacao.component';
@@ -45,7 +45,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
     } else {
       setChequeOperacaoForm(ChequeOperacao);
     }
-    
+
     setOpen({...open, [button]: true});
   };
 
@@ -60,7 +60,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
       enqueueSnackbar('Selecione o cheque a ser quitado!!')
     }
   };
-  
+
   const handleOpenDelete = () => {
     if(selected?.id) {
         setOpen({...open, 'delete': true});
@@ -74,7 +74,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
       if(flgEdit) {
         chequeOperacao = chequeOperacao.map(cheque => {
           if(cheque.id === newChequeOperacao.id) {
-            return newChequeOperacao; 
+            return newChequeOperacao;
           }
           return cheque;
         });
@@ -94,7 +94,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
   const handleCloseSituacao = async (answer) => {
     if(answer){
       if(selected?.id) {
-       const retorno = await axios.put(`/chequeOperacao/quitacao/${selected.id}`).then(r => { return r.data});
+       const retorno = await api.put(`/chequeOperacao/quitacao/${selected.id}`).then(r => { return r.data});
 
        if (retorno) {
           setSelected(retorno);
@@ -102,7 +102,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
 
           chequeOperacao = chequeOperacao.map(cheque => {
             if(cheque.id === retorno.id) {
-              return retorno; 
+              return retorno;
             }
             return cheque;
           });
@@ -117,7 +117,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
   const handleCloseDelete = async (answer) => {
     if(answer){
       if(selected?.id) {
-       const retorno = await axios.delete(`/chequeOperacao/${selected.id}`).then(r => { return r.data});
+       const retorno = await api.delete(`/chequeOperacao/${selected.id}`).then(r => { return r.data});
 
        if (retorno) {
           enqueueSnackbar('O cheque foi Deletado !!')

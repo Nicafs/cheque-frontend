@@ -1,11 +1,10 @@
 import { bancoClientTypes } from './banco.types';
-
-import axios from '../../axios';
+import api from '../../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/bancoClient/`&{id})
+  api.get(`/bancoClient/`&{id})
     .then(payload => {
-     
+
       return dispatch({
         type: bancoClientTypes.BANCO_CLIENT_GET,
         payload,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/bancoClient')
+  api.get('/bancoClient')
     .then((response)=>{
         dispatch({
           type: bancoClientTypes.BANCO_CLIENT_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/bancoClient', formData, config)
+  api.put('/bancoClient', formData, config)
   .then(payload => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/bancoClient', formData, config)
+    api.post('/bancoClient', formData, config)
     .then(payload => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/bancoClient/${id}`, config)
+  api.delete(`/bancoClient/${id}`, config)
   .then((response)=>{
       dispatch({
         type: bancoClientTypes.BANCO_CLIENT_DELETE,

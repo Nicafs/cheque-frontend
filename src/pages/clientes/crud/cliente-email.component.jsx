@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { EmailClient as initialState } from '../../../model/EmailClient';
 import FormField from '../../../core/components/form/form.component';
-import ViewFormField from '../../../core/components/form/view-form.component';
 
 const useStyles = makeStyles(() => ({
   multipleForm: {
@@ -21,24 +20,24 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
   const [newEmails, setNewEmails] = useState(initialState);
   const classes = useStyles();
 
-  
+
   const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-  
+
   const emailForm = [
-    { type: 'email', name: 'email *', label: 'Email', size: 10,
-      errors: { required: { value: true, message: "Informe o E-mail *" }, 
+    { type: 'email', name: 'email', label: 'Email *', size: 10,
+      errors: { required: { value: true, message: "Informe o E-mail *" },
                 pattern: { value: isEmail, message: "E-mail inválido *"} } },
-    { type: 'select', name: 'principal', label: 'Principal', size: 2, 
+    { type: 'select', name: 'principal', label: 'Principal', size: 2,
       selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
       value: 'true', fullWidth: true },
   ];
 
   // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
+    console.log("clientId:", clientId);
     if(clientId){
+      console.log("Entrou");
       if(newEmails.id){
         updateEmailClient(newEmails);
       } else {
@@ -79,23 +78,24 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
   return (
     <div className={classes.multipleForm}>
       <FormField
-                fields={emailForm} 
+                fields={emailForm}
                 handleChange={(name, value) => handleChange(name, value)}
                 values={newEmails}
                 title="E-mails"
-                handleDelete={handleDelete} 
+                handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
                 isMultiple={true}>
       </FormField>
 
       {emails ? emails.map((email, index) => {
         return (
-        <ViewFormField key={index}
-                fields={emailForm} 
+        <FormField key={index}
+                fields={emailForm}
                 values={email}
                 handleEdit={() => handleEdit(index)}
-                handleDelete={() => handleDelete(index)}>
-        </ViewFormField>
+                handleDelete={() => handleDelete(index)}
+                disable={true}>
+        </FormField>
       )}) : null }
     </div>
   );

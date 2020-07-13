@@ -68,7 +68,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, linkTo, history}) {
+function TableCustom({ data, columns, isEditable, customActions, handleSelected, isSelectable, linkTo, history}) {
 
   const classes = useStyles();
   const [selected, setSelected] = React.useState({});
@@ -99,7 +99,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
     //     selected.slice(selectedIndex + 1),
     //   );
     // }
-    
+
     if(selected !== row) {
       handleSelected(row);
       setSelected(row);
@@ -122,12 +122,12 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
     if(type === 'compost') {
       const splits = field.split('.');
       let retorno = row;
-      splits.map(split => { 
-          if(retorno[split]) { 
-          retorno = retorno[split]; 
-        } else { 
+      splits.map(split => {
+          if(retorno[split]) {
+          retorno = retorno[split];
+        } else {
           retorno = '';
-        } 
+        }
         return retorno;
       })
 
@@ -163,7 +163,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
     <ThemeProvider theme={theme}>
       <Paper className={classes.paper}>
         <TableContainer>
-          <Table 
+          <Table
             className={classes.table}
             aria-labelledby="Tabela de Informações"
             aria-label="Tabela de Informações"
@@ -185,7 +185,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
                     const isItemSelected = isSelected(row.id);
 
                     return (
-                      <TableRow 
+                      <TableRow
                         key={index}
                         hover
                         onClick={(event) => isSelectable ? handleClick(event, row) : null}
@@ -194,7 +194,7 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
                         selected={isItemSelected}>
 
                         {isEditable ?
-                          <TableCell>
+                          <TableCell align={'center'}>
                             <IconButton aria-label="editar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
                               <EditIcon />
                             </IconButton>
@@ -202,6 +202,15 @@ function TableCustom({ data, columns, isEditable, handleSelected, isSelectable, 
                             <IconButton aria-label="deletar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
                               <DeleteIcon />
                             </IconButton>
+
+                            {customActions ? customActions.map((action, index) => {
+                              const Icon = action.icon;
+                              return (
+                                  <IconButton key={index} aria-label={action.ariaLabel} onClick={() => action.onClick(row)}>
+                                    <Icon />
+                                  </IconButton>
+                              )
+                            }) : null }
                           </TableCell>
                         : null}
 

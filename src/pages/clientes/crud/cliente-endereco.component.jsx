@@ -8,7 +8,6 @@ import { UfEnum } from '../../../model/enums/Estado';
 import { EstadosCidades } from '../../../model/enums/EstadoCidade';
 
 import FormField from '../../../core/components/form/form.component';
-import ViewFormField from '../../../core/components/form/view-form.component';
 
 const useStyles = makeStyles(() => ({
   multipleForm: {
@@ -23,11 +22,11 @@ let flgEdit = null;
 function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, updateEnderecoClient, createEnderecoClient, clientId }) {
   const [newEnderecos, setNewEnderecos] = useState(initialState);
   const classes = useStyles();
-  
+
   const enderecoForm = [
     { type: 'select', name: 'tipo', label: 'Tipo', size: 3,
-      selects: [{ description: 'Residencial', value: 'Residencial' }, 
-                { description: 'Comercial', value: 'Comercial' }, 
+      selects: [{ description: 'Residencial', value: 'Residencial' },
+                { description: 'Comercial', value: 'Comercial' },
                 { description: 'Outros', value: 'Outros' }
               ],
       value: '', fullWidth: true,
@@ -35,8 +34,8 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
     { type: 'text', name: 'cep', label: 'CEP *', format: '000-000-000-00', size: 3,
       errors: { required: { value: true, message: "Informe o CEP *" }} },
     { type: 'select', name: 'tipo_logradouro', label: 'Tipo de Logradouro', size: 3,
-      selects: [{ description: 'Alameda', value: 'Alameda' }, 
-                { description: 'Alto', value: 'Alto' }, 
+      selects: [{ description: 'Alameda', value: 'Alameda' },
+                { description: 'Alto', value: 'Alto' },
                 { description: 'Avenida', value: 'Avenida' },
                 { description: 'Estrada', value: 'Estrada' },
                 { description: 'Ladeira', value: 'Ladeira' },
@@ -71,9 +70,7 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
 
   // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     if(clientId){
       if(newEnderecos.id){
         updateEnderecoClient(newEnderecos);
@@ -115,23 +112,24 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
   return (
     <div className={classes.multipleForm}>
       <FormField
-                fields={enderecoForm} 
+                fields={enderecoForm}
                 handleChange={(name, value) => handleChange(name, value)}
                 values={newEnderecos}
                 title="Endereços"
-                handleDelete={handleDelete} 
+                handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
                 isMultiple={true}>
       </FormField>
 
       {enderecos ? enderecos.map((endereco, index) => {
         return (
-        <ViewFormField key={index}
-                fields={enderecoForm} 
+        <FormField key={index}
+                fields={enderecoForm}
                 values={endereco}
                 handleEdit={() => handleEdit(index)}
-                handleDelete={() => handleDelete(index)}>
-        </ViewFormField>
+                handleDelete={() => handleDelete(index)}
+                disable={true}>
+        </FormField>
       )}) : null }
     </div>
   );

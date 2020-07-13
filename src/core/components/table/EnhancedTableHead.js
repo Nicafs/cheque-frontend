@@ -12,15 +12,15 @@ export default function EnhancedTableHead(props) {
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
-  
+
     return (
       <TableHead>
         <TableRow>
-          {isEditable ? <TableCell> Ações </TableCell> : null}
+          {isEditable ? <TableCell align={'center'}> Ações </TableCell> : null}
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.field}
-              
+
               align={headCell.type === 'numeric' ? 'right' : (headCell.align ? headCell.align : 'left')}
               padding={headCell.disablePadding ? 'none' : 'default'}
               sortDirection={orderBy === headCell.field ? order : false}

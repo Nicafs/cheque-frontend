@@ -7,7 +7,7 @@ import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import axios from '../../../redux/axios';
+import api from '../../../core/services/api';
 import { create, findById, update, deleteById } from '../../../redux/cheque/cheque.actions';
 import { find as findClient } from '../../../redux/client/client.actions';
 import { find as findBanco } from '../../../redux/banco/banco.actions';
@@ -23,7 +23,7 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/cheques/${id}`);
+      const response = await api.get(`/cheques/${id}`);
       setCheque(response.data);
     };
 

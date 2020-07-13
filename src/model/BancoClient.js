@@ -1,6 +1,8 @@
+import Banco from './Banco';
+
 export const BancoClient = {
     id: '',
-    banco: '',
+    banco: Banco,
     agencia: '',
     conta: '',
     user_id: '',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useForm } from "react-hook-form";
-import axios from '../../../redux/axios';
+import api from '../../../core/services/api';
 
 import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -15,7 +15,7 @@ import DialogClient from '../dialog-cheque/dialog-client.component';
 import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
 import './operacao-crud.styles.scss';
 
-function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao, 
+function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao,
                         operacaoInitial, history, ...otherProps }) {
   const [operacao, setOperacao] = useState(operacaoInitial);
   const [open, setOpen] = useState(false);
@@ -26,7 +26,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/operacoes/${id}`).then(r => { return r.data});
+      const response = await api.get(`/operacoes/${id}`).then(r => { return r.data});
 
       setOperacao(response);
     };
@@ -37,8 +37,6 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   }, [id]);
 
   const handleSubmit = async event => {
-    event.preventDefault();
-    
     if(id){
       operacao['id'] = id;
       updateOperacao(id, operacao);
@@ -53,7 +51,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     const nameCompost = name.split('.');
 
     if(nameCompost.length > 1){
-      setOperacao({...operacao, 
+      setOperacao({...operacao,
         [nameCompost[0]]: {...operacao[nameCompost[0]], [nameCompost[1]]: value}
       });
     } else {
@@ -71,14 +69,14 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const handleClickOpen = () => {
     setOpen(true);
   };
-  
+
   const handleOnBlurClient = async e => {
     const { value } = e.target;
 
     if (value) {
-      const response = await axios.get(`/clients/${value}`).then(r => { return r.data});
+      const response = await api.get(`/clients/${value}`).then(r => { return r.data});
       if(response){
-        setOperacao({...operacao, client: { name: response.name, id: response.id, 
+        setOperacao({...operacao, client: { name: response.name, id: response.id,
                       limit: response.limit, credit: response.credit  }});
       } else {
         setOperacao({...operacao, client: { name: '', id: "", limit: "", credit: "" } });
@@ -86,11 +84,11 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     }
     console.log("operacao:", operacao);
   };
-  
+
   const handleClose = (selected) => {
     console.log("selected:", selected);
     if(selected) {
-      setOperacao({...operacao, client: { name: selected.name, id: selected.id, 
+      setOperacao({...operacao, client: { name: selected.name, id: selected.id,
         limit: selected.limit, credit: selected.credit  } });
     }
     setOpen(false);
@@ -104,7 +102,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const operacaoForm = [
     { type: 'number', name: 'id', label: 'Operação', size: 3, disabled: true },
-    { type: 'dialog', name: 'client.id', label: 'Cliente *', size: 9, 
+    { type: 'dialog', name: 'client.id', label: 'Cliente *', size: 9,
       name_disable: 'client.name', value_disable: '', open: handleClickOpen,
       onBlur: handleOnBlurClient,
       errors: { required: { value: true, message: "Informe o Cliente *" }} },
@@ -131,7 +129,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">
-          <Button variant="contained" type="button" color="primary" 
+          <Button variant="contained" type="button" color="primary"
             onClick={hookForm.handleSubmit(handleSubmit)}>
             Salvar
           </Button>

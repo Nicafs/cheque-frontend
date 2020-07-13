@@ -2,12 +2,13 @@ import React from 'react';
 
 import { FormControl, InputLabel, Select, FormHelperText } from '@material-ui/core';
 
-const FormSelect = ({ handleChange, label, name, value, selects, fullWidth, 
+const FormSelect = ({ handleChange, label, name, value, selects, fullWidth,
                       dependentName, parentValue, helperText, error, ...props }) => (
     <FormControl variant="outlined" fullWidth={fullWidth} error={error}>
-        <InputLabel htmlFor={name}>{label}</InputLabel>
+        <InputLabel shrink htmlFor={name}>{label}</InputLabel>
         <Select
             native
+            displayEmpty
             value={value}
             onChange={handleChange}
             label={label}
@@ -15,9 +16,9 @@ const FormSelect = ({ handleChange, label, name, value, selects, fullWidth,
             name={name}
             {...props}
         >
-            <option aria-label="Nenhum" value={null}> Selecione </option>
-            {selects ? 
-                !dependentName ? 
+            <option aria-label="Nenhum" value={''}> Selecione </option>
+            {selects ?
+                !dependentName ?
                   selects.map(select => {
                     return <option key={select.value} value={select.value}> {select.description} </option>
                   })
@@ -27,7 +28,7 @@ const FormSelect = ({ handleChange, label, name, value, selects, fullWidth,
             : null }
         </Select>
 
-        {helperText ? 
+        {helperText ?
           <FormHelperText id={'helper'+label}>{helperText}</FormHelperText>
         : null }
     </FormControl>

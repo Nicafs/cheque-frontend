@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { withRouter } from 'react-router-dom';
-import axios from '../../../redux/axios';
+import api from '../../../core/services/api';
 
 import FormField from '../../../core/components/form/form.component';
 import DialogBanco from './dialog-banco/dialog-banco.component';
@@ -16,11 +16,11 @@ function CrudChequeOperacao({ data, handleCheque }) {
     const nameCompost = name.split('.');
 
     if(nameCompost.length > 1){
-      setChequeOperacao({...chequeOperacao, 
+      setChequeOperacao({...chequeOperacao,
         [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
       });
 
-      handleCheque({...chequeOperacao, 
+      handleCheque({...chequeOperacao,
         [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
       });
     } else {
@@ -39,26 +39,28 @@ function CrudChequeOperacao({ data, handleCheque }) {
     }
     setOpen(false);
   };
-  
+
   const handleOnBlurBanco = async e => {
     const { value } = e.target;
-    
+
     if (value) {
-      const response = await axios.get(`/bancos/${value}`).then(r => { return r.data});
+      const response = await api.get(`/bancos/${value}`).then(r => { return r.data});
       if(response){
         setChequeOperacao({...chequeOperacao, banco: {id: response.id, descricao: response.descricao }});
       } else {
         setChequeOperacao({...chequeOperacao, banco: {id: "", descricao: "" }});
       }
+    } else {
+      setChequeOperacao({...chequeOperacao, banco: {id: "", descricao: "" }});
     }
   };
 
   const chequeOperacaoForm = [
     { type: 'select', name: 'tipo', label: 'tipo', size: 3, fullWidth: true,
-    selects:[{value:'cheque', description: 'Cheque'}, 
+    selects:[{value:'cheque', description: 'Cheque'},
              {value:'duplicata', description: 'Duplicata'}]
     },
-    { type: 'dialog', name: 'banco.id', label: 'Banco *', size: 9, 
+    { type: 'dialog', name: 'banco.id', label: 'Banco *', size: 9,
       name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,
       onBlur: handleOnBlurBanco },
     { type: 'number', name: 'agencia', label: 'Agência', size: 3 },

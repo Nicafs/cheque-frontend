@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useForm } from "react-hook-form";
 
-import axios from '../../../redux/axios';
+import api from '../../../core/services/api';
 
 import { Container, Tab, Tabs, AppBar, ButtonGroup, Button } from '@material-ui/core';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
@@ -25,35 +25,35 @@ import EmailClient  from './cliente-email.component';
 import BancoClient  from './cliente-banco.component';
 import ReferenciaClient  from './cliente-referencia.component';
 
-import { create, 
+import { create,
          update,
          deleteById,
-         findById 
+         findById
        } from '../../../redux/client/client.actions';
 
-import { create as createEnderecoClient, 
+import { create as createEnderecoClient,
          update as updateEnderecoClient,
-         deleteById as deleteEnderecoClient 
+         deleteById as deleteEnderecoClient
        } from '../../../redux/client/endereco/endereco.actions';
 
-import {create as createTelefoneClient, 
+import {create as createTelefoneClient,
         update as updateTelefoneClient,
-        deleteById as deleteTelefoneClient 
+        deleteById as deleteTelefoneClient
       } from '../../../redux/client/telefone/telefone.actions';
 
-import {create as createEmailClient, 
+import {create as createEmailClient,
         update as updateEmailClient,
-        deleteById as deleteEmailClient 
+        deleteById as deleteEmailClient
         } from '../../../redux/client/email/email.actions';
 
-import {create as createBancoClient, 
+import {create as createBancoClient,
         update as updateBancoClient,
-        deleteById as deleteBancoClient 
+        deleteById as deleteBancoClient
       } from '../../../redux/client/banco/banco.actions';
 
-import {create as createReferenciaClient, 
+import {create as createReferenciaClient,
         update as updateReferenciaClient,
-        deleteById as deleteReferenciaClient 
+        deleteById as deleteReferenciaClient
       } from '../../../redux/client/referencia/referencia.actions';
 
 function TabPanel(props) {
@@ -83,9 +83,9 @@ function scrollable(index) {
   };
 }
 
-function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias, history, 
+function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias, history,
                       createClient, updateClient, deleteClient, ...otherProps }) {
-                        
+
   const [valueTab, setValueTab] = useState(0);
   const [clientForm, setClient] = useState(client);
   const [enderecosForm, setEnderecos] = useState([]);
@@ -101,7 +101,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/clients/${id}`);
+      const response = await api.get(`/clients/${id}`);
       setClient(response.data);
       setEnderecos(response.data.enderecoClient);
       setTelefones(response.data.telefoneClient);
@@ -109,7 +109,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       setBancos(response.data.bancoClient);
       setReferencias(response.data.referenciaClient);
     };
- 
+
     if(id){
       fetchData();
     }
@@ -119,7 +119,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
     setValueTab(newValue);
   };
 
-  const handleSubmit = async event => {
+  const handleSubmit = async () => {
     clientForm.bancoClient = bancosForm;
     clientForm.enderecoClient = enderecosForm;
     clientForm.telefoneClient = telefonesForm;
@@ -161,7 +161,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </AppBar>
 
       <TabPanel value={valueTab} index={0}>
-          <CrudClient client={clientForm} setClient={setClient} 
+          <CrudClient client={clientForm} setClient={setClient}
             hookForm={hookForm}
             createClient={otherProps.createClient}
             updateClient={otherProps.updateClient}
@@ -169,7 +169,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </TabPanel>
 
       <TabPanel value={valueTab} index={1}>
-          <EnderecoClient enderecos={enderecosForm} setEnderecos={setEnderecos} 
+          <EnderecoClient enderecos={enderecosForm} setEnderecos={setEnderecos}
             clientId={id}
             createEnderecoClient={otherProps.createEnderecoClient}
             updateEnderecoClient={otherProps.updateEnderecoClient}
@@ -177,7 +177,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </TabPanel>
 
       <TabPanel value={valueTab} index={2}>
-          <TelefoneClient telefones={telefonesForm} setTelefones={setTelefones} 
+          <TelefoneClient telefones={telefonesForm} setTelefones={setTelefones}
             clientId={id}
             createTelefoneClient={otherProps.createTelefoneClient}
             updateTelefoneClient={otherProps.updateTelefoneClient}
@@ -185,7 +185,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </TabPanel>
 
       <TabPanel value={valueTab} index={3}>
-          <EmailClient emails={emailsForm} setEmails={setEmails} 
+          <EmailClient emails={emailsForm} setEmails={setEmails}
             clientId={id}
             createEmailClient={otherProps.createEmailClient}
             updateEmailClient={otherProps.updateEmailClient}
@@ -193,7 +193,7 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </TabPanel>
 
       <TabPanel value={valueTab} index={4}>
-          <BancoClient bancos={bancosForm} setBancos={setBancos} 
+          <BancoClient bancos={bancosForm} setBancos={setBancos}
             clientId={id}
             createBancoClient={otherProps.createBancoClient}
             updateBancoClient={otherProps.updateBancoClient}
@@ -201,23 +201,23 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       </TabPanel>
 
       <TabPanel value={valueTab} index={5}>
-          <ReferenciaClient referencias={referenciasForm} setReferencias={setReferencias} 
+          <ReferenciaClient referencias={referenciasForm} setReferencias={setReferencias}
             clientId={id}
             createReferenciaClient={otherProps.createReferenciaClient}
             updateReferenciaClient={otherProps.updateReferenciaClient}
             deleteReferenciaClient={otherProps.deleteReferenciaClient}></ReferenciaClient>
       </TabPanel>
-      
+
       <ButtonGroup className="btn-group">
         <Button variant="contained" type="button" color="primary"
           onClick={hookForm.handleSubmit(handleSubmit)}  startIcon={<DoneOutlineIcon />}>
           Salvar
         </Button>
-        <Button variant="contained" type="button" color="default" 
+        <Button variant="contained" type="button" color="default"
             onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
           Voltar
         </Button>
-        <Button variant="contained" type="button" color="secondary" 
+        <Button variant="contained" type="button" color="secondary"
             onClick={handleDelete} startIcon={<DeleteIcon />}>
           Excluir
         </Button>
@@ -242,23 +242,23 @@ const mapDispatchToProps = dispatch => ({
   createClient: (form) => dispatch(create(form)),
   updateClient: (id, form) => dispatch(update(id, form)),
   deleteClient: (id) => dispatch(deleteById(id)),
-  
+
   createEnderecoClient: (form) => dispatch(createEnderecoClient(form)),
   updateEnderecoClient: (form) => dispatch(updateEnderecoClient(form)),
   deleteEnderecoClient: (id) => dispatch(deleteEnderecoClient(id)),
-  
+
   createTelefoneClient: (form) => dispatch(createTelefoneClient(form)),
   updateTelefoneClient: (form) => dispatch(updateTelefoneClient(form)),
   deleteTelefoneClient: (id) => dispatch(deleteTelefoneClient(id)),
-  
+
   createEmailClient: (form) => dispatch(createEmailClient(form)),
   updateEmailClient: (form) => dispatch(updateEmailClient(form)),
   deleteEmailClient: (id) => dispatch(deleteEmailClient(id)),
-  
+
   createBancoClient: (form) => dispatch(createBancoClient(form)),
   updateBancoClient: (form) => dispatch(updateBancoClient(form)),
   deleteBancoClient: (id) => dispatch(deleteBancoClient(id)),
-  
+
   createReferenciaClient: (form) => dispatch(createReferenciaClient(form)),
   updateReferenciaClient: (form) => dispatch(updateReferenciaClient(form)),
   deleteReferenciaClient: (id) => dispatch(deleteReferenciaClient(id))

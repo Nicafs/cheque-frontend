@@ -1,11 +1,10 @@
 import { chequeOperacaoTypes } from './chequeOperacao.types';
-
-import axios from '../axios';
+import api from '../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/chequeOperacao/`&{id})
+  api.get(`/chequeOperacao/`&{id})
     .then(response => {
-     
+
       return dispatch({
         type: chequeOperacaoTypes.CHEQUE_OPERACAO_GET,
         payload: response.data,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/chequeOperacao')
+  api.get('/chequeOperacao')
     .then((response)=>{
         dispatch({
           type: chequeOperacaoTypes.CHEQUE_OPERACAO_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/chequeOperacao', formData, config)
+  api.put('/chequeOperacao', formData, config)
   .then(response => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/chequeOperacao', formData, config)
+    api.post('/chequeOperacao', formData, config)
     .then(response => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/chequeOperacao/${id}`, config)
+  api.delete(`/chequeOperacao/${id}`, config)
   .then((response)=>{
       dispatch({
         type: chequeOperacaoTypes.CHEQUE_OPERACAO_DELETE,

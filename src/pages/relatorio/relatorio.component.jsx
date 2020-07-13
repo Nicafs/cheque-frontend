@@ -1,11 +1,11 @@
 import React from 'react';
 import { PDFViewer } from '@react-pdf/renderer';
-import MyDocument from './nota-promissoria.component';
+import NotaPromissoria from './nota-promissoria.component';
 
 export default function Relatorio() {
     return (
-        <PDFViewer style={{height: '1200px'}}>
-            <MyDocument />
+        <PDFViewer style={{width: '100%', height: '1200px'}}>
+            <NotaPromissoria />
         </PDFViewer>
     )
 };

@@ -1,11 +1,10 @@
 import { clientTypes } from './client.types';
-
-import axios from '../axios';
+import api from '../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/clients/`&{id})
+  api.get(`/clients/`&{id})
     .then(payload => {
-     
+
       return dispatch({
         type: clientTypes.CLIENT_GET,
         payload,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/clients')
+  api.get('/clients')
     .then((response)=>{
         dispatch({
           type: clientTypes.CLIENT_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (id, formData, token) => dispatch => {
     }
   };
 
-  axios.put(`/clients/${id}`, formData, config)
+  api.put(`/clients/${id}`, formData, config)
   .then(response => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (id, formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/clients', formData, config)
+    api.post('/clients', formData, config)
     .then(payload => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/clients/${id}`, config)
+  api.delete(`/clients/${id}`, config)
   .then((response)=>{
       dispatch({
         type: clientTypes.CLIENT_DELETE,

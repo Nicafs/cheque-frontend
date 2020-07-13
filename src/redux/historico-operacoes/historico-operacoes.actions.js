@@ -1,11 +1,10 @@
 import { historicoOperacoesTypes } from './historico-operacoes.types';
-
-import axios from '../axios';
+import api from '../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/historicoOperacoes/`&{id})
+  api.get(`/historicoOperacoes/`&{id})
     .then(response => {
-     
+
       return dispatch({
         type: historicoOperacoesTypes.HISTORICO_OPERACOES_GET,
         historicoOperacao: response.data,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/historicoOperacoes')
+  api.get('/historicoOperacoes')
     .then((response)=>{
         dispatch({
           type: historicoOperacoesTypes.HISTORICO_OPERACOES_GET_ALL,

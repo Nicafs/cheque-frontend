@@ -1,11 +1,10 @@
 import { emailClientTypes } from './email.types';
-
-import axios from '../../axios';
+import api from '../../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/emailClient/`&{id})
+  api.get(`/emailClient/`&{id})
     .then(payload => {
-     
+
       return dispatch({
         type: emailClientTypes.EMAIL_CLIENT_GET,
         payload,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/emailClient')
+  api.get('/emailClient')
     .then((response)=>{
         dispatch({
           type: emailClientTypes.EMAIL_CLIENT_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/emailClient', formData, config)
+  api.put('/emailClient', formData, config)
   .then(payload => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/emailClient', formData, config)
+    api.post('/emailClient', formData, config)
     .then(payload => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/emailClient/${id}`, config)
+  api.delete(`/emailClient/${id}`, config)
   .then((response)=>{
       dispatch({
         type: emailClientTypes.EMAIL_CLIENT_DELETE,

@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { ReferenciaClient as initialState } from '../../../model/ReferenciaClient';
 import FormField from '../../../core/components/form/form.component';
-import ViewFormField from '../../../core/components/form/view-form.component';
 
 const useStyles = makeStyles(() => ({
   multipleForm: {
@@ -20,7 +19,7 @@ let flgEdit = null;
 function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient, updateReferenciaClient, createReferenciaClient, clientId }) {
   const [newReferencias, setNewReferencias] = useState(initialState);
   const classes = useStyles();
-  
+
   const referenciaForm = [
     { type: 'text', name: 'nome', label: 'Nome *', size: 6,
       errors: { required: { value: true, message: "Informe o Nome da Referência *" }} },
@@ -29,9 +28,7 @@ function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient
 
   // const { enqueueSnackbar } = useSnackbar();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async () => {
     if(clientId){
       if(newReferencias.id){
         updateReferenciaClient(newReferencias);
@@ -72,24 +69,25 @@ function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient
 
   return (
     <div className={classes.multipleForm}>
-      <FormField 
-                fields={referenciaForm} 
+      <FormField
+                fields={referenciaForm}
                 handleChange={(name, value) => handleChange(name, value)}
                 values={newReferencias}
                 title="Referências"
-                handleDelete={handleDelete} 
+                handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
                 isMultiple={true}>
       </FormField>
 
       {referencias ? referencias.map((referencia, index) => {
         return (
-        <ViewFormField key={index}
-                fields={referenciaForm} 
+        <FormField key={index}
+                fields={referenciaForm}
                 values={referencia}
                 handleEdit={() => handleEdit(index)}
-                handleDelete={() => handleDelete(index)}>
-        </ViewFormField>
+                handleDelete={() => handleDelete(index)}
+                disable={true}>
+        </FormField>
     )}) : null }
     </div>
   );

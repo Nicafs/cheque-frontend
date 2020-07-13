@@ -38,9 +38,7 @@ export default function bancos(state = initialState, action){
     return {
       ...state,
       loading: true,
-      data: {
-        ...action.payload,
-      }
+      data: action.payload,
     }
 
     case bancoTypes.BANCO_CREATE:

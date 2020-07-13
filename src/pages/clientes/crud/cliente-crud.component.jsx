@@ -7,50 +7,50 @@ import './cliente-crud.styles.scss';
 function CrudClient ({ client, setClient, hookForm }) {
 
   const isValidCPF = (value) => {
-    let unformated = value; 
+    let unformated = value;
     unformated = unformated.trim();
     unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
 
     if(!unformated) {
       return true;
     }
-    
+
     const regexp = /^\d{11}$/;
     return regexp.exec(unformated) !== null
   }
 
   const isValidRG = (value) => {
-    let unformated = value; 
+    let unformated = value;
     unformated = unformated.trim();
     unformated = unformated.replace(/[^a-zA-Z0-9]/g, '');
-    
+
     if(!unformated) {
       return true;
     }
-    
+
     const regexp = /^\d{8}$/;
     return regexp.exec(unformated) !== null
   }
-  
+
   const clientForm = [
-    { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2, 
+    { type: 'select', name: 'type', label: 'Tipo de Pessoa', size: 2,
       selects: [{ description: 'Pessoa Civil', value: 'PC' }, { description: 'Pessoa Jurídica', value: 'PJ' }],
       value: 'PC', fullWidth: true,
       errors: { required: { value: true, message: "Escolha o Tipo do Cliente *" }} },
     { type: 'text', name: 'name', label: 'Nome *', size: 5,
       errors: { required: { value: true, message: "Informe o Nome do Cliente *" }} },
     { type: 'text', name: 'nickname', label: 'Apelido', size: 5 },
-    { type: 'maskNumero', name: 'cpf', label: 'CPF', size: 3, format: '###.###.###-##', 
+    { type: 'maskNumero', name: 'cpf', label: 'CPF', size: 3, format: '###.###.###-##',
       errors: { validate: { validate: values => isValidCPF(values) || "Formato do CPF Inválido *" } }},
-    { type: 'maskNumero', name: 'rg', label: 'RG', size: 3, format: '#######-#', 
+    { type: 'maskNumero', name: 'rg', label: 'RG', size: 3, format: '#######-#',
       errors: { validate: { validate: values => isValidRG(values) || "Formato do RG Inválido *" } }},
-    { type: 'select', name: 'gender', label: 'Sexo', size: 3, 
+    { type: 'select', name: 'gender', label: 'Sexo', size: 3,
       selects: [{ description: 'Masculino', value: 'M' }, { description: 'Feminino', value: 'F' }],
       value: 'PC', fullWidth: true },
     { type: 'date', name: 'birthDate', label: 'Data de Nascimento', size: 3 },
     { type: 'text', name: 'nome_mae', label: 'Nome da Mãe', size: 6 },
     { type: 'text', name: 'nome_pai', label: 'Nome do Pai', size: 6 },
-    { type: 'select', name: 'estado_civil', label: 'Estado Civil', size: 3, 
+    { type: 'select', name: 'estado_civil', label: 'Estado Civil', size: 3,
       selects: [{ description: 'Solteiro', value: 'S' }, { description: 'Casado', value: 'C' }],
       value: 'PC', fullWidth: true },
     { type: 'numeric', name: 'credit', label: 'Crédito', size: 3 },
@@ -60,11 +60,11 @@ function CrudClient ({ client, setClient, hookForm }) {
     { type: 'money', name: 'renda_mensal', label: 'Renda Mensal', size: 2 },
     { type: 'text', name: 'cargo', label: 'Cargo', size: 6 },
   ];
- 
+
   const handleChange = (name, value) => {
     setClient({...client, [name]: value})
   }
-  
+
   return (
     <>
       <FormField fields={clientForm} className="clientsCrud"
@@ -74,7 +74,7 @@ function CrudClient ({ client, setClient, hookForm }) {
                 title="Criar um Cliente">
       </FormField>
     </>
-        
+
   );
 }
 

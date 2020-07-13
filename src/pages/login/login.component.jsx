@@ -1,8 +1,7 @@
 import React from 'react';
-
-import { connect } from 'react-redux';
-
-import { userActions } from '../../redux/user/user.actions';
+import { withRouter } from "react-router-dom";
+import api from '../../core/services/api';
+import { login, userSave } from "../../core/services/auth.service";
 
 import FormInput from '../../components/form-input/form-input.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
@@ -13,24 +12,32 @@ import './login.styles.scss';
 class Login extends React.Component {
   constructor(props) {
     super(props);
-   
+
     this.state = {
       username: 'nicollas',
       password: '123456',
-      submitted: false
+      submitted: false,
+      error: ""
     };
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-
-    this.setState({ submitted: true });
-    
+  handleSubmit = async e => {
+    e.preventDefault();
     const { username, password } = this.state;
-
-    if (username && password) {
-        this.props.login(username, password);
-       // this.setState({ username: '', password: ''});
+    if (!username || !password) {
+      this.setState({ error: "Preencha Usuário e Senha para continuar!" });
+    } else {
+      try {
+        const response = await api.post('/sessions', { username, password }); //api.post("/sessions", { username, password });
+        login(response.data.token);
+        userSave(response.data.user);
+        this.props.history.push("/");
+      } catch (err) {
+        this.setState({
+          error:
+            "Houve um problema com o login, verifique suas credenciais. T.T"
+        });
+      }
     }
   };
 
@@ -63,6 +70,7 @@ class Login extends React.Component {
               label='Senha'
               required
             />
+            {this.state.error && <p>{this.state.error}</p>}
             <CustomButton type='submit'> Entrar </CustomButton>
           </form>
         </CustomCard>
@@ -71,16 +79,5 @@ class Login extends React.Component {
   }
 }
 
-function mapState(state) {
-    const { loggingIn } = state.authentication;
-    return { loggingIn };
-}
 
-const actionCreators = {
-    login: userActions.login,
-    logout: userActions.logout
-};
-
-const connectedLoginPage = connect(mapState, actionCreators)(Login);
-
-export { connectedLoginPage as Login };
+export default withRouter(Login);

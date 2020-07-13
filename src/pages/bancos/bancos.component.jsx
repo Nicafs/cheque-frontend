@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from 'react-redux';
+import { isEqual, parse, parseISO, format } from 'date-fns';
 
 import {Container, Grid} from '@material-ui/core';
 
@@ -8,7 +9,7 @@ import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/banco/banco.actions';
 
 function Bancos({ findBancos, data, filteredData, filterSubmit }) {
-  
+
   const filters = [
     { type: 'text', name: 'codigo', label: 'Codigo', validators: '', value: '' },
     { type: 'text', name: 'descricao', label: 'Descricao', validators: '', value: '' }
@@ -27,13 +28,27 @@ function Bancos({ findBancos, data, filteredData, filterSubmit }) {
 
   const handleSubmit = (filtersSubmit) => {
     filteredData = data;
-    
+
     filtersSubmit.map(filter => {
       if (filter.value) {
+        const splitName = filter.name.split('.');
+
         filteredData = filteredData.filter(d =>  {
-          if(filter.type === 'text') return d[filter.name].includes(filter.value);
+          if(filter.type === 'text') {
+            return splitName.length > 1 ? d[splitName[0]][splitName[1]].toUpperCase().includes(filter.value.toUpperCase())
+            : d[filter.name].toUpperCase().includes(filter.value.toUpperCase());
+          }
+
+          if(filter.type === 'date') {
+            const dateCompare = parse(format(filter.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
+            return splitName.length > 1 ? isEqual(parseISO(d[splitName[0]][splitName[1]]), dateCompare) ? true : false
+            : isEqual(parseISO(d[filter.name]), dateCompare) ? true : false;
+          }
+
           return d[filter.name] === filter.value;
         })
+
+        console.log("filteredData:", filteredData);
       }
       return filteredData;
     })

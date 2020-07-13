@@ -2,54 +2,47 @@ import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import api from '../../../core/services/api';
 
-import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
+import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
-import axios from '../../../redux/axios';
+import { Banco as initialState } from '../../../model/Banco';
+import FormField from '../../../core/components/form/form.component';
+
 import { create, findById, update, deleteById } from '../../../redux/banco/banco.actions';
-import FormInput from '../../../core/components/form-input/form-input.component';
 import './banco-crud.styles.scss';
 
-function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, banco, history, ...otherProps }) {
-  const [bancoForm, setBanco] = useState(banco);
+function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, history, ...otherProps }) {
+  const [bancoValue, setBancoValue] = useState(initialState);
   const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
-  
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/bancos/${id}`);
-      setBanco(response.data);
+      const response = await api.get(`/bancos/${id}`);
+      setBancoValue(response.data);
     };
- 
+
     if(id){
       fetchData();
     }
   }, [id]);
 
-  // useEffect(() => {
-  //   if(id) {
-  //     findBancoById(id);
-  //   }
-  // }, [findBancoById, id]);
-  
   const handleSubmit = async event => {
-    event.preventDefault();
-
     if(id){
-      bancoForm['id'] = id;
-      updateBanco(bancoForm);
+      bancoValue['id'] = id;
+      updateBanco(id, bancoValue);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
-      createBanco(bancoForm);
+      createBanco(bancoValue);
       enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
-  const handleChange = e => {
-    const { name, value } = e.target
-    setBanco({...bancoForm, [name]: value});
+  const handleChange = (name, value) => {
+    setBancoValue({...bancoValue, [name]: value});
   }
 
   const handleDelete = () => {
@@ -59,64 +52,45 @@ function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, banco
     }
   };
 
+  const bancoForm = [
+    { type: 'text', name: 'codigo', label: 'Código', size: 12,
+    errors: { required: { value: true, message: "Informe um Código *" }} },
+    { type: 'text', name: 'descricao', label: 'Descrição', size: 12,
+    errors: { required: { value: true, message: "Informe uma Descrição *" }} },
+    { type: 'numeric', name: 'prazo', label: 'Prazo', size: 12 },
+    { type: 'numeric', name: 'juros', label: 'Juros', size: 12 },
+  ];
+
   return (
-      <Card variant="outlined">
-        <CardHeader title="Criar um Banco"/>
-
-        <CardContent>
-          <form className='bancoForm' onSubmit={handleSubmit}>
-
-            <FormInput
-              type='text'
-              name='codigo'
-              value={bancoForm.codigo}
-              onChange={handleChange}
-              label='Código'
-              required
-            />
-
-            <FormInput
-              type='text'
-              name='descricao'
-              value={bancoForm.descricao}
-              onChange={handleChange}
-              label='Descrição'
-              required
-            />
-
-            <FormInput
-              type='number'
-              name='juros'
-              value={bancoForm.juros}
-              onChange={handleChange}
-              label='Juros' />
-
-            <FormInput
-              type='number'
-              name='prazo'
-              value={bancoForm.prazo}
-              onChange={handleChange}
-              label='Prazo'
-            />
+    <Container className="Operacoes">
+      <FormField
+        fields={bancoForm}
+        handleChange={(name, value) => handleChange(name, value)}
+        values={bancoValue}
+        title="Criar um Banco"
+        handleDelete={handleDelete}
+        handleSubmit={handleSubmit}
+        >
+      </FormField>
 
 
-          <ButtonGroup className="btn-group">
-            <Button variant="contained" type="submit" color="primary">
-              Salvar
-            </Button>
-            <Button variant="contained" type="button" color="default" 
-                onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
-              Voltar
-            </Button>
-            <Button variant="contained" type="button" color="secondary" 
-                onClick={handleDelete} startIcon={<DeleteIcon />}>
-              Excluir
-            </Button>
-          </ButtonGroup>
-
-          </form>
-        </CardContent>
-      </Card>
+      <Grid item xs={12}>
+        <ButtonGroup className="btn-group">
+          <Button variant="contained" type="button" color="primary"
+            onClick={handleSubmit}>
+            Salvar
+          </Button>
+          <Button variant="contained" type="button" color="default"
+              onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
+            Voltar
+          </Button>
+          <Button variant="contained" type="button" color="secondary"
+              onClick={handleDelete} startIcon={<DeleteIcon />}>
+            Excluir
+          </Button>
+        </ButtonGroup>
+      </Grid>
+    </Container>
     );
 }
 
@@ -129,7 +103,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   findBancoById: (id) => dispatch(findById(id)),
   createBanco: (form) => dispatch(create(form)),
-  updateBanco: (form) => dispatch(update(form)),
+  updateBanco: (id, form) => dispatch(update(id, form)),
   deleteBanco: (id) => dispatch(deleteById(id))
 });
 

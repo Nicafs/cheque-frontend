@@ -7,6 +7,8 @@ import { Button, ButtonGroup, Card, CardContent, CardHeader, Grid } from '@mater
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
@@ -24,7 +26,7 @@ const useStyles = makeStyles(() => ({
   grow: { flexGrow: 1},
 }));
 
-function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange, handleClear, title, isMultiple }) {
+function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange, handleClear, handleEdit, handleDelete, title, isMultiple, disable }) {
   // const [newValues, setNewValues] = useState(EnderecoClient);
   const classes = useStyles();
   let { register, errors, ...hookForm } = useForm();
@@ -48,22 +50,22 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
             let value;
 
             if(split.length > 1) {
-              Object.keys(values).find( key => { 
-                if(key === split[0]) 
+              Object.keys(values).find( key => {
+                if(key === split[0])
                   Object.keys(values[key]).find( k => {
                     if(k === split[1]) value = values[key][k];
                     return k === split[1];
-                  }) 
+                  })
                   return key === split[0];
                 })
             } else {
               Object.keys(values).find( key => { if(key === field.name) value = values[key]; return key === field.name; })
             }
-            
+
             if(field) {
               return (
                 <Grid item xs={field.size} key={field.name} style={{order: index}}>
-                  { (() => { 
+                  { (() => {
                     switch (field.type) {
                       case 'date':
                         return <FormDate
@@ -76,7 +78,8 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false} />
+                                  disabled={field.disabled || disable || false}
+                                  />
 
                       case 'select':
                           return <FormSelect
@@ -90,7 +93,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     error={errors[field.name] ? true : false}
                                     inputRef={register(field.errors)}
                                     helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || false}
+                                    disabled={field.disabled || disable || false}
                                 />
 
                       case 'selectDependent':
@@ -107,7 +110,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     error={errors[field.name] ? true : false}
                                     inputRef={register(field.errors)}
                                     helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || false}
+                                    disabled={field.disabled || disable || false}
                                 />
 
                       case 'dialog':
@@ -127,7 +130,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                               error={errors[field.name] ? true : false}
                               inputRef={register(field.errors)}
                               helperText={errors[field.name] ? errors[field.name].message : null}
-                              disabled={field.disabled || false}
+                              disabled={field.disabled || disable || false}
                               />
 
                             <Button variant="contained" color="primary" onClick={field.open}>
@@ -152,7 +155,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                         return <FormNumberMaskInput
                                   key={field.name}
                                   name={field.name}
-                                  defaultValue={value}
+                                  value={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
@@ -163,14 +166,14 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false}
+                                  disabled={field.disabled || disable || false}
                               />
 
                       case 'money':
                         return <FormNumberMaskInput
                                   key={field.name}
                                   name={field.name}
-                                  defaultValue={value}
+                                  value={value}
                                   thousandSeparator={true}
                                   decimalSeparator={'.'}
                                   decimalScale={2}
@@ -181,14 +184,14 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false}
+                                  disabled={field.disabled || disable || false}
                               />
 
                       case 'maskNumero':
                         return <FormNumberMaskInput
                                   key={field.name}
                                   name={field.name}
-                                  defaultValue={value}
+                                  value={value}
                                   format={field.format || null}
                                   mask={field.mask || null}
                                   fullWidth
@@ -197,14 +200,14 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false}
+                                  disabled={field.disabled || disable || false}
                               />
 
                       case 'maskText':
                         return <FormNumberTextInput
                                   key={field.name}
                                   name={field.name}
-                                  defaultValue={value}
+                                  value={value}
                                   format={field.mask || null}
                                   fullWidth
                                   onValueChange={({ value: v }) =>  handleChange(field.name, v)}
@@ -212,7 +215,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false}
+                                  disabled={field.disabled || disable || false}
                               />
 
                       default:
@@ -227,7 +230,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                   error={errors[field.name] ? true : false}
                                   inputRef={register(field.errors)}
                                   helperText={errors[field.name] ? errors[field.name].message : null}
-                                  disabled={field.disabled || false}
+                                  disabled={field.disabled || disable || false}
                               />;
                       }
                     })()
@@ -241,13 +244,29 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
           }
         </Grid>
 
+
+        {disable ? (
+            <ButtonGroup className="btn-group">
+              <Button variant="contained" type="button" color="primary"
+                onClick={handleEdit}  startIcon={<EditIcon />}>
+                Editar
+              </Button>
+              <Button variant="contained" type="button" color="default"
+                  onClick={handleDelete} startIcon={<DeleteIcon />}>
+                Deletar
+              </Button>
+            </ButtonGroup>
+          ): null
+        }
+
+
         {isMultiple ? (
             <ButtonGroup className="btn-group">
               <Button variant="contained" type="submit" color="primary"
                 startIcon={<DoneIcon />}>
                 Salvar
               </Button>
-              <Button variant="contained" type="button" color="default" 
+              <Button variant="contained" type="button" color="default"
                   onClick={handleClear} startIcon={<ClearIcon />}>
                 Limpar
               </Button>

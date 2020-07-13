@@ -1,11 +1,10 @@
 import { telefoneClientTypes } from './telefone.types';
-
-import axios from '../../axios';
+import api from '../../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/telefoneClient/`&{id})
+  api.get(`/telefoneClient/`&{id})
     .then(payload => {
-     
+
       return dispatch({
         type: telefoneClientTypes.TELEFONE_CLIENT_GET,
         payload,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/telefoneClient')
+  api.get('/telefoneClient')
     .then((response)=>{
         dispatch({
           type: telefoneClientTypes.TELEFONE_CLIENT_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/telefoneClient', formData, config)
+  api.put('/telefoneClient', formData, config)
   .then(payload => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/telefoneClient', formData, config)
+    api.post('/telefoneClient', formData, config)
     .then(payload => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/telefoneClient/${id}`, config)
+  api.delete(`/telefoneClient/${id}`, config)
   .then((response)=>{
       dispatch({
         type: telefoneClientTypes.TELEFONE_CLIENT_DELETE,

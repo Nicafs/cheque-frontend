@@ -1,11 +1,10 @@
 import { referenciaClientTypes } from './referencia.types';
-
-import axios from '../../axios';
+import api from '../../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/referenciaClient/`&{id})
+  api.get(`/referenciaClient/`&{id})
     .then(payload => {
-     
+
       return dispatch({
         type: referenciaClientTypes.REFERENCIA_CLIENT_GET,
         payload,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/referenciaClient')
+  api.get('/referenciaClient')
     .then((response)=>{
         dispatch({
           type: referenciaClientTypes.REFERENCIA_CLIENT_GET_ALL,
@@ -41,7 +40,7 @@ export const update = (formData, token) => dispatch => {
     }
   };
 
-  axios.put('/referenciaClient', formData, config)
+  api.put('/referenciaClient', formData, config)
   .then(payload => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/referenciaClient', formData, config)
+    api.post('/referenciaClient', formData, config)
     .then(payload => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/referenciaClient/${id}`, config)
+  api.delete(`/referenciaClient/${id}`, config)
   .then((response)=>{
       dispatch({
         type: referenciaClientTypes.REFERENCIA_CLIENT_DELETE,

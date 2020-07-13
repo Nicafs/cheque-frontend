@@ -1,9 +1,8 @@
 import { bancoTypes } from './banco.types';
-
-import axios from '../axios';
+import api from '../../core/services/api';
 
 export const findById = (id) => dispatch => {
-  axios.get(`/bancos/${id}`)
+  api.get(`/bancos/${id}`)
   .then((response)=>{
     dispatch({
       type: bancoTypes.BANCO_GET,
@@ -15,7 +14,7 @@ export const findById = (id) => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/bancos')
+  api.get('/bancos')
     .then((response)=>{
         dispatch({
           type: bancoTypes.BANCO_GET_ALL,
@@ -33,22 +32,23 @@ export const filter = (data) => dispatch => {
     });
 }
 
-export const update = (formData, token) => dispatch => {
+export const update = (id, formData, token) => dispatch => {
   const config = {
     headers: {
       'Authorization': token,
     }
   };
 
-  axios.put('/bancos', formData, config)
-  .then((response)=>{
-      dispatch({
-        type: bancoTypes.BANCO_UPDATE,
-        banco: response.data,
-      });
-  }).catch((err)=>{
-      console.log(err);
+  api.put(`/bancos/${id}`, formData, config)
+  .then(response => {
+
+    return dispatch({
+      type: bancoTypes.BANCO_UPDATE,
+      payload: response.data,
+    });
+
   })
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -58,7 +58,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/bancos', formData, config)
+    api.post('/bancos', formData, config)
     .then((response)=>{
       return dispatch({
                   type: bancoTypes.BANCO_CREATE,
@@ -76,7 +76,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/bancos/${id}`, config)
+  api.delete(`/bancos/${id}`, config)
   .then((response)=>{
       dispatch({
         type: bancoTypes.BANCO_DELETE,

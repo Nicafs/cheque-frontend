@@ -5,9 +5,7 @@ import MenuItem from './menu-item/menu-item.component';
 import './menu.styles.scss';
 import ClientImg from '../../assets/client.jpg';
 import BancoImg from '../../assets/banco.jpg';
-import ChequeImg from '../../assets/cheque.png';
 import OperacoesImg from '../../assets/operacoes_credito.jpg';
-import HistoricoImg from '../../assets/historico.jpg';
 import RelatorioImg from '../../assets/relatorio.png';
 
 class Menu extends React.Component {
@@ -29,29 +27,17 @@ class Menu extends React.Component {
           linkUrl: 'bancos'
         },
         {
-          title: 'Cheques',
-          imageUrl: ChequeImg,
-          id: 3,
-          linkUrl: 'cheques'
-        },
-        {
           title: 'Operação de Crédito',
           imageUrl: OperacoesImg,
-          id: 4,
+          id: 3,
           linkUrl: 'operacoes'
         },
         {
           title: 'Histórico',
-          imageUrl: HistoricoImg,
-          id: 5,
+          imageUrl: RelatorioImg,
+          id: 4,
           linkUrl: 'historicoOperacoes'
         },
-        {
-          title: 'Relatório',
-          imageUrl: RelatorioImg,
-          id: 6,
-          linkUrl: 'relatorio'
-        }
       ]
     };
   }

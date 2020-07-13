@@ -1,11 +1,10 @@
 import { operacaoTypes } from './operacao.types';
-
-import axios from '../axios';
+import api from '../../core/services/api';
 
 export const findById = id => dispatch => {
-  axios.get(`/operacoes/${id}`)
+  api.get(`/operacoes/${id}`)
     .then(response => {
-     
+
       return dispatch({
         type: operacaoTypes.OPERACOES_GET,
         payload: response.data,
@@ -16,7 +15,7 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  axios.get('/operacoes')
+  api.get('/operacoes')
     .then((response)=>{
         dispatch({
           type: operacaoTypes.OPERACOES_GET_ALL,
@@ -40,8 +39,8 @@ export const update = (id, formData, token) => dispatch => {
       'Authorization': token,
     }
   };
-  
-  axios.put(`/operacoes/${id}`, formData, config)
+
+  api.put(`/operacoes/${id}`, formData, config)
   .then(response => {
 
     return dispatch({
@@ -50,7 +49,7 @@ export const update = (id, formData, token) => dispatch => {
     });
 
   })
-  .catch(err => console.log(err)); 
+  .catch(err => console.log(err));
 }
 
 export const create = (formData, token) => dispatch => {
@@ -60,7 +59,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
-    axios.post('/operacoes', formData, config)
+    api.post('/operacoes', formData, config)
     .then(response => {
 
     return dispatch({
@@ -69,7 +68,7 @@ export const create = (formData, token) => dispatch => {
     });
 
     })
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -79,7 +78,7 @@ export const deleteById = (id, token) => dispatch => {
     }
   };
 
-  axios.delete(`/operacoes/${id}`, config)
+  api.delete(`/operacoes/${id}`, config)
   .then((response)=>{
       dispatch({
         type: operacaoTypes.OPERACOES_DELETE,
