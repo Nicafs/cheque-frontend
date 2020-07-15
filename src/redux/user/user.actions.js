@@ -1,29 +1,31 @@
 import { userTypes } from './user.types';
-import { userService } from '../../core/services/user.service';
-import { alertActions } from '../alert/alert.actions';
+import api from '../../core/services/api';
+import { logout as logoutService } from '../../core/services/auth.service';
 import { history } from '../../core/helpers/history';
 
 export const userActions = {
     login,
     logout,
-    register,
     getAll,
-    delete: _delete
+    getById,
+    create,
+    update,
+    filter,
+    deleteById
 };
 
 function login(username, password) {
     return dispatch => {
         dispatch(request({ username }));
 
-        userService.login(username, password)
+        api.post('/sessions', { username, password })
             .then(
-                user => { 
+                user => {
                     dispatch(success(user));
-                    history.push('/');
+                    history.push('/home');
                 },
                 error => {
                     dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
                 }
             );
     };
@@ -34,62 +36,116 @@ function login(username, password) {
 }
 
 function logout() {
-    userService.logout();
-    return { type: userTypes.LOGOUT };
+  logoutService();
+  return { type: userTypes.LOGOUT };
 }
 
-function register(user) {
+function create(formData, token) {
     return dispatch => {
-        dispatch(request(user));
+      const config = {
+        headers: {
+          'Authorization': token,
+        }
+      };
 
-        userService.register(user)
+        dispatch(request(formData));
+
+        api.post('/users', formData, config)
             .then(
-                user => { 
-                    dispatch(success());
-                    history.push('/login');
-                    dispatch(alertActions.success('Registration successful'));
+                user => {
+                    dispatch(success(user.data));
+                    // history.push('/login');
+                    // dispatch(alertActions.success('Registration successful'));
                 },
                 error => {
                     dispatch(failure(error.toString()));
-                    dispatch(alertActions.error(error.toString()));
                 }
             );
     };
 
-    function request(user) { return { type: userTypes.REGISTER_REQUEST, user } }
-    function success(user) { return { type: userTypes.REGISTER_SUCCESS, user } }
-    function failure(error) { return { type: userTypes.REGISTER_FAILURE, error } }
+    function request(users) { return { type: userTypes.USERS_CREATE_REQUEST, users } }
+    function success(users) { return { type: userTypes.USERS_CREATE_SUCCESS, users } }
+    function failure(error) { return { type: userTypes.USERS_CREATE_FAILURE, error } }
 }
 
 function getAll() {
     return dispatch => {
         dispatch(request());
 
-        userService.getAll()
+        api.get('/users')
             .then(
-                users => dispatch(success(users)),
+                users => dispatch(success(users.data)),
                 error => dispatch(failure(error.toString()))
             );
     };
 
-    function request() { return { type: userTypes.GETALL_REQUEST } }
-    function success(users) { return { type: userTypes.GETALL_SUCCESS, users } }
-    function failure(error) { return { type: userTypes.GETALL_FAILURE, error } }
+    function request() { return { type: userTypes.USERS_GETALL_REQUEST } }
+    function success(users) { return { type: userTypes.USERS_GETALL_SUCCESS, users } }
+    function failure(error) { return { type: userTypes.USERS_GETALL_FAILURE, error } }
 }
 
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
+function getById(id) {
+  return dispatch => {
+      dispatch(request());
+
+      api.get(`/users/${id}`)
+          .then(
+              users => dispatch(success(users.data)),
+              error => dispatch(failure(error.toString()))
+          );
+  };
+
+  function request() { return { type: userTypes.USERS_GETBYID_REQUEST } }
+  function success(users) { return { type: userTypes.USERS_GETBYID_SUCCESS, users } }
+  function failure(error) { return { type: userTypes.USERS_GETBYID_FAILURE, error } }
+}
+
+function update(id, formData, token) {
+  return dispatch => {
+      dispatch(request());
+      const config = {
+        headers: {
+          'Authorization': token,
+        }
+      };
+
+      api.put(`/users/${id}`, formData, config)
+          .then(
+              users => dispatch(success(users.data)),
+              error => dispatch(failure(error.toString()))
+          );
+  };
+
+  function request() { return { type: userTypes.USERS_UPDATE_REQUEST } }
+  function success(users) { return { type: userTypes.USERS_UPDATE_SUCCESS, users } }
+  function failure(error) { return { type: userTypes.USERS_UPDATE_FAILURE, error } }
+}
+
+function filter(data) {
+  return dispatch => {
+      dispatch(request(data));
+  };
+
+  function request(data) { return { type: userTypes.USERS_FILTER_REQUEST, data } }
+}
+
+function deleteById(id, token) {
     return dispatch => {
         dispatch(request(id));
+        const config = {
+          headers: {
+            'Authorization': token,
+          }
+        };
 
-        userService.delete(id)
+        api.delete(`/users/${id}`, config)
             .then(
                 user => dispatch(success(id)),
                 error => dispatch(failure(id, error.toString()))
             );
     };
 
-    function request(id) { return { type: userTypes.DELETE_REQUEST, id } }
-    function success(id) { return { type: userTypes.DELETE_SUCCESS, id } }
-    function failure(id, error) { return { type: userTypes.DELETE_FAILURE, id, error } }
+    function request(id) { return { type: userTypes.USERS_DELETE_REQUEST, id } }
+    function success(id) { return { type: userTypes.USERS_DELETE_SUCCESS, id } }
+    function failure(id, error) { return { type: userTypes.USERS_DELETE_FAILURE, id, error } }
 }

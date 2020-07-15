@@ -16,7 +16,7 @@ import { alert } from './alert/alert.reducer';
 import { authentication } from './authentication/authentication.reducer';
 
 export default combineReducers({
-  user: users,
+  users: users,
   clients: clients,
   enderecosClient: enderecosClient,
   telefonesClient: telefonesClient,

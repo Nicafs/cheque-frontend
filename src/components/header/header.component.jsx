@@ -38,6 +38,10 @@ const Header = ({history}) => (
             Configurações
           </Link> */}
 
+          <Button variant="contained" color="secondary" startIcon={<HighlightOffIcon />} to='/user'>
+            Usuários
+          </Button>
+
           <Button variant="contained" color="secondary" startIcon={<HighlightOffIcon />} onClick={() => sair(history)}>
             SAIR
           </Button>

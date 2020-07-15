@@ -1,53 +1,136 @@
 import { userTypes } from './user.types';
+import User from '../../model/User';
 
-export function users(state = {}, action) {
+const initialState = {
+  loading: false,
+  user: User,
+  data: [],
+  filteredData: [],
+  error: '',
+}
+
+export function users(state = initialState, action) {
   switch (action.type) {
-    case userTypes.GETALL_REQUEST:
+    case userTypes.USERS_GETALL_REQUEST:
       return {
         ...state,
         loading: true
       };
-    case userTypes.GETALL_SUCCESS:
+
+    case userTypes.USERS_GETALL_SUCCESS:
       return {
         ...state,
-        items: action.users
+        data: action.users,
+        filteredData: action.users,
+        loading: false
       };
-    case userTypes.GETALL_FAILURE:
-      return { 
-        ...state,
-        error: action.error
-      };
-    case userTypes.DELETE_REQUEST:
-      // add 'deleting:true' property to user being deleted
+
+    case userTypes.USERS_GETALL_FAILURE:
       return {
         ...state,
-        items: state.items.map(user =>
+        error: action.error,
+        loading: false
+      };
+
+    case userTypes.USERS_GETBYID_REQUEST:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case userTypes.USERS_GETBYID__SUCCESS:
+      return {
+        ...state,
+        user: action.users,
+        loading: false
+      };
+
+    case userTypes.USERS_GETBYID__FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        loading: false
+      };
+
+    case userTypes.USERS_DELETE_REQUEST:
+      return {
+        ...state,
+        data: state.data.map(user =>
           user.id === action.id
             ? { ...user, deleting: true }
             : user
-        )
+        ),
+        loading: true
       };
-    case userTypes.DELETE_SUCCESS:
-      // remove deleted user from state
+
+    case userTypes.USERS_DELETE_SUCCESS:
       return {
         ...state,
-        items: state.items.filter(user => user.id !== action.id)
+        data: state.data.filter(user => user.id !== action.id),
+        loading: false
       };
-    case userTypes.DELETE_FAILURE:
-      // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
+
+    case userTypes.USERS_DELETE_FAILURE:
       return {
         ...state,
-        items: state.items.map(user => {
+        data: state.data.map(user => {
           if (user.id === action.id) {
-            // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = user;
-            // return copy of user with 'deleteError:[error]' property
+
             return { ...userCopy, deleteError: action.error };
           }
 
           return user;
-        })
+        }),
+        loading: false
       };
+
+      case userTypes.USERS_CREATE_REQUEST:
+        return {
+          ...state,
+          loading: true
+        };
+
+      case userTypes.USERS_CREATE_SUCCESS:
+        return {
+          ...state,
+          user: action.users,
+          loading: false
+        };
+
+      case userTypes.USERS_CREATE_FAILURE:
+        return {
+          ...state,
+          error: action.error,
+          loading: false
+        };
+
+      case userTypes.USERS_UPDATE_REQUEST:
+        return {
+          ...state,
+          loading: true
+        };
+
+      case userTypes.USERS_UPDATE_SUCCESS:
+        return {
+          ...state,
+          user: action.users,
+          loading: false
+        };
+
+      case userTypes.USERS_UPDATE_FAILURE:
+        return {
+          ...state,
+          error: action.error,
+          loading: false
+        };
+
+      case userTypes.USERS_FILTER_REQUEST:
+        return {
+          ...state,
+          filteredData: action.users
+        };
+
     default:
       return state
   }
