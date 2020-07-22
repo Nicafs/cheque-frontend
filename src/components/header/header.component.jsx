@@ -4,6 +4,7 @@ import { userGet, logout, isAuthenticated } from "../../core/services/auth.servi
 
 import Button from '@material-ui/core/Button';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import PersonIcon from '@material-ui/icons/Person';
 import { ReactComponent as Logo } from '../../assets/logo.svg';
 
 import './header.styles.scss';
@@ -16,7 +17,7 @@ const sair = (history) => {
 
   }
 };
-console.log("isAuthenticated:", isAuthenticated())
+
 const Header = ({history}) => (
   <header className='headerApp'>
     <div className='sistema-container'>
@@ -38,11 +39,11 @@ const Header = ({history}) => (
             Configurações
           </Link> */}
 
-          <Button variant="contained" color="secondary" startIcon={<HighlightOffIcon />} to='/user'>
+          <Button variant="contained" color="secondary" startIcon={<PersonIcon />} onClick={() => history.push('/user')}>
             Usuários
           </Button>
 
-          <Button variant="contained" color="secondary" startIcon={<HighlightOffIcon />} onClick={() => sair(history)}>
+          <Button variant="contained" color="default" startIcon={<HighlightOffIcon />} onClick={() => sair(history)}>
             SAIR
           </Button>
         </div>

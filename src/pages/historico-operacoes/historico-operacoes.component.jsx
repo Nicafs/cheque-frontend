@@ -60,7 +60,7 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
     <Container className="HistoricoOperacoes">
       <Grid item md={12}>
         <Filters filters={filters} handleSubmit={handleSubmit} label="Buscar Hitório de Operações"
-                 linkPrev='/' className="form" />
+                 linkPrev='/' className="form" flgCreate={true} />
       </Grid>
 
       {filteredData ?

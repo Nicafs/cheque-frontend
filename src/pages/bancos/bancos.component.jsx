@@ -47,8 +47,6 @@ function Bancos({ findBancos, data, filteredData, filterSubmit }) {
 
           return d[filter.name] === filter.value;
         })
-
-        console.log("filteredData:", filteredData);
       }
       return filteredData;
     })

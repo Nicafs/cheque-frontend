@@ -56,9 +56,9 @@ function CrudUser({ findUserById, createUser, updateUser, deleteUser, history, .
     errors: { required: { value: true, message: "Informe um Nome *" }} },
     { type: 'email', name: 'email', label: 'E-mail', size: 6,
     errors: { required: { value: true, message: "Informe um E-mail *" }} },
-    { type: 'text', name: 'username', label: 'Usuário *', size: 5,
+    { type: 'text', name: 'username', label: 'Usuário *', size: 6,
     errors: { required: { value: true, message: "Informe um E-mail *" }}  },
-    { type: 'password', name: 'password', label: 'Senha *', size: 5 ,
+    { type: 'password', name: 'password', label: 'Senha *', size: 6 ,
     errors: { required: { value: true, message: "Informe um E-mail *" }} },
   ];
 

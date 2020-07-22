@@ -3,8 +3,10 @@ import { withRouter } from "react-router-dom";
 import api from '../../core/services/api';
 import { login, userSave } from "../../core/services/auth.service";
 
+import Button from '@material-ui/core/Button';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+
 import FormInput from '../../components/form-input/form-input.component';
-import CustomButton from '../../components/custom-button/custom-button.component';
 import { CustomCard } from '../../components/custom-card/custom-card.component';
 
 import './login.styles.scss';
@@ -35,7 +37,7 @@ class Login extends React.Component {
       } catch (err) {
         this.setState({
           error:
-            "Houve um problema com o login, verifique suas credenciais. T.T"
+            "Houve um problema com o login, verifique suas credenciais."
         });
       }
     }
@@ -71,7 +73,10 @@ class Login extends React.Component {
               required
             />
             {this.state.error && <p>{this.state.error}</p>}
-            <CustomButton type='submit'> Entrar </CustomButton>
+            <Button type='submit' variant="contained" color="primary" startIcon={<ArrowForwardIcon />}
+            >
+              Entrar
+            </Button>
           </form>
         </CustomCard>
       </div>

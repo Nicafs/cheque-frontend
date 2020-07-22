@@ -41,6 +41,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-end;
+      button:not(last-child){margin-left: 10px;}
   
       .option {
         padding: 10px 15px;
