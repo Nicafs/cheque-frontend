@@ -85,7 +85,6 @@ export default function NotaPromissoria({operacao}) {
   useEffect(() => {
     const fetchClient = async () => {
       const response = await api.get(`/clients/${operacao.client_id}`);
-      console.log("response:", response.data)
       setClient(response.data);
     };
 
@@ -139,13 +138,17 @@ export default function NotaPromissoria({operacao}) {
                     <View>
                       <Text>Devedor: {client?.name}</Text>
                       <Text>C.P.F./C.N.P.J.:
+                        {client?.cpf && client.cpf.length === 11 ?
                         <NumberFormat value={client?.cpf} format={'###.###.###-##'}
                             displayType={'text'} renderText={value =><Text>{value}</Text>} />
+                            : null }
                       </Text>
-                      {/* <Text>Telefone:
+                      <Text>Telefone:
+                        {client?.telefoneClient && client?.telefoneClient.length > 0 ?
                         <NumberFormat value={client?.telefoneClient && client?.telefoneClient.length > 0 ? client?.telefoneClient[0].numero : null} format={'(##) # ####-####'}
                             displayType={'text'} renderText={value =><Text>{value}</Text>} />
-                      </Text> */}
+                            : null }
+                      </Text>
                     </View>
                     <View>
                       <Text>...............................................................................................</Text>

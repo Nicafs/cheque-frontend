@@ -64,7 +64,6 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
   };
 
   const handleClickOpenNota = (selected) => {
-    console.log("selected:", selected);
     setOperacao(selected);
     setOpenNota(true);
   };
