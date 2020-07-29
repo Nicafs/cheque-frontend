@@ -16,12 +16,14 @@ import { create, findById, update, deleteById } from '../../../redux/operacao/op
 import './operacao-crud.styles.scss';
 
 function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao,
-                        operacaoInitial, history, ...otherProps }) {
+                        operacaoInitial, history, lastId, ...otherProps }) {
+
+  const id = otherProps.match.params.id;
+
   const [operacao, setOperacao] = useState(operacaoInitial);
   const [open, setOpen] = useState(false);
   const { ...hookForm } = useForm();
 
-  const id = otherProps.match.params.id;
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -31,10 +33,21 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
       setOperacao(response);
     };
 
+    const fetchLastId = async () => {
+      if(lastId === 0) {
+        const response = await api.get(`/operacoes/lastId`).then(r => { return r.data});
+        setOperacao({...operacaoInitial, id: response.id + 1});
+      } else {
+        setOperacao({...operacaoInitial, id: lastId + 1});
+      }
+    };
+
     if(id){
       fetchData();
+    } else {
+      fetchLastId();
     }
-  }, [id]);
+  }, [id, operacaoInitial, lastId]);
 
   const handleSubmit = async event => {
     if(id){
@@ -74,22 +87,22 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     const { value } = e.target;
 
     if (value) {
-      const response = await api.get(`/clients/${value}`).then(r => { return r.data});
+      const response = await api.get(`/operacoes/disponivel/${value}`).then(r => { return r.data});
       if(response){
         setOperacao({...operacao, client: { name: response.name, id: response.id,
-                      limit: response.limit, credit: response.credit  }});
+                      limit: response.limit, credit: response.disponivel  }});
       } else {
         setOperacao({...operacao, client: { name: '', id: "", limit: "", credit: "" } });
       }
     }
-    console.log("operacao:", operacao);
   };
 
-  const handleClose = (selected) => {
-    console.log("selected:", selected);
+  const handleClose = async (selected) => {
     if(selected) {
+      const response = await api.get(`/operacoes/disponivel/${selected.id}`).then(r => { return r.data});
+
       setOperacao({...operacao, client: { name: selected.name, id: selected.id,
-        limit: selected.limit, credit: selected.credit  } });
+        limit: selected.limit, credit: response.disponivel  } });
     }
     setOpen(false);
   };
@@ -150,6 +163,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 const mapStateToProps = (state) => {
   return {
     operacaoInitial: state.operacoes.operacao,
+    lastId: state.operacoes.lastId,
   };
 }
 

@@ -14,13 +14,31 @@ export const findById = id => dispatch => {
     .catch(err => console.log(err));
 }
 
+export const findLastId = () => dispatch => {
+  api.get('/operacoes/lastId')
+    .then((response)=>{
+      dispatch({
+        type: operacaoTypes.OPERACOES_GET_LAST_ID,
+        lastId: response.id,
+      });
+    }).catch((err)=>{
+        console.log(err);
+    })
+}
+
 export const find = () => dispatch => {
   api.get('/operacoes')
     .then((response)=>{
-        dispatch({
-          type: operacaoTypes.OPERACOES_GET_ALL,
-          data: response.data,
-        });
+
+      const max = response.data.reduce((prev, current) =>
+        prev.id > current.id ? prev : current,
+      );
+
+      dispatch({
+        type: operacaoTypes.OPERACOES_GET_ALL,
+        data: response.data,
+        lastId: max.id,
+      });
     }).catch((err)=>{
         console.log(err);
     })

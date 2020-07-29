@@ -5,7 +5,7 @@ const Operacao = {
     client: Client,
     user_id: '',
     situacao: '',
-    percentual: 0,
+    percentual: 8,
     tarifa: 0,
     data_operacao: null,
     acrescimos: 0,

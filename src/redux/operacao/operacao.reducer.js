@@ -7,6 +7,7 @@ const initialState = {
   operacao: Operacao,
   data: [],
   filteredData: [],
+  lastId: 0,
 }
 
 export default function cheques(state = initialState, action){
@@ -23,7 +24,14 @@ export default function cheques(state = initialState, action){
       ...state,
       loading: true,
       data: action.data,
-      filteredData: action.data
+      filteredData: action.data,
+      lastId: action.lastId,
+    }
+
+    case operacaoTypes.OPERACOES_GET_LAST_ID:
+    return {
+      ...state,
+      lastId: action.lastId,
     }
 
     case operacaoTypes.OPERACOES_FILTER:
