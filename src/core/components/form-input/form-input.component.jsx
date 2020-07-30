@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TextField, FormControl } from '@material-ui/core';
 
-const FormInput = ({ handleChange, label, fullWidth, ...props }) => (
+const FormInput = ({ handleChange, label, fullWidth, name, ...props }) => (
   <FormControl variant="outlined" fullWidth={fullWidth}>
       {/* {label ? (
           <InputLabel htmlFor={label}>
@@ -19,8 +19,9 @@ const FormInput = ({ handleChange, label, fullWidth, ...props }) => (
        : null } */}
 
       <TextField
-        id={label} 
+        id={name} 
         label={label} 
+        name={name}
         onChange={handleChange} 
         variant="outlined"
         {...props} 

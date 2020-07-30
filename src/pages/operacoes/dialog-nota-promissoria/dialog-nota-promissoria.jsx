@@ -11,6 +11,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 function DialogNotaPromissoria({operacao, open, handleClose}) {
+  
   return (
     <Dialog fullWidth={true} maxWidth="xl" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">Nota Promissória</DialogTitle>

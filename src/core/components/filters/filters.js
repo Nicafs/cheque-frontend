@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   grow: { flexGrow: 1},
 }));
 
-function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, history }) {
+function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, flgModal, history }) {
   const classes = useStyles();
   const [values, setValues] = useState(filters);
 
@@ -147,10 +147,17 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, hi
               </Button>
             : null }
 
-            <Button variant="contained" type="button"
-                onClick={() => history.push(`${linkPrev}`)}>
-              Voltar
-            </Button>
+            { flgModal ?
+              <Button variant="contained" type="button"
+                  onClick={() => flgModal()}>
+                Fechar
+              </Button>
+            :
+              <Button variant="contained" type="button"
+                  onClick={() => history.push(`${linkPrev}`)}>
+                Voltar
+              </Button>
+            }
           </ButtonGroup>
 
         </form>

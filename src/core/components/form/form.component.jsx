@@ -37,6 +37,37 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
     hookForm.handleSubmit = hookFormCustom.handleSubmit;
   }
 
+  const disableInputs = (disable, value) => {
+    if (disable) {
+      if (disable.value === value) {
+        disable.fields.map(field => {
+          const element = document.getElementById(field);
+          
+          if(element) {
+            element.disabled = true;
+            element.classList.add('disabled');
+
+            const nameCompost = field.split('.');
+            Object.keys(values).find( key => {  if(key === nameCompost[0]) handleChange(field, ''); return key === field; })
+          }
+
+          return true;
+        })
+      } else {
+        disable.fields.map(field => {
+          const element = document.getElementById(field);
+          
+          if(element) {
+            element.disabled = false;
+            element.classList.remove('disabled');
+          }
+
+          return true;
+        })
+      }
+    }
+  }
+
   return (
     <form className='formField' onSubmit={hookForm.handleSubmit(handleSubmit)}>
       <Card variant="outlined">
@@ -86,7 +117,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
                                     key={field.name}
                                     name={field.name}
                                     value={value}
-                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                    onChange={(e) => { handleChange(e.target.name, e.target.value); disableInputs(field.disable, e.target.value) } }
                                     fullWidth={field.fullWidth}
                                     label={field.label}
                                     selects={field.selects}

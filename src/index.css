@@ -34,3 +34,5 @@ h1, h2, h3 {
 .MuiTableSortLabel-icon { position: absolute; right: -27px; display: none !important;}
 .MuiTableCell-head:hover .MuiTableSortLabel-root .MuiTableSortLabel-icon { display: block !important;}
 .MuiGrid-item .MuiFormControl-root {padding: 0px !important}
+
+.disabled{color: rgba(0, 0, 0, 0.38) !important; background: #f8f8f8 !important;}

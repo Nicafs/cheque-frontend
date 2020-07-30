@@ -7,7 +7,7 @@ const Operacao = {
     situacao: '',
     percentual: 8,
     tarifa: 0,
-    data_operacao: null,
+    data_operacao: new Date(),
     acrescimos: 0,
     tarifa_bordero: 0,
     total_operacao: 0,

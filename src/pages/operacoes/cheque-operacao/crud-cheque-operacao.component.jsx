@@ -58,7 +58,8 @@ function CrudChequeOperacao({ data, handleCheque }) {
   const chequeOperacaoForm = [
     { type: 'select', name: 'tipo', label: 'tipo', size: 3, fullWidth: true,
     selects:[{value:'cheque', description: 'Cheque'},
-             {value:'duplicata', description: 'Duplicata'}]
+             {value:'duplicata', description: 'Duplicata'}],
+    disable: {value:'duplicata', fields: ['banco.id', 'banco.descricao', 'conta', 'agencia']}
     },
     { type: 'dialog', name: 'banco.id', label: 'Banco *', size: 9,
       name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,
