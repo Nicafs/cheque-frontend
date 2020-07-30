@@ -12,20 +12,20 @@ function CrudChequeOperacao({ data, handleCheque }) {
   const [chequeOperacao, setChequeOperacao] = useState(dataMod);
   const [open, setOpen] = useState(false);
 
-  const handleChange = (name, value) => {
+  const handleChange = async (name, value) => {
     const nameCompost = name.split('.');
 
     if(nameCompost.length > 1){
-      setChequeOperacao({...chequeOperacao,
-        [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
-      });
+      setChequeOperacao((state) => ({...state,
+        [nameCompost[0]]: {...state[nameCompost[0]], [nameCompost[1]]: value}
+      }));
 
-      handleCheque({...chequeOperacao,
-        [nameCompost[0]]: {...chequeOperacao[nameCompost[0]], [nameCompost[1]]: value}
-      });
+      handleCheque((state) => ({...state,
+        [nameCompost[0]]: {...state[nameCompost[0]], [nameCompost[1]]: value}
+      }));
     } else {
-      setChequeOperacao({...chequeOperacao, [name]: value});
-      handleCheque({...chequeOperacao, [name]: value});
+      setChequeOperacao((state) => ({...state, [name]: value}));
+      handleCheque((state) => ({...state, [name]: value}));
     }
   }
 

@@ -26,7 +26,9 @@ const useStyles = makeStyles(() => ({
   grow: { flexGrow: 1},
 }));
 
-function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange, handleClear, handleEdit, handleDelete, title, isMultiple, disable }) {
+function FormField({ fields, values, hookFormCustom, handleSubmit,
+                     handleChange, handleClear, handleEdit, handleDelete, title,
+                     isMultiple, disable }) {
   // const [newValues, setNewValues] = useState(EnderecoClient);
   const classes = useStyles();
   let { register, errors, ...hookForm } = useForm();
@@ -40,29 +42,28 @@ function FormField({ fields, values, hookFormCustom, handleSubmit, handleChange,
   const disableInputs = (disable, value) => {
     if (disable) {
       if (disable.value === value) {
-        disable.fields.map(field => {
+        disable.fields.forEach(field => {
           const element = document.getElementById(field);
-          
+
           if(element) {
             element.disabled = true;
             element.classList.add('disabled');
 
             const nameCompost = field.split('.');
-            Object.keys(values).find( key => {  if(key === nameCompost[0]) handleChange(field, ''); return key === field; })
+            Object.keys(values).find((key) => {
+              if(key === nameCompost[0]) handleChange(field, '');
+              return key === nameCompost[0];
+            })
           }
-
-          return true;
         })
       } else {
-        disable.fields.map(field => {
+        disable.fields.forEach(field => {
           const element = document.getElementById(field);
-          
+
           if(element) {
             element.disabled = false;
             element.classList.remove('disabled');
           }
-
-          return true;
         })
       }
     }

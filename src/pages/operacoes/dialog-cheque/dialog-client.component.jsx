@@ -41,7 +41,7 @@ function DialogClient({open, handleClose, findClients, clients, filteredData, fi
     setSelected(row);
   };
 
-  
+
   const handleSubmit = (filtersSubmit) => {
     filteredData = clients;
 
@@ -67,7 +67,7 @@ function DialogClient({open, handleClose, findClients, clients, filteredData, fi
 
   return (
       <Dialog fullWidth={true} maxWidth="md" open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Selecione um Banco</DialogTitle>
+        <DialogTitle id="form-dialog-title">Selecione um Cliente</DialogTitle>
 
         <DialogContent>
           <Container className="Clientes">

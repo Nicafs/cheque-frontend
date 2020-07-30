@@ -12,6 +12,7 @@ const Client = {
     estado_civil: '',
     conjugue: '',
     credit: 0,
+    disponivel: 0,
     limit: 0,
     acrescimo: 0,
     local_trabalho: '',

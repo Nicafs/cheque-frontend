@@ -28,10 +28,10 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
     { label: 'Agencia', field: 'agencia', type: 'numeric' },
     { label: 'Conta', field: 'conta', type: 'numeric' },
     { label: 'Docto/Chq', field: 'numero' },
-    { label: 'Valor Operação', field: 'valor_operacao', type: 'numeric' },
-    { label: 'Vencimento', field: 'data_vencimento', type: 'date' },
     { label: 'Dias', field: 'dias', type: 'numeric' },
-    { label: 'Valor Encargos', field: 'valor_encargos', type: 'numeric' },
+    { label: 'Vencimento', field: 'data_vencimento', type: 'date' },
+    { label: 'Valor Operação', field: 'valor_operacao', type: 'money' },
+    { label: 'Valor Encargos', field: 'valor_encargos', type: 'money' },
     { label: 'Data Quitação', field: 'data_quitacao', type: 'date' },
     { label: 'Emitente', field: 'emitente' },
   ]

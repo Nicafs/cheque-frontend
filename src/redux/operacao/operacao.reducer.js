@@ -45,14 +45,14 @@ export default function cheques(state = initialState, action){
     return {
       ...state,
       loading: true,
-      data: action.payload,
+      operacao: action.payload,
     }
 
     case operacaoTypes.OPERACOES_CREATE:
     return {
       ...state,
       loading: true,
-      data: action.payload,
+      operacao: action.payload,
     }
     default:
       return state;

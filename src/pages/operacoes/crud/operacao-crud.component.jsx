@@ -4,8 +4,10 @@ import { withRouter } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useForm } from "react-hook-form";
 import api from '../../../core/services/api';
+import NumberFormat from 'react-number-format';
 
-import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, ButtonGroup, Grid, Container, Card, Typography, CardContent, Box } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
@@ -15,10 +17,39 @@ import DialogClient from '../dialog-cheque/dialog-client.component';
 import { create, findById, update, deleteById } from '../../../redux/operacao/operacao.actions';
 import './operacao-crud.styles.scss';
 
+const useStyles = makeStyles(() => ({
+  totaisWrap: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  totais: {
+    color: 'blue',
+    fontSize: '18px',
+    width: '200px'
+  },
+  left: {
+    textAlign: 'left',
+  },
+  right: {
+    textAlign: 'right',
+    float: 'right',
+    padding: '0px 10px',
+  },
+  total: {
+    background: 'red',
+    fontSize: '18px',
+    width: '180px',
+    padding: '0px 10px',
+    textAlign: 'right',
+    color: 'yellow'
+  },
+}));
+
 function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, deleteOperacao,
                         operacaoInitial, history, lastId, ...otherProps }) {
 
   const id = otherProps.match.params.id;
+  const classes = useStyles();
 
   const [operacao, setOperacao] = useState(operacaoInitial);
   const [open, setOpen] = useState(false);
@@ -52,6 +83,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const handleSubmit = async event => {
     if(id){
       operacao['id'] = id;
+      console.log("operacao:", operacao);
       updateOperacao(id, operacao);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
@@ -109,9 +141,17 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const handleUpdate = (chequeOperacao) => {
     if(chequeOperacao) {
-      setOperacao({...operacao, chequeOperacao: chequeOperacao });
+      const cheque = chequeOperacao;
+      cheque.map(c => c.valor_encargos = c.valor_operacao * (operacao.percentual / 100));
+      setOperacao({...operacao, chequeOperacao: cheque });
     }
   };
+
+  const moneyMask = (value) => {
+    return <NumberFormat value={value} prefix={'R$ '} displayType={'text'} thousandSeparator={'.'}
+                        decimalSeparator={','}
+                        renderText={value =><span>{value}</span>} />;
+  }
 
   const operacaoForm = [
     { type: 'number', name: 'id', label: 'Operação', size: 3, disabled: true },
@@ -124,7 +164,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     { type: 'number', name: 'tarifa', label: 'Tarifa', size: 3 },
     { type: 'number', name: 'acrescimos', label: 'Acréscimos', size: 3 },
     { type: 'number', name: 'client.limit', label: 'Limite', size: 3, disabled: true },
-    { type: 'number', name: 'client.credit', label: 'Disponível', size: 3, disabled: true },
+    { type: 'number', name: 'client.disponivel', label: 'Disponível', size: 3, disabled: true },
   ];
 
   return (
@@ -139,6 +179,50 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
       <DialogClient open={open} handleClose={handleClose}></DialogClient>
 
       <ChequeOperacoes chequeOperacao={operacao.chequeOperacao} handleUpdate={handleUpdate}></ChequeOperacoes>
+
+      <Card variant="outlined">
+        <CardContent>
+            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
+              <Grid item className={classes.totais}>
+                <span className={classes.left}>TOTAL OPERAÇÃO</span>
+                <span className={classes.right}>:</span>
+              </Grid>
+              <Grid item className={classes.total} >
+                <Box>{moneyMask(operacao.total_operacao)}</Box>
+              </Grid>
+            </Typography>
+
+            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
+              <Grid item className={classes.totais}>
+                <span className={classes.left}>TOTAL ACRÉSCIMOS</span>
+                <span className={classes.right}>:</span>
+              </Grid>
+              <Grid item className={classes.total} >
+                <Box>{moneyMask(operacao.total_outros)}</Box>
+              </Grid>
+            </Typography>
+
+            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
+              <Grid item className={classes.totais}>
+                <span className={classes.left}>TOTAL ENCARGOS</span>
+                <span className={classes.right}>:</span>
+              </Grid>
+              <Grid item className={classes.total} >
+                <Box>{moneyMask(operacao.total_encargos)}</Box>
+              </Grid>
+            </Typography>
+
+            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
+              <Grid item className={classes.totais}>
+                <span className={classes.left}>TOTAL LÍQUIDO</span>
+                <span className={classes.right}>:</span>
+              </Grid>
+              <Grid item className={classes.total} >
+                <Box>{moneyMask(operacao.total_liquido)}</Box>
+              </Grid>
+            </Typography>
+        </CardContent>
+      </Card>
 
       <Grid item xs={12}>
         <ButtonGroup className="btn-group">
