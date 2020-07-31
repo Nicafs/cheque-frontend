@@ -15,10 +15,9 @@ export const findById = id => dispatch => {
 }
 
 export const find = () => dispatch => {
-  console.log("Get ALl Clientes - 1");
   api.get('/clients')
     .then((response)=>{
-      console.log("Get ALl Clientes - response.data:", response.data);
+      
         dispatch({
           type: clientTypes.CLIENT_GET_ALL,
           data: response.data,
