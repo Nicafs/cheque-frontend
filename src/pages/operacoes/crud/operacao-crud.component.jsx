@@ -83,7 +83,6 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const handleSubmit = async event => {
     if(id){
       operacao['id'] = id;
-      console.log("operacao:", operacao);
       updateOperacao(id, operacao);
       enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
@@ -222,6 +221,16 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
               </Grid>
               <Grid item className={classes.total} >
                 <Box>{moneyMask(operacao.total_liquido)}</Box>
+              </Grid>
+            </Typography>
+
+            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
+              <Grid item className={classes.totais}>
+                <span className={classes.left}>TOTAL TESTE</span>
+                <span className={classes.right}>:</span>
+              </Grid>
+              <Grid item className={classes.total} >
+                <Box>{moneyMask(0.04)}</Box>
               </Grid>
             </Typography>
         </CardContent>
