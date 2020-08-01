@@ -147,8 +147,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   };
 
   const moneyMask = (value) => {
-    return <NumberFormat value={value} prefix={'R$ '} 
-                        displayType={'text'} 
+    return <NumberFormat value={value} prefix={'R$ '} displayType={'text'}
                         thousandSeparator={'.'}
                         decimalSeparator={','}
                         decimalScale={2}
