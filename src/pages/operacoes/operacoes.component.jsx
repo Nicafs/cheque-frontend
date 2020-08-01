@@ -15,6 +15,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
 
   const [open, setOpen] = useState(false);
   const [openNota, setOpenNota] = useState(false);
+  const [flgRelatorio, setFlgRelatorio] = useState(false);
   const [operacao, setOperacao] = useState();
 
 
@@ -63,9 +64,9 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
     setOpen(false);
   };
 
-  const handleClickOpenNota = (selected) => {
+  const handleClickOpenNota = (selected, flgRelatorio) => {
     setOperacao(selected);
-    setOpenNota(true);
+    setFlgRelatorio(flgRelatorio, setOpenNota(true));
   };
 
   const handleCloseNota = () => {
@@ -100,7 +101,8 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
   ];
 
   const customActions = [
-    { ariaLabel: 'Nota Pomissória', onClick: (row) => handleClickOpenNota(row), icon: FeaturedPlayListIcon },
+    { ariaLabel: 'Nota Pomissória', onClick: (row) => handleClickOpenNota(row, 1), icon: FeaturedPlayListIcon },
+    { ariaLabel: 'Operação de Crédito', onClick: (row) => handleClickOpenNota(row, 2), icon: FeaturedPlayListIcon },
   ]
 
   return (
@@ -116,7 +118,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
         (<TableCustom data={filteredData} columns={columns} customActions={customActions} linkTo='/operacoes/crud' isEditable='true' />)
         : ''}
 
-      <DialogNotaPromissoria operacao={operacao} open={openNota} handleClose={handleCloseNota}></DialogNotaPromissoria>
+      <DialogNotaPromissoria flgRelatorio={flgRelatorio} operacao={operacao} open={openNota} handleClose={handleCloseNota}></DialogNotaPromissoria>
     </Container >
   );
 };

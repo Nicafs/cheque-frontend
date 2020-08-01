@@ -151,6 +151,8 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
                         displayType={'text'} 
                         thousandSeparator={'.'}
                         decimalSeparator={','}
+                        decimalScale={2}
+                        fixedDecimalScale={true}
                         renderText={value =><span>{value}</span>} />;
   }
 
@@ -220,16 +222,6 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
               </Grid>
               <Grid item className={classes.total} >
                 <Box>{moneyMask(operacao.total_liquido)}</Box>
-              </Grid>
-            </Typography>
-
-            <Typography className={classes.totaisWrap} variant="subtitle2" color="textSecondary" gutterBottom>
-              <Grid item className={classes.totais}>
-                <span className={classes.left}>TOTAL TESTE</span>
-                <span className={classes.right}>:</span>
-              </Grid>
-              <Grid item className={classes.total} >
-                <Box>{moneyMask(0.04)}</Box>
               </Grid>
             </Typography>
         </CardContent>

@@ -31,7 +31,7 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
               ],
       value: '', fullWidth: true,
       errors: { required: { value: true, message: "Escolha o Tipo do Endereço *" }} },
-    { type: 'text', name: 'cep', label: 'CEP *', format: '000-000-000-00', size: 3,
+    { type: 'text', name: 'cep', label: 'CEP *', format: '00000-000', size: 3,
       errors: { required: { value: true, message: "Informe o CEP *" }} },
     { type: 'select', name: 'tipo_logradouro', label: 'Tipo de Logradouro', size: 3,
       selects: [{ description: 'Alameda', value: 'Alameda' },
