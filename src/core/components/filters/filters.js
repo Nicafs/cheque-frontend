@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid } from '@material-ui/core';
+import { Button, Card, CardContent, CardHeader, ButtonGroup, Grid, TextField, MenuItem } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
+import FormNumberMaskInput from '../../../core/components/form-input/form-number-mask.component';
+import FormNumberTextInput from '../../../core/components/form-input/form-text-mask.component';
 import './filters.styles.scss';
 
 const useStyles = makeStyles(() => ({
@@ -41,15 +43,20 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, fl
 
   const handleSubmitForm = async event => {
     event.preventDefault();
-
+    
     handleSubmit(values);
   }
 
-  const handleChange = e => {
-    const { name, value } = e.target
-    
+  const handleChange = (name, value) => {    
     setValues(prevValues => (prevValues.map(v => {
       if (v.name === name) return { ...v, value: value }
+      return v;
+    })))
+  }
+
+  const handleChangeFilter = (name, value) => {    
+    setValues(prevValues => (prevValues.map(v => {
+      if (v.name === name) return { ...v, filterType: value }
       return v;
     })))
   }
@@ -70,19 +77,20 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, fl
                             return <FormDate
                                     key={value.name}
                                     name={value.name}
+                                    label={value.label}
                                     value={value.value}
+                                    onChange={date => handleChange(value.name, date)}
                                     fullWidth
-                                    onChange={date => handleChange({ target: { name: value.name, value: date } })}
-                                    label={value.label} />
+                                    />
 
                           case 'select':
                             return <FormSelect
                                     key={value.name}
                                     name={value.name}
-                                    value={value.value}
-                                    onChange={handleChange}
-                                    fullWidth={value.fullWidth}
                                     label={value.label}
+                                    value={value.value}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                    fullWidth={value.fullWidth}
                                     selects={value.selects}
                                   />
 
@@ -93,9 +101,10 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, fl
                                   key={value.name}
                                   type={value.type}
                                   name={value.name}
-                                  value={value.value}
-                                  onChange={handleChange}
                                   label={value.label}
+                                  value={value.value}
+                                  onChange={(e) => handleChange(e.target.name, e.target.value)}
+                                  onBlur={value.onBlur || null}
                                 />
 
                                 <Button variant="contained" color="primary" onClick={value.open}>
@@ -107,7 +116,7 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, fl
                                     type='text'
                                     name={value.name_disable}
                                     value={value.value_disable}
-                                    onChange={handleChange}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
                                     label='Descrição'
                                     disabled
                                     fullWidth
@@ -116,15 +125,82 @@ function Filters({ filters, handleSubmit, title, linkTo, linkPrev, flgCreate, fl
                               </Grid>
                             )
 
+                          case 'numeric':
+                            return  <div style={{display: 'flex', flexDirection: 'row'}}>
+                                      <FormNumberMaskInput
+                                        key={value.name}
+                                        name={value.name}
+                                        value={value.value}
+                                        label={value.label}
+                                        onValueChange={({ value: v }) =>  handleChange(value.name, v)}
+                                        thousandSeparator={'.'}
+                                        decimalSeparator={','}
+                                        decimalScale={value.decimalScale | 0}
+                                        fixedDecimalScale
+                                        fullWidth
+                                      />
+
+                                      <TextField style={{ color: 'rgba(0, 0, 0, 0.87)',
+                                                          backgroundColor: '#e0e0e0',
+                                                          marginLeft: '4px',
+                                                          width: '105px' }} className={'selectFilterType'}
+                                          value={value.filterType}
+                                          onChange={(e) => handleChangeFilter(value.name, e.target.value)}
+                                          variant="outlined"
+                                          select >
+                                        <MenuItem value={'equal'}> Igual </MenuItem>
+                                        <MenuItem value={'lessThan'}> Menor </MenuItem>
+                                        <MenuItem value={'greaterThan'}> Maior </MenuItem>
+                                      </TextField>
+                                    </div>
+      
+                          case 'money':
+                            return <FormNumberMaskInput
+                                      key={value.name}
+                                      name={value.name}
+                                      value={value.value}
+                                      label={value.label}
+                                      onValueChange={({ value: v }) =>  handleChange(value.name, v)}
+                                      thousandSeparator={'.'}
+                                      decimalSeparator={','}
+                                      decimalScale={2}
+                                      fixedDecimalScale
+                                      prefix={'R$ '}
+                                      fullWidth
+                                  />
+    
+                          case 'maskNumero':
+                            return <FormNumberMaskInput
+                                      key={value.name}
+                                      name={value.name}
+                                      value={value.value}
+                                      label={value.label}
+                                      onValueChange={({ value: v }) =>  handleChange(value.name, v)}
+                                      format={value.format || null}
+                                      mask={value.mask || null}
+                                      fullWidth
+                                  />
+    
+                          case 'maskText':
+                            return <FormNumberTextInput
+                                      key={value.name}
+                                      name={value.name}
+                                      value={value.value}
+                                      label={value.label}
+                                      onValueChange={({ value: v }) =>  handleChange(value.name, v)}
+                                      format={value.mask || null}
+                                      fullWidth
+                                  />
+
                           default:
                             return <FormInput
                                     key={value.name}
                                     type={value.type}
                                     name={value.name}
+                                    label={value.label}
                                     value={value.value}
                                     fullWidth
-                                    onChange={handleChange}
-                                    label={value.label}
+                                    onChange={(e) => handleChange(e.target.name, e.target.value)}
                                   />
                         }
                       })()

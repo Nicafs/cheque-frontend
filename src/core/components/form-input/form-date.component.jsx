@@ -8,7 +8,7 @@ import {
 } from '@material-ui/pickers';
 
 export default function FormDate({ handleChangeDate, ...props }) {
-
+  
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils} locale={enLocale}>
         <KeyboardDatePicker

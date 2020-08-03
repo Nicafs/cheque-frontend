@@ -147,7 +147,8 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
           const select = selects.find(select => select.value === row[field]);
           return select.description;
         case 'money':
-          return <NumberFormat value={row[field]} prefix={'R$ '} displayType={'text'} thousandSeparator={'.'}
+          return <NumberFormat value={row[field]} prefix={'R$ '} displayType={'text'} 
+          thousandSeparator={'.'}
                               decimalSeparator={','}
                               decimalScale={2}
                               fixedDecimalScale={true}

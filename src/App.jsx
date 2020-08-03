@@ -14,12 +14,12 @@ import Footer from './components/footer/footer.component';
 
 class App extends React.Component {
   constructor(props) {
-      super(props);
+    super(props);
 
-      history.listen((location, action) => {
-          // clear alert on location change
-          this.props.clearAlerts();
-      });
+    history.listen((location, action) => {
+        // clear alert on location change
+        this.props.clearAlerts();
+    });
   }
 
   render() {

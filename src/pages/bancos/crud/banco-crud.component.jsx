@@ -78,16 +78,18 @@ function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, histo
         <ButtonGroup className="btn-group">
           <Button variant="contained" type="button" color="primary"
             onClick={handleSubmit}>
-            Salvar
+            { id ? 'Salvar' : 'Confirmar' }
           </Button>
           <Button variant="contained" type="button" color="default"
               onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
             Voltar
           </Button>
-          <Button variant="contained" type="button" color="secondary"
+          { id ? 
+            <Button variant="contained" type="button" color="secondary"
               onClick={handleDelete} startIcon={<DeleteIcon />}>
-            Excluir
-          </Button>
+                Excluir
+            </Button>
+          : null }
         </ButtonGroup>
       </Grid>
     </Container>

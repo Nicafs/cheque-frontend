@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,21 +22,8 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
 
   const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-  const emailForm = [
-    { type: 'email', name: 'email', label: 'Email *', size: 10,
-      errors: { required: { value: true, message: "Informe o E-mail *" },
-                pattern: { value: isEmail, message: "E-mail inválido *"} } },
-    { type: 'select', name: 'principal', label: 'Principal', size: 2,
-      selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
-      value: 'true', fullWidth: true },
-  ];
-
-  // const { enqueueSnackbar } = useSnackbar();
-
   const handleSubmit = async () => {
-    console.log("clientId:", clientId);
     if(clientId){
-      console.log("Entrou");
       if(newEmails.id){
         updateEmailClient(newEmails);
       } else {
@@ -71,10 +57,22 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
     if(emails[index].id){
       deleteEmailClient(emails[index].id);
     }
-
     setEmails(emails.filter((end, i) => i !== index));
   };
 
+  const handleClear = () => {
+    setNewEmails(initialState);
+  }
+
+  const emailForm = [
+    { type: 'email', name: 'email', label: 'Email *', size: 10,
+      errors: { required: { value: true, message: "Informe o E-mail *" },
+                pattern: { value: isEmail, message: "E-mail inválido *"} } },
+    { type: 'select', name: 'principal', label: 'Principal', size: 2,
+      selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
+      value: 'true', fullWidth: true },
+  ];
+  
   return (
     <div className={classes.multipleForm}>
       <FormField
@@ -84,6 +82,7 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
                 title="E-mails"
                 handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
+                handleClear={handleClear}
                 isMultiple={true}>
       </FormField>
 

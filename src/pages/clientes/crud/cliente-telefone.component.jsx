@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -29,23 +28,17 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
       return true;
     }
 
-    const regexp = /^\d{11}$/;
+    const regexp = /^\d{10}|\d{11}$/;
     return regexp.exec(unformated) !== null
   }
 
-  const telefoneForm = [
-    { type: 'select', name: 'tipo', label: 'Tipo', size: 2,
-    selects: [{ description: 'Pessoal', value: 'Pessoal' },
-              { description: 'Comercial', value: 'Comercial' },
-              { description: 'Outros', value: 'Outros' }],
-    value: '', fullWidth: true,
-    errors: { required: { value: true, message: "Informe o Tipo de Telefone *" }} },
-    { type: 'maskNumero', name: 'numero', label: 'Número *', size: 3, format: '(##) # ####-####', mask:'_',
-    errors: { required: { value: true, message: "Informe o Número do Telefone *" },
-              validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
-  ];
+  const formatPhone = (val) => {
+    if(val.length <= 10) {
+      return '(' + val.substring(0, 2) + ') ' + val.substring(2, 6) + '-' + val.substring(6, 10);
+    }
 
-  // const { enqueueSnackbar } = useSnackbar();
+    return '(' + val.substring(0, 2) + ') ' + val.substring(2, 3) + ' ' + val.substring(3, 7) + '-' + val.substring(7, 11);
+  }
 
   const handleSubmit = async () => {
     if(clientId){
@@ -82,9 +75,24 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
     if(telefones[index].id){
       deleteTelefoneCLient(telefones[index].id);
     }
-
     setTelefones(telefones.filter((end, i) => i !== index));
   };
+
+  const handleClear = () => {
+    setNewTelefone(initialState);
+  }
+
+  const telefoneForm = [
+    { type: 'select', name: 'tipo', label: 'Tipo', size: 2,
+      selects: [{ description: 'Pessoal', value: 'Pessoal' },
+                { description: 'Comercial', value: 'Comercial' },
+                { description: 'Outros', value: 'Outros' }],
+      value: '', fullWidth: true,
+      errors: { required: { value: true, message: "Informe o Tipo de Telefone *" }} },
+    { type: 'maskNumero', name: 'numero', label: 'Número *', size: 3, format: formatPhone, mask:'_',
+      errors: { required: { value: true, message: "Informe o Número do Telefone *" },
+                validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
+  ];
 
   return (
     <div className={classes.multipleForm}>
@@ -95,6 +103,7 @@ function TelefoneCLient ({ telefones, setTelefones, deleteTelefoneCLient, update
                 title="Telefones"
                 handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
+                handleClear={handleClear}
                 isMultiple={true}>
       </FormField>
 

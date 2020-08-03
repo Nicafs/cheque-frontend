@@ -17,6 +17,7 @@ import HistoricoOperacoes from './pages/historico-operacoes/historico-operacoes.
 import Relatorio from './pages/relatorio/relatorio.component';
 import User from './pages/user/user.component';
 import CrudUser from './pages/user/crud/user-crud.component';
+import Configuracao from './pages/configuracao/configuracao.component';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -52,6 +53,7 @@ const Routes = ({history}) => (
       <PrivateRoute  exact path='/user/crud' component={CrudUser} />
       <PrivateRoute  exact path='/user/crud/:id' component={CrudUser} />
       <PrivateRoute  exact path='/relatorio' component={Relatorio} />
+      <PrivateRoute  exact path='/configuracao' component={Configuracao} />
       <Route path='/login' component={Login} />
       <Redirect from="*" to="/" />
     </Switch>

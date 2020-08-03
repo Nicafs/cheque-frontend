@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import api from '../../../core/services/api';
-// import { useSnackbar } from 'notistack';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -24,8 +23,6 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
   const [newBancos, setNewBancos] = useState(initialState);
   const [open, setOpen] = useState(false);
   const classes = useStyles();
-
-  // const { enqueueSnackbar } = useSnackbar();
 
   const handleSubmit = async () => {
     if(clientId){
@@ -70,7 +67,6 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
     if(bancos[index].id){
       deleteBancoClient(bancos[index].id);
     }
-
     setBancos(bancos.filter((banco, i) => i !== index));
   };
 
@@ -91,7 +87,7 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
     if (value) {
       const response = await api.get(`/bancos/${value}`).then(r => { return r.data});
       if(response){
-        setNewBancos({...newBancos, banco: response});
+        setNewBancos({...newBancos, banco: {...newBancos.banco, id: response.id, descricao: response.descricao }});
       } else {
         setNewBancos({...newBancos, banco: Banco});
       }
@@ -100,6 +96,10 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
     }
   };
 
+  const handleClear = () => {
+    setNewBancos(initialState);
+  }
+  
   const bancoForm = [
     { type: 'dialog', name: 'banco.id', label: 'Banco', size: 6,
       name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,
@@ -119,6 +119,7 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
                 title="Bancos"
                 handleDelete={handleDelete}
                 handleSubmit={handleSubmit}
+                handleClear={handleClear}
                 isMultiple={true}>
       </FormField>
 

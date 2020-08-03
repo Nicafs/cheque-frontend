@@ -39,6 +39,10 @@ const Header = ({history}) => (
             Configurações
           </Link> */}
 
+          <Button variant="contained" color="primary" startIcon={<PersonIcon />} onClick={() => history.push('/configuracao')}>
+            Configuração
+          </Button>
+
           <Button variant="contained" color="secondary" startIcon={<PersonIcon />} onClick={() => history.push('/user')}>
             Usuários
           </Button>

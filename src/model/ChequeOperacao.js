@@ -9,7 +9,7 @@ const ChequeOperacao = {
     numero: '',
     dias: 30,
     status: '',
-    data_vencimento: new Date().addDay(30),
+    data_vencimento: new Date().getDate() + 30,
     data_quitacao: null,
     valor_operacao: 0,
     valor_encargos: 0,

@@ -160,6 +160,7 @@ const numberMask = (value, mask) => {
 // Create Document Component
 export default function OperacaoCredito({operacao}) {
   const [client, setClient] = useState({});
+  const [configuracao, setConfiguracao] = useState({});
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -167,13 +168,20 @@ export default function OperacaoCredito({operacao}) {
       setClient(response.data);
     };
 
+    const fetchConfiguracao = async () => {
+      const response = await api.get(`/configuracao`);
+      setConfiguracao(response.data);
+    };
+
     if(operacao.client_id) {
       fetchClient();
     }
+
+    fetchConfiguracao();
   }, [operacao]);
 
   const cheques = operacao.chequeOperacao;
-console.log("operacao:", operacao);
+
   return ( 
     <Document title={'Operação de Crédito'} creator={'Usuário'} author={'Cliente'}>
       <Page size="A4" style={styles.page}>
@@ -183,31 +191,31 @@ console.log("operacao:", operacao);
 
             <View style={{display: 'flex', flexDirection: 'column'}}>
               <View>
-                <Text style={styles.title}> CACTTUS BRASIL SOFTWARE E INFORMÁTICA </Text>
+                <Text style={styles.title}> { configuracao.name } </Text>
               </View>
 
               <View style={[styles.headerInfo, styles.headerText]}>
                 <View>
-                  <Text> Endereço: AV. BRASIL </Text>
-                  <Text> Bairro: JARDIM TROPICAL </Text>
-                  <Text> Telefone: (65) 3359-1110 </Text>
+                  <Text> Endereço: { configuracao.endLogradouro }  </Text>
+                  <Text> Bairro: { configuracao.endBairro }  </Text>
+                  <Text> Telefone: { configuracao.telefone }  </Text>
                 </View>
 
                 <View>
-                  <Text> Nº: 64 </Text>
-                  <Text> Cidade: Cuiabá </Text>
-                  <Text> Whatsapp: (65) 99961-7014 </Text>
+                  <Text> Nº: { configuracao.endNumero }  </Text>
+                  <Text> Cidade: { configuracao.endCidade }  </Text>
+                  <Text> Whatsapp: { configuracao.whatsapp }  </Text>
                 </View>
 
                 <View>
-                  <Text> CNPJ: 35301858000170 </Text>
-                  <Text> CEP: 78030-304 </Text>
-                  <Text> Celular: (65) 99961-7014 </Text>
+                  <Text> CNPJ: { configuracao.cpfCnpj }  </Text>
+                  <Text> CEP: { configuracao.endCep }  </Text>
+                  <Text> Celular: { configuracao.celular }  </Text>
                 </View>
               </View>
 
               <View style={styles.headerText}>
-                <Text> E-mail: vendas@unibrasilsistemas.com.br / www.unibrasilsistemas.com.br / suporte@unibrasilsistemas.com.br </Text>
+                <Text> E-mail: { configuracao.email } </Text>
               </View>  
             </View>
           </View>

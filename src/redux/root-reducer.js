@@ -12,6 +12,7 @@ import chequesOperacao from './cheque-operacao/chequeOperacao.reducer';
 import historicoOperacoes from './historico-operacoes/historico-operacoes.reducer';
 import bancos from './banco/banco.reducer';
 import operacoes from './operacao/operacao.reducer';
+import configuracao from './configuracao/configuracao.reducer';
 import { alert } from './alert/alert.reducer';
 import { authentication } from './authentication/authentication.reducer';
 
@@ -28,6 +29,7 @@ export default combineReducers({
   historicoOperacoes: historicoOperacoes,
   bancos: bancos,
   operacoes: operacoes,
+  configuracao: configuracao,
   alert: alert,
   authentication: authentication
 });

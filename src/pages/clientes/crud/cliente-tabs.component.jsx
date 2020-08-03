@@ -211,17 +211,19 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
       <ButtonGroup className="btn-group">
         <Button variant="contained" type="button" color="primary"
           onClick={hookForm.handleSubmit(handleSubmit)}  startIcon={<DoneOutlineIcon />}>
-          Salvar
+          { id ? 'Salvar' : 'Confirmar' }
         </Button>
         <Button variant="contained" type="button" color="default"
             onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
           Voltar
         </Button>
-        <Button variant="contained" type="button" color="secondary"
+        { id ? 
+          <Button variant="contained" type="button" color="secondary"
             onClick={handleDelete} startIcon={<DeleteIcon />}>
-          Excluir
-        </Button>
-      </ButtonGroup>
+              Excluir
+          </Button>
+        : null }
+      </ButtonGroup> 
     </Container>
   )
 }

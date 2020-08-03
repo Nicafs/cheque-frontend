@@ -66,15 +66,12 @@ function CrudClient ({ client, setClient, hookForm }) {
   }
 
   return (
-    <>
-      <FormField fields={clientForm} className="clientsCrud"
-                handleChange={(name, value) => handleChange(name, value)}
-                hookFormCustom={hookForm}
-                values={client}
-                title="Criar um Cliente">
-      </FormField>
-    </>
-
+    <FormField fields={clientForm} className="clientsCrud"
+              handleChange={(name, value) => handleChange(name, value)}
+              hookFormCustom={hookForm}
+              values={client}
+              title="Criar um Cliente">
+    </FormField>
   );
 }
 

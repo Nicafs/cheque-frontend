@@ -10,7 +10,7 @@ const initialState = {
   lastId: 0,
 }
 
-export default function cheques(state = initialState, action){
+export default function operacao(state = initialState, action){
   switch(action.type){
     case operacaoTypes.OPERACOES_GET:
       return {

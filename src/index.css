@@ -36,3 +36,5 @@ h1, h2, h3 {
 .MuiGrid-item .MuiFormControl-root {padding: 0px !important}
 
 .disabled{color: rgba(0, 0, 0, 0.38) !important; background: #f8f8f8 !important;}
+
+.selectFilterType .MuiSelect-outlined.MuiSelect-outlined { padding: 18px 8px }
