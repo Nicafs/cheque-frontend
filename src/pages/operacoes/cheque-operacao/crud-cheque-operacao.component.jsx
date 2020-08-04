@@ -5,7 +5,7 @@ import api from '../../../core/services/api';
 import FormField from '../../../core/components/form/form.component';
 import DialogBanco from './dialog-banco/dialog-banco.component';
 
-function CrudChequeOperacao({ data, handleCheque }) {
+function CrudChequeOperacao({ data, handleCheque, flgView }) {
   const dataMod = data;
   dataMod.banco_id = data?.banco?.id;
   dataMod.banco_nome = data?.banco?.descricao;
@@ -82,9 +82,9 @@ function CrudChequeOperacao({ data, handleCheque }) {
       <FormField fields={chequeOperacaoForm} className="chequeOperacaoForm"
                   handleChange={(name, value) => handleChange(name, value)}
                   values={chequeOperacao}
-                  title="Criar uma Operação">
+                  disable={flgView}
+                  title="">
       </FormField>
-
 
       <DialogBanco open={open} handleClose={handleClose}></DialogBanco>
     </>

@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 export default function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort, headCells, isEditable } = props;
+    const { classes, order, orderBy, onRequestSort, headCells, isEditable, customActions } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
@@ -16,7 +16,7 @@ export default function EnhancedTableHead(props) {
     return (
       <TableHead>
         <TableRow>
-          {isEditable ? <TableCell align={'center'}> Ações </TableCell> : null}
+          {isEditable || customActions ? <TableCell align={'center'}> Ações </TableCell> : null}
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.field}

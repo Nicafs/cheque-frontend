@@ -120,21 +120,22 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
     if (value) {
       const response = await api.get(`/operacoes/disponivel/${value}`).then(r => { return r.data});
       if(response){
-        setOperacao({...operacao, client: { name: response.name, id: response.id,
+        setOperacao({...operacao, client: {...operacao.client, name: response.name, id: response.id,
                       limit: response.limit, credit: response.disponivel  }});
       } else {
-        setOperacao({...operacao, client: { name: '', id: "", limit: "", credit: "" } });
+        setOperacao({...operacao, client: {...operacao.client, name: '', id: "", limit: "", credit: "" } });
       }
     }
   };
 
   const handleClose = async (selected) => {
-    if(selected) {
+    if(selected.id) {
       const response = await api.get(`/operacoes/disponivel/${selected.id}`).then(r => { return r.data});
 
-      setOperacao({...operacao, client: { name: selected.name, id: selected.id,
+      setOperacao({...operacao, client: {...operacao.client, name: selected.name, id: selected.id,
         limit: selected.limit, credit: response.disponivel  } });
     }
+
     setOpen(false);
   };
 

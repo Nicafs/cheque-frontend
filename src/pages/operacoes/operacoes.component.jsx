@@ -11,6 +11,7 @@ import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/operacao/operacao.actions';
 import DialogClient from './dialog-cheque/dialog-client.component';
 import DialogNotaPromissoria from './dialog-nota-promissoria/dialog-nota-promissoria';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
 
@@ -29,52 +30,56 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
     filtersSubmit.map(filter => {
       if (filter.value) {
         const splitName = filter.name.split('.');
-        
-        filteredData = filteredData.filter(d =>  {
-          const dateCompare = parse(format(filter.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
-          const dateCompareDependent = filter.filterDependent ?
-            filtersSubmit.find(f => {
-              if(f.name === filter.filterDependent ) {
-                parse(format(f.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
-              }
-              return true;
-            }) : null;
-            
-          const name = filter.removeStringLast ? 
-                       filter.name.substring(0, filter.name.length - filter.removeStringLast) : 
-                       filter.name;
 
+        filteredData = filteredData.filter(d =>  {
           switch (filter.type) {
-            case 'date': 
+            case 'date':
+              const dateCompare = parse(format(filter.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
+              const dateCompareDependent = filter.filterDependent ?
+                filtersSubmit.find(f => {
+                  if(f.name === filter.filterDependent ) {
+                    parse(format(f.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
+                  }
+                  return true;
+                }) : null;
+
+              const name = filter.removeStringLast ?
+                          filter.name.substring(0, filter.name.length - filter.removeStringLast) :
+                          filter.name;
+
               switch (filter.filterType) {
-                case 'lessThan': 
-                  return splitName.length > 1 ? 
-                    isAfter(parseISO(d[splitName[0]][splitName[1]]), dateCompare) && 
+                case 'lessThan':
+                  return splitName.length > 1 ?
+                    isAfter(parseISO(d[splitName[0]][splitName[1]]), dateCompare) &&
                     dateCompareDependent ? isBefore(parseISO(d[filter.filterDependent]), dateCompareDependent) : true
                     ? true : false
-                    : isAfter(parseISO(d[name]), dateCompare) && 
+                    : isAfter(parseISO(d[name]), dateCompare) &&
                     dateCompareDependent ? isBefore(parseISO(d[filter.filterDependent]), dateCompareDependent) : true
                     ? true : false;
 
-                case 'greaterThan': 
-                  return splitName.length > 1 ? 
-                    isBefore(parseISO(d[splitName[0]][splitName[1]]), dateCompare) && 
+                case 'greaterThan':
+                  return splitName.length > 1 ?
+                    isBefore(parseISO(d[splitName[0]][splitName[1]]), dateCompare) &&
                       dateCompareDependent ? isAfter(parseISO(d[filter.filterDependent]), dateCompareDependent) : true
                       ? true : false
-                      : isBefore(parseISO(d[name]), dateCompare) && 
+                      : isBefore(parseISO(d[name]), dateCompare) &&
                       dateCompareDependent ? isAfter(parseISO(d[name]), dateCompareDependent) : true
                       ? true : false;
 
-                case 'equal': 
+                case 'equal':
                   return splitName.length > 1 ? isEqual(parseISO(d[splitName[0]][splitName[1]]), dateCompare) ? true : false
                   : isEqual(parseISO(d[name]), dateCompare) ? true : false;
 
-                default: 
+                default:
                   return splitName.length > 1 ? isEqual(parseISO(d[splitName[0]][splitName[1]]), dateCompare) ? true : false
                   : isEqual(parseISO(d[filter.name]), dateCompare) ? true : false;
               }
 
-            default: 
+            case 'dialog' || 'numeric':
+              return splitName.length > 1 ? d[splitName[0]][splitName[1]] === filter.value
+              : d[filter.name] === filter.value;
+
+            default:
               return splitName.length > 1 ? d[splitName[0]][splitName[1]].toUpperCase().includes(filter.value.toUpperCase())
               : d[filter.name].toUpperCase().includes(filter.value.toUpperCase());
           }
@@ -82,7 +87,7 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
       }
       return filteredData;
     })
-  
+
     filterSubmit(filteredData);
   }
 
@@ -106,12 +111,12 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
       const response = await api.get(`/clients/${value}`).then(r => { return r.data });
       if(response){
         setFilters((prevFilters) => (prevFilters.map(prevFilter => {
-          if (prevFilter.name === 'client.id')  return { ...prevFilter, value: response.id, value_disable: response.name };
+          if (prevFilter.name === 'client_id')  return { ...prevFilter, value: response.id, value_disable: response.name };
           return prevFilter;
         })));
       } else {
         setFilters((prevFilters) => (prevFilters.map(prevFilter => {
-          if (prevFilter.name === 'client.id')  return { ...prevFilter, value: '', value_disable: '' };
+          if (prevFilter.name === 'client_id')  return { ...prevFilter, value: '', value_disable: '' };
           return prevFilter;
         })));
       }
@@ -128,42 +133,42 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
   };
 
   const [filters, setFilters] = React.useState([
-    { type: 'date', name: 'data_operacao_ini', label: 'Data Inicial de Cadastro', validators: '', value: null, size: 3, 
-      filterType: 'greaterThan', filterDependent: 'data_final_cadastro', removeStringLast: 4 
+    { type: 'date', name: 'data_operacao_ini', label: 'Data Inicial de Cadastro', validators: '', value: null, size: 3,
+      filterType: 'greaterThan', filterDependent: 'data_final_cadastro', removeStringLast: 4
     },
-    { type: 'date', name: 'data_operacao_fim', label: 'Data Final de Cadastro', validators: '', value: null, size: 3, 
+    { type: 'date', name: 'data_operacao_fim', label: 'Data Final de Cadastro', validators: '', value: null, size: 3,
       filterType: 'lessThan', filterDependent: 'data_ini_cadastro', removeStringLast: 4
     },
-    { type: 'date', name: 'data_quitacao_ini', label: 'Data Inicial de Quitação', validators: '', value: null, size: 3, 
+    { type: 'date', name: 'data_quitacao_ini', label: 'Data Inicial de Quitação', validators: '', value: null, size: 3,
       filterType: 'greaterThan', filterDependent: 'data_final_quitacao', removeStringLast: 4
     },
-    { type: 'date', name: 'data_quitacao_fim', label: 'Data Final de Quitação', validators: '', value: null, size: 3, 
+    { type: 'date', name: 'data_quitacao_fim', label: 'Data Final de Quitação', validators: '', value: null, size: 3,
       filterType: 'lessThan', filterDependent: 'data_ini_quitacao', removeStringLast: 4
     },
-    { type: 'dialog', name: 'client.id', label: 'Cliente', size: 12, value: '',
-      name_disable: 'client.name', value_disable: '', open: handleClickOpen,
+    { type: 'dialog', name: 'client_id', label: 'Cliente', size: 12, value: '',
+      name_disable: 'client_name', value_disable: '', open: handleClickOpen,
        onBlur: handleOnBlurClient},
-    { type: 'number', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: '', size: 10 },
-    { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: '', selects:
-    [{value:'todas', description: '1 - Todas'},
-     {value:'analise', description: '2 - Em Análise'},
-     {value:'aprovado', description: '3 - Aprovado'},
-     {value:'quitado', description: '4 - Quitado'} ], fullWidth: true, size: 2 }
+    // { type: 'numeric', name: 'cheque_numero', label: 'Documento/Cheque', validators: '', value: '', size: 10 },
+    // { type: 'select', name: 'situacao', label: 'Situação', validators: '', value: '', selects:
+    // [{value:'todas', description: '1 - Todas'},
+    //  {value:'analise', description: '2 - Em Análise'},
+    //  {value:'aprovado', description: '3 - Aprovado'},
+    //  {value:'quitado', description: '4 - Quitado'} ], fullWidth: true, size: 2 }
   ]);
 
   const columns =  [
+    { label: 'Operação', field: 'id', type: 'text', align: 'center' },
     { label: 'Data de Operação', field: 'data_operacao', type: 'date', align: 'center' },
-    { label: 'Total Operação', field: 'total_operacao', type: 'money', align: 'right' },
     { label: '% ao mês', field: 'percentual', type: 'numeric', align: 'center' },
     { label: 'Situação', field: 'situacao', align: 'center'  },
+    { label: 'Total Operação', field: 'total_operacao', type: 'money', align: 'right'  },
     { label: 'Total Encargos', field: 'total_encargos', type: 'money', align: 'right'  },
-    { label: 'Outros Acréscimos', field: 'total_outros', type: 'money', align: 'right'  },
     { label: 'Total Líquido', field: 'total_liquido', type: 'money', align: 'right'  },
   ];
 
   const customActions = [
     { ariaLabel: 'Nota Pomissória', onClick: (row) => handleClickOpenNota(row, 1), icon: FeaturedPlayListIcon },
-    { ariaLabel: 'Operação de Crédito', onClick: (row) => handleClickOpenNota(row, 2), icon: FeaturedPlayListIcon },
+    { ariaLabel: 'Operação de Crédito', onClick: (row) => handleClickOpenNota(row, 2), icon: ReceiptIcon },
   ]
 
   return (

@@ -17,7 +17,7 @@ import TableCustom from '../../../core/components/table/tableCustom';
 import ChequeOperacao from '../../../model/ChequeOperacao';
 
 export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState();
   const [flgEdit, setFlgEdit] = useState(false);
   const [chequeOperacaoForm, setChequeOperacaoForm] = useState(ChequeOperacao);
   const { enqueueSnackbar } = useSnackbar();
@@ -41,12 +41,16 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
   const handleClickOpen = (button, edit) => {
     setFlgEdit(edit);
     if(edit) {
-      setChequeOperacaoForm(selected);
+      if(selected) {
+        setChequeOperacaoForm(selected);
+        setOpen({...open, [button]: true});
+      } else {
+        enqueueSnackbar('Selecione um cheque!!')
+      }
     } else {
       setChequeOperacaoForm(ChequeOperacao);
+      setOpen({...open, [button]: true});
     }
-
-    setOpen({...open, [button]: true});
   };
 
   const handleOpenSituacao = () => {
@@ -173,7 +177,7 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
           </Button>
       </ButtonGroup>
 
-      <DialogCheque open={open.add} handleClose={handleCloseAdd} chequeOperacaoForm={chequeOperacaoForm}></DialogCheque>
+      <DialogCheque open={open.add} handleClose={handleCloseAdd} chequeOperacaoForm={chequeOperacaoForm} flgView={flgEdit}></DialogCheque>
 
       <DialogSituacao open={open.situacao} handleClose={handleCloseSituacao}></DialogSituacao>
 

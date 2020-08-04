@@ -1,26 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { isEqual, parse, parseISO, format } from 'date-fns';
 
 import {Container, Grid} from '@material-ui/core';
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
 import { find, filter } from '../../redux/historico-operacoes/historico-operacoes.actions';
+import DialogOperacao  from './dialog-operacao.component';
 
 function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filterSubmit }) {
+  const [open, setOpen] = useState(false);
+  const [idOperacao, setIdOperacao] = useState(0);
 
   const filters = [
     { type: 'date', name: 'data_operacao', label: 'Data de Operação', validators: '', value: null, size: 2 },
-    { type: 'text', name: 'user.nome', label: 'Nome do Usuário', validators: '', value: '', size: 5 },
+    { type: 'text', name: 'user.name', label: 'Nome do Usuário', validators: '', value: '', size: 5 },
     { type: 'text', name: 'client.name', label: 'Cliente', validators: '', value: '', size: 5 }
   ]
 
   const columns =  [
     { label: 'Data de Operação', field: 'data_operacao', type: 'date' },
-    { label: 'Nome do Usuário', field: 'user.nome', type: 'compost' },
+    { label: 'Operação', field: 'id', type: 'text' },
+    { label: 'Nome do Usuário', field: 'user.name', type: 'compost' },
     { label: 'Cliente', field: 'client.name', type: 'compost' },
+    { label: 'Total Líquido', field: 'total_liquido', type: 'money' },
   ]
+
 
   useEffect(() => {
     findHistoricoOperacoes();
@@ -56,6 +63,20 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
     filterSubmit(filteredData);
   }
 
+  const handleClickOpen = (id) => {
+    setIdOperacao(24);
+    setOpen(true);
+  };
+
+
+  const handleClose = async () => {
+    setOpen(false);
+  };
+
+  const customActions = [
+    { ariaLabel: 'Operacao', onClick: (row) => handleClickOpen(row.id), icon: ReceiptIcon },
+  ]
+
   return (
     <Container className="HistoricoOperacoes">
       <Grid item md={12}>
@@ -64,8 +85,10 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
       </Grid>
 
       {filteredData ?
-        (<TableCustom data={filteredData} columns={columns} />)
+        (<TableCustom data={filteredData} columns={columns} customActions={customActions} />)
         : null}
+
+       <DialogOperacao open={open} handleClose={handleClose} id={idOperacao}></DialogOperacao>
     </Container >
   );
 };

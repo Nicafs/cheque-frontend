@@ -104,8 +104,8 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
       handleSelected(row);
       setSelected(row);
     } else {
-      handleSelected({});
-      setSelected({});
+      handleSelected();
+      setSelected();
     }
   };
 
@@ -147,7 +147,7 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
           const select = selects.find(select => select.value === row[field]);
           return select.description;
         case 'money':
-          return <NumberFormat value={row[field]} prefix={'R$ '} displayType={'text'} 
+          return <NumberFormat value={row[field]} prefix={'R$ '} displayType={'text'}
           thousandSeparator={'.'}
                               decimalSeparator={','}
                               decimalScale={2}
@@ -160,7 +160,7 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
     return '';
   }
 
-  const isSelected = (id) => selected.id === id;
+  const isSelected = (id) => selected?.id === id;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
@@ -180,6 +180,7 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
               isEditable={isEditable}
+              customActions={customActions}
               headCells={columns}
             />
 
@@ -198,24 +199,28 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
                         tabIndex={-1}
                         selected={isItemSelected}>
 
-                        {isEditable ?
-                          <TableCell align={'center'}>
-                            <IconButton aria-label="editar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
-                              <EditIcon />
-                            </IconButton>
-
-                            <IconButton aria-label="deletar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
-                              <DeleteIcon />
-                            </IconButton>
-
-                            {customActions ? customActions.map((action, index) => {
-                              const Icon = action.icon;
-                              return (
-                                  <IconButton key={index} aria-label={action.ariaLabel} onClick={() => action.onClick(row)}>
-                                    <Icon />
+                        {isEditable || customActions ?
+                            <TableCell align={'center'}>
+                              {isEditable ?
+                                <>
+                                  <IconButton aria-label="editar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
+                                    <EditIcon />
                                   </IconButton>
-                              )
-                            }) : null }
+
+                                  <IconButton aria-label="deletar" onClick={() => history.push(`${linkTo}/${row.id}`)}>
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </>
+                              : null }
+
+                              {customActions ? customActions.map((action, index) => {
+                                const Icon = action.icon;
+                                return (
+                                    <IconButton key={index} aria-label={action.ariaLabel} onClick={() => action.onClick(row)}>
+                                      <Icon />
+                                    </IconButton>
+                                )
+                              }) : null }
                           </TableCell>
                         : null}
 

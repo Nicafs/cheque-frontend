@@ -72,7 +72,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
   return (
     <form className='formField' onSubmit={hookForm.handleSubmit(handleSubmit)}>
       <Card variant="outlined">
-        <CardHeader title={title} />
+        { title ? <CardHeader title={title} /> : null }
 
         <CardContent>
           <Grid container spacing={1}>
@@ -163,7 +163,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                               disabled={field.disabled || disable || false}
                               />
 
-                            <Button variant="contained" color="primary" onClick={field.open}>
+                            <Button variant="contained" color="primary" onClick={field.open} disabled={field.disabled || disable || false}>
                               <ExitToAppIcon />
                             </Button >
 
