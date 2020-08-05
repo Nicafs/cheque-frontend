@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 function FormField({ fields, values, hookFormCustom, handleSubmit,
                      handleChange, handleClear, handleEdit, handleDelete, title,
-                     isMultiple, disable }) {
+                     isMultiple, disable, isView }) {
 
   const classes = useStyles();
   let { register, errors, ...hookForm } = useForm();
@@ -272,7 +272,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
           </Grid>
 
 
-          {disable ? (
+          {disable && !isView ? (
               <ButtonGroup className="btn-group">
                 <Button variant="contained" type="button" color="primary"
                   onClick={handleEdit}  startIcon={<EditIcon />}>

@@ -318,7 +318,7 @@ export default function OperacaoCredito({operacao}) {
               return (
                 <View key={index} style={[styles.tableField, styles.tableBody]}>
                   <View style={{width: '30px'}}><Text style={styles.textCenter}> { cheque.tipo } </Text></View>
-                  <View style={{width: '40px'}}><Text> { cheque.banco.descricao } </Text></View>
+                  <View style={{width: '40px'}}><Text> { cheque.banco?.descricao } </Text></View>
                   <View style={{width: '35px'}}><Text style={styles.textCenter}> { cheque.agencia } </Text></View>
                   <View style={{width: '50px'}}><Text style={styles.textCenter}> { cheque.conta } </Text></View>
                   <View style={{width: '45px'}}><Text style={styles.textCenter}> { cheque.numero } </Text></View>

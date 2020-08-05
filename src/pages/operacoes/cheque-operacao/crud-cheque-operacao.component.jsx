@@ -83,6 +83,7 @@ function CrudChequeOperacao({ data, handleCheque, flgView }) {
                   handleChange={(name, value) => handleChange(name, value)}
                   values={chequeOperacao}
                   disable={flgView}
+                  isView={flgView}
                   title="">
       </FormField>
 

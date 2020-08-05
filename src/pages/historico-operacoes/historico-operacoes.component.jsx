@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { isEqual, parse, parseISO, format } from 'date-fns';
 
 import {Container, Grid} from '@material-ui/core';
-import ReceiptIcon from '@material-ui/icons/Receipt';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import TableCustom from '../../core/components/table/tableCustom';
 import Filters from '../../core/components/filters/filters';
@@ -15,8 +15,8 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
   const [idOperacao, setIdOperacao] = useState(0);
 
   const filters = [
-    { type: 'date', name: 'data_operacao', label: 'Data de Operação', validators: '', value: null, size: 2 },
-    { type: 'text', name: 'user.name', label: 'Nome do Usuário', validators: '', value: '', size: 5 },
+    { type: 'date', name: 'data_operacao', label: 'Data de Operação', validators: '', value: null, size: 3 },
+    { type: 'text', name: 'user.name', label: 'Nome do Usuário', validators: '', value: '', size: 4 },
     { type: 'text', name: 'client.name', label: 'Cliente', validators: '', value: '', size: 5 }
   ]
 
@@ -64,7 +64,7 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
   }
 
   const handleClickOpen = (id) => {
-    setIdOperacao(24);
+    setIdOperacao(id);
     setOpen(true);
   };
 
@@ -74,7 +74,7 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
   };
 
   const customActions = [
-    { ariaLabel: 'Operacao', onClick: (row) => handleClickOpen(row.id), icon: ReceiptIcon },
+    { ariaLabel: 'Operacao', onClick: (row) => handleClickOpen(row.id), icon: VisibilityIcon },
   ]
 
   return (

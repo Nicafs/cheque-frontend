@@ -75,6 +75,9 @@ const styles = StyleSheet.create({
   end: {
     alignSelf: 'flex-end',
     margin: '5px 70px 0px 0px'
+  },
+  break: {
+    marginBottom: '150px'
   }
 });
 
@@ -106,7 +109,7 @@ export default function NotaPromissoria({operacao}) {
             const year = new Date(cheque.data_vencimento).getFullYear();
 
             return (
-              <View key={index}>
+              <View key={index} style={cheques.length === index + 1 ? '' : styles.break}>
                 <View style={[styles.section, styles.notaBackground]}>
                   <View style={styles.header}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', fontWeight: 'bold' }}>

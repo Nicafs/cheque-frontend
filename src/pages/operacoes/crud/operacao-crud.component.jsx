@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   totais: {
     color: 'blue',
     fontSize: '18px',
-    width: '200px'
+    width: '210px'
   },
   left: {
     textAlign: 'left',
@@ -82,9 +82,18 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const handleSubmit = async event => {
     if(id){
-      operacao['id'] = id;
-      updateOperacao(id, operacao);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+      operacao['id'] = id; 
+      await api.put(`/operacoes/${id}`, operacao).then(r => {
+        let response = r.data;
+
+        if (r.data?.operacao) {
+          response = operacao;
+        }
+        
+        setOperacao(response);
+        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
+        return response;
+      });
     } else {
       createOperacao(operacao);
       enqueueSnackbar('Foi Criado com Sucesso !!')
