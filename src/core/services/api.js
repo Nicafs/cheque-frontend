@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getToken, login, isExpired, logout, tokenExpire } from "./auth.service";
 
 const api = axios.create({
-    baseURL: 'http://localhost:3333/',
+    baseURL: 'http://unibrasilfactory.nodejs7601.kinghost.net/api',
     headers: {
       'Content-Type': 'application/json'
     }
@@ -28,7 +28,7 @@ api.interceptors.request.use(async config => {
         }
       }
 
-      const response = await axios.post('http://localhost:3333/sessions/refresh',  '', configAxios);
+      const response = await axios.post('http://unibrasilfactory.nodejs7601.kinghost.net/api/sessions/refresh',  '', configAxios);
       login(response.data.tokenRefresh);
       token = response.data.tokenRefresh;
     }
