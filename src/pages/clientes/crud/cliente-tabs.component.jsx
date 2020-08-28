@@ -217,13 +217,13 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
             onClick={() => history.goBack()} startIcon={<ArrowBackIcon />}>
           Voltar
         </Button>
-        { id ? 
+        { id ?
           <Button variant="contained" type="button" color="secondary"
             onClick={handleDelete} startIcon={<DeleteIcon />}>
               Excluir
           </Button>
         : null }
-      </ButtonGroup> 
+      </ButtonGroup>
     </Container>
   )
 }

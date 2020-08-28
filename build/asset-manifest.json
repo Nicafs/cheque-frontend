@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/static/css/main.865360c2.chunk.css",
+    "main.js": "/static/js/main.5d5cb688.chunk.js",
+    "main.js.map": "/static/js/main.5d5cb688.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.9754e504.js",
+    "runtime-main.js.map": "/static/js/runtime-main.9754e504.js.map",
+    "static/js/2.09f5d8c2.chunk.js": "/static/js/2.09f5d8c2.chunk.js",
+    "static/js/2.09f5d8c2.chunk.js.map": "/static/js/2.09f5d8c2.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.ebe0df7c08fed3597dd2476dce9083e6.js": "/precache-manifest.ebe0df7c08fed3597dd2476dce9083e6.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.865360c2.chunk.css.map": "/static/css/main.865360c2.chunk.css.map",
+    "static/js/2.09f5d8c2.chunk.js.LICENSE.txt": "/static/js/2.09f5d8c2.chunk.js.LICENSE.txt",
+    "static/media/arial-bold.ttf": "/static/media/arial-bold.ce4244a1.ttf",
+    "static/media/arial.ttf": "/static/media/arial.5995c725.ttf",
+    "static/media/banco.jpg": "/static/media/banco.77517e2d.jpg",
+    "static/media/client.jpg": "/static/media/client.78fc8f47.jpg",
+    "static/media/logo.27593f2e.svg": "/static/media/logo.27593f2e.svg",
+    "static/media/operacoes_credito.jpg": "/static/media/operacoes_credito.baf7327b.jpg",
+    "static/media/relatorio.png": "/static/media/relatorio.4f67807a.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9754e504.js",
+    "static/js/2.09f5d8c2.chunk.js",
+    "static/css/main.865360c2.chunk.css",
+    "static/js/main.5d5cb688.chunk.js"
+  ]
+}

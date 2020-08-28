@@ -21,7 +21,7 @@ let flgEdit = null;
 function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, updateEnderecoClient, createEnderecoClient, clientId }) {
   const [newEnderecos, setNewEnderecos] = useState(initialState);
   const classes = useStyles();
-  
+
   const handleSubmit = async () => {
     if(clientId){
       if(newEnderecos.id){
@@ -108,7 +108,7 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
     { type: 'text', name: 'complemento', label: 'Complemento', size: 6 },
     { type: 'text', name: 'referencia', label: 'Referência', size: 6 }
   ];
-  
+
   return (
     <div className={classes.multipleForm}>
       <FormField

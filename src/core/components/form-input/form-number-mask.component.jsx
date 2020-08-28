@@ -3,8 +3,8 @@ import NumberFormat from 'react-number-format';
 
 import { OutlinedInput, FormControl, InputLabel, FormHelperText } from '@material-ui/core';
 
-const FormNumberMaskInput = ({ label, format, mask, fullWidth, 
-                                thousandSeparator, prefix, decimalScale, 
+const FormNumberMaskInput = ({ label, format, mask, fullWidth,
+                                thousandSeparator, prefix, decimalScale,
                                 helperText, error, ...props }) => (
     <FormControl variant="outlined" fullWidth={fullWidth} error={error}>
         {label ? (
@@ -26,7 +26,7 @@ const FormNumberMaskInput = ({ label, format, mask, fullWidth,
             {...props}
         />
 
-        {helperText ? 
+        {helperText ?
           <FormHelperText id={'helper'+label}>{helperText}</FormHelperText>
         : null }
     </FormControl>

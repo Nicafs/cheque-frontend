@@ -8,7 +8,7 @@ const FormSelect = ({ handleChange, label, name, value, selects, fullWidth,
       <TextField
           id={name}
           name={name}
-          label={label} 
+          label={label}
           value={value}
           onChange={handleChange}
           variant="outlined"

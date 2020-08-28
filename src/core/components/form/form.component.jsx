@@ -121,10 +121,10 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                     onChange={(e) => { handleChange(e.target.name, e.target.value); disableInputs(field.disable, e.target.value) } }
                                     fullWidth={field.fullWidth}
                                     selects={field.selects}
-                                    error={errors[field.name] ? true : false}
-                                    inputRef={register(field.errors)}
-                                    helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || disable || false}
+                                    // error={errors[field.name] ? true : false}
+                                    // inputRef={register(field.errors)}
+                                    // helperText={errors[field.name] ? errors[field.name].message : null}
+                                    // disabled={field.disabled || disable || false}
                                 />
 
                         case 'selectDependent':
@@ -138,10 +138,10 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                     selects={field.selects}
                                     dependentName={field.dependentName}
                                     parentValue={values[field.parentValue]}
-                                    error={errors[field.name] ? true : false}
-                                    inputRef={register(field.errors)}
-                                    helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || disable || false}
+                                    // error={errors[field.name] ? true : false}
+                                    // inputRef={register(field.errors)}
+                                    // helperText={errors[field.name] ? errors[field.name].message : null}
+                                    // disabled={field.disabled || disable || false}
                                 />
 
                         case 'dialog':

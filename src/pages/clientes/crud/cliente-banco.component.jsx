@@ -99,7 +99,7 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
   const handleClear = () => {
     setNewBancos(initialState);
   }
-  
+
   const bancoForm = [
     { type: 'dialog', name: 'banco.id', label: 'Banco', size: 6,
       name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,

@@ -88,7 +88,7 @@ function ReferenciaClient ({ referencias, setReferencias, deleteReferenciaClient
     { type: 'maskNumero', name: 'telefone', label: 'Telefone', size: 3, format: formatPhone, mask:'_',
       errors: { validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
   ];
-  
+
   return (
     <div className={classes.multipleForm}>
       <FormField

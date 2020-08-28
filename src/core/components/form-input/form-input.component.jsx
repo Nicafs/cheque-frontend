@@ -10,21 +10,21 @@ const FormInput = ({ handleChange, label, fullWidth, name, ...props }) => (
           </InputLabel>
       ) : null}
 
-      <OutlinedInput id={label} 
-                     onChange={handleChange} 
-                     {...props} 
+      <OutlinedInput id={label}
+                     onChange={handleChange}
+                     {...props}
                       />
-       {helperText ? 
+       {helperText ?
         <FormHelperText id={'helper'+label}>{helperText}</FormHelperText>
        : null } */}
 
       <TextField
-        id={name} 
-        label={label} 
+        id={name}
+        label={label}
         name={name}
-        onChange={handleChange} 
+        onChange={handleChange}
         variant="outlined"
-        {...props} 
+        {...props}
       >
 
        </TextField>

@@ -72,7 +72,7 @@ function EmailClient ({ emails, setEmails, deleteEmailClient, updateEmailClient,
       selects: [{ description: 'Sim', value: 'true' }, { description: 'Não', value: 'false' }],
       value: 'true', fullWidth: true },
   ];
-  
+
   return (
     <div className={classes.multipleForm}>
       <FormField
