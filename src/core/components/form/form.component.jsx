@@ -49,7 +49,12 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
             element.disabled = true;
             element.classList.add('disabled');
 
-            const nameCompost = field.split('.');
+            let nameCompost = field;
+
+            if (field) {
+              nameCompost = field.split('.');
+            }
+            
             Object.keys(values).find((key) => {
               if(key === nameCompost[0]) handleChange(field, '');
               return key === nameCompost[0];
@@ -78,7 +83,12 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
           <Grid container spacing={1}>
             { fields.map((field, index) => {
 
-              const split = field.name.split('.')
+              let split = field?.name;
+
+              if (field.name) {
+                split = field.name.split('.')
+              }
+              
               let value;
 
               if(split.length > 1) {
@@ -145,7 +155,11 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                 />
 
                         case 'dialog':
-                          const keyCompostDisable = field.name_disable.split('.');
+                          let keyCompostDisable = field?.name_disable;
+
+                          if(field?.name_disable) {
+                            keyCompostDisable = field.name_disable.split('.');
+                          }
 
                           return (
                           <Grid container item className={classes.groupItemButton}>

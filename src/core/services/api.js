@@ -2,9 +2,16 @@ import axios from 'axios';
 import { getToken, login, isExpired, logout, tokenExpire } from "./auth.service";
 
 const api = axios.create({
+<<<<<<< HEAD
     baseURL: 'http://www.unibrasilfactory.com.br:21176/',
+=======
+    baseURL: 'http://localhost:21130/api',
+>>>>>>> 6e33b734f7e212fa2024f40f29d59329eb9a2138
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Authorization", 
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE"
     }
 });
 
@@ -28,7 +35,11 @@ api.interceptors.request.use(async config => {
         }
       }
 
+<<<<<<< HEAD
       const response = await axios.post('http://www.unibrasilfactory.com.br:21176/sessions/refresh',  '', configAxios);
+=======
+      const response = await axios.post('http://localhost:21130/api/sessions/refresh',  '', configAxios);
+>>>>>>> 6e33b734f7e212fa2024f40f29d59329eb9a2138
       login(response.data.tokenRefresh);
       token = response.data.tokenRefresh;
     }

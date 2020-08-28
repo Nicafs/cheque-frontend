@@ -46,7 +46,10 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
   }
 
   const handleChange = (name, value) => {
-    const nameCompost = name.split('.');
+      let nameCompost = name;
+      if(name) {
+        nameCompost = name.split('.');
+      }
 
     if(nameCompost.length > 1){
       setNewBancos({...newBancos,

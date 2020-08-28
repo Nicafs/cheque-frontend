@@ -16,8 +16,8 @@ class Login extends React.Component {
     super(props);
 
     this.state = {
-      username: 'nicollas',
-      password: '123456',
+      username: '',
+      password: '',
       submitted: false,
       error: ""
     };
@@ -53,7 +53,7 @@ class Login extends React.Component {
     return (
       <div className='login'>
         <CustomCard>
-          <h2>Login</h2>
+          <h2><div>Bem Vindo</div>Entre com seu Usuário e Senha</h2>
 
           <form onSubmit={this.handleSubmit}>
             <FormInput

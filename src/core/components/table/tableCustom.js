@@ -120,7 +120,13 @@ function TableCustom({ data, columns, isEditable, customActions, handleSelected,
 
   const getValue = (row, { field, type, selects }) => {
     if(type === 'compost') {
-      const splits = field.split('.');
+      
+      let splits = field;
+      
+      if(field) {
+        splits = field.split('.');
+      }
+
       let retorno = row;
       splits.map(split => {
           if(retorno[split]) {

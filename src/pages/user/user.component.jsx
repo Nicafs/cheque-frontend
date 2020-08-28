@@ -18,7 +18,12 @@ function Users({ findUsers, data, filteredData, filterSubmit }) {
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        const splitName = filter.name.split('.');
+        console.log("Teste 19");
+          let splitName = filter.name;
+          if(filter.name) {
+            splitName = filter.name.split('.');
+          }
+          console.log("Teste 29");
 
         filteredData = filteredData.filter(d =>  {
           if(filter.type === 'text') {

@@ -1,7 +1,7 @@
 // import config from 'config';
 import { authHeader } from '../helpers/auth-header';
 
-const config = 'http://localhost:4200';
+const config = 'http://unibrasilfactory.com.br:21176';
 
 export const userService = {
     login,
