@@ -29,7 +29,12 @@ function Operacoes({ findOperacoes, data, filteredData, filterSubmit }) {
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        const splitName = filter.name.split('.');
+        console.log("Teste 17");
+          let splitName = filter.name;
+          if(filter.name) {
+            splitName = filter.name.split('.');
+          }
+          console.log("Teste 27");
 
         filteredData = filteredData.filter(d =>  {
           switch (filter.type) {

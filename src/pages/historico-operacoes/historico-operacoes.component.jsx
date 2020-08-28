@@ -38,7 +38,12 @@ function HistoricoOperacoes({ findHistoricoOperacoes, data, filteredData, filter
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        const splitName = filter.name.split('.');
+        console.log("Teste 16");
+          let splitName = filter.name;
+          if(filter.name) {
+            splitName = filter.name.split('.');
+          }
+          console.log("Teste 26");
 
         filteredData = filteredData.filter(d =>  {
           if(filter.type === 'text') {

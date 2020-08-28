@@ -101,7 +101,12 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   }
 
   const handleChange = ( name, value ) => {
-    const nameCompost = name.split('.');
+    console.log("Teste 15");
+      let nameCompost = name;
+      if(name) {
+        nameCompost = name.split('.');
+      }
+      console.log("Teste 25");
 
     if(nameCompost.length > 1){
       setOperacao({...operacao,

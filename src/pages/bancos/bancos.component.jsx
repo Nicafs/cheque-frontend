@@ -31,7 +31,13 @@ function Bancos({ findBancos, data, filteredData, filterSubmit }) {
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        const splitName = filter.name.split('.');
+        
+      console.log("Teste 1");
+        let splitName = filter.name;
+        if(filter.name) {
+          splitName = filter.name.split('.');
+        }
+        console.log("Teste 2");
 
         filteredData = filteredData.filter(d =>  {
           if(filter.type === 'text') {

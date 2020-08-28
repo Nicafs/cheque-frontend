@@ -27,7 +27,7 @@ const Footer = () => (
         </div>
 
         {/* Versão do sistema */}
-        <small>v.1.0.0</small>
+        <small className="txt-end">v.1.0.0</small>
     </footer>
 );
 

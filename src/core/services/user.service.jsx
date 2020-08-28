@@ -1,7 +1,7 @@
 // import config from 'config';
 import { authHeader } from '../helpers/auth-header';
 
-const config = 'http://unibrasilfactory.nodejs7601.kinghost.net/';
+const config = 'http://unibrasilfactory.com.br:21176';
 
 export const userService = {
     login,

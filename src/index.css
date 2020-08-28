@@ -18,7 +18,7 @@ h1, h2, h3 {
 }
 
 .txt-center { text-align: center;}
-
+.txt-end { text-align: end;}
 
 .MuiCard-root { width: 100% !important; }
 .MuiCardHeader-root, .MuiDialogTitle-root { padding-bottom: 6px !important; }

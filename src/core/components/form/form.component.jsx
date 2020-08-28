@@ -49,7 +49,12 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
             element.disabled = true;
             element.classList.add('disabled');
 
-            const nameCompost = field.split('.');
+            let nameCompost = field;
+
+            if (field) {
+              nameCompost = field.split('.');
+            }
+            
             Object.keys(values).find((key) => {
               if(key === nameCompost[0]) handleChange(field, '');
               return key === nameCompost[0];
@@ -78,7 +83,12 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
           <Grid container spacing={1}>
             { fields.map((field, index) => {
 
-              const split = field.name.split('.')
+              let split = field?.name;
+
+              if (field.name) {
+                split = field.name.split('.')
+              }
+              
               let value;
 
               if(split.length > 1) {
@@ -121,10 +131,10 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                     onChange={(e) => { handleChange(e.target.name, e.target.value); disableInputs(field.disable, e.target.value) } }
                                     fullWidth={field.fullWidth}
                                     selects={field.selects}
-                                    error={errors[field.name] ? true : false}
-                                    inputRef={register(field.errors)}
-                                    helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || disable || false}
+                                    // error={errors[field.name] ? true : false}
+                                    // inputRef={register(field.errors)}
+                                    // helperText={errors[field.name] ? errors[field.name].message : null}
+                                    // disabled={field.disabled || disable || false}
                                 />
 
                         case 'selectDependent':
@@ -138,14 +148,18 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                     selects={field.selects}
                                     dependentName={field.dependentName}
                                     parentValue={values[field.parentValue]}
-                                    error={errors[field.name] ? true : false}
-                                    inputRef={register(field.errors)}
-                                    helperText={errors[field.name] ? errors[field.name].message : null}
-                                    disabled={field.disabled || disable || false}
+                                    // error={errors[field.name] ? true : false}
+                                    // inputRef={register(field.errors)}
+                                    // helperText={errors[field.name] ? errors[field.name].message : null}
+                                    // disabled={field.disabled || disable || false}
                                 />
 
                         case 'dialog':
-                          const keyCompostDisable = field.name_disable.split('.');
+                          let keyCompostDisable = field?.name_disable;
+
+                          if(field?.name_disable) {
+                            keyCompostDisable = field.name_disable.split('.');
+                          }
 
                           return (
                           <Grid container item className={classes.groupItemButton}>
