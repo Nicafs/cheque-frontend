@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import api from '../../../core/services/api';
 
 import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
@@ -17,7 +16,6 @@ import './banco-crud.styles.scss';
 function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, history, ...otherProps }) {
   const [bancoValue, setBancoValue] = useState(initialState);
   const id = otherProps.match.params.id;
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,10 +32,8 @@ function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, histo
     if(id){
       bancoValue['id'] = id;
       updateBanco(id, bancoValue);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
-      createBanco(bancoValue);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
+      createBanco(bancoValue, history);
     }
   }
 
@@ -48,7 +44,7 @@ function CrudBanco({ findBancoById, createBanco, updateBanco, deleteBanco, histo
   const handleDelete = () => {
     alert('Deseja deletar mesmo?');
     if(id){
-      deleteBanco(id);
+      deleteBanco(id, history);
     }
   };
 
@@ -104,9 +100,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   findBancoById: (id) => dispatch(findById(id)),
-  createBanco: (form) => dispatch(create(form)),
+  createBanco: (form, history) => dispatch(create(form, history)),
   updateBanco: (id, form) => dispatch(update(id, form)),
-  deleteBanco: (id) => dispatch(deleteById(id))
+  deleteBanco: (id, history) => dispatch(deleteById(id, history))
 });
 
 export default withRouter(connect(

@@ -1,5 +1,6 @@
 import { bancoTypes } from './banco.types';
 import api from '../../core/services/api';
+import { toast } from "react-toastify";
 
 export const findById = (id) => dispatch => {
   api.get(`/bancos/${id}`)
@@ -8,9 +9,12 @@ export const findById = (id) => dispatch => {
       type: bancoTypes.BANCO_GET,
       data: response.data,
         });
-    }).catch((err)=>{
-        console.log(err);
-    })
+    }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    });
 }
 
 export const find = () => dispatch => {
@@ -20,9 +24,12 @@ export const find = () => dispatch => {
           type: bancoTypes.BANCO_GET_ALL,
           data: response.data,
         });
-    }).catch((err)=>{
-        console.log(err);
-    })
+    }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    });
 }
 
 export const filter = (data) => dispatch => {
@@ -41,35 +48,51 @@ export const update = (id, formData, token) => dispatch => {
 
   api.put(`/bancos/${id}`, formData, config)
   .then(response => {
+    toast.success('Foi Alterado com Sucesso !!', {
+      position: toast.POSITION.BOTTOM_LEFT
+    });
 
     return dispatch({
       type: bancoTypes.BANCO_UPDATE,
       payload: response.data,
     });
 
-  })
-  .catch(err => console.log(err));
+  }).catch(err => {
+    toast.error(err?.response?.data?.message, {
+      position: toast.POSITION.BOTTOM_LEFT
+    });
+    console.log(err.response)
+  });
 }
 
-export const create = (formData, token) => dispatch => {
+export const create = (formData, history, token) => dispatch => {
     const config = {
         headers: {
             'Authorization': token,
         }
     };
 
-    api.post('/bancos', formData, config)
-    .then((response)=>{
-      return dispatch({
-                  type: bancoTypes.BANCO_CREATE,
-                  banco: response.data,
-                });
-            }).catch((err)=>{
-                console.log(err);
-            })
+  api.post('/bancos', formData, config)
+  .then((response)=>{
+
+    toast.success('Foi Criado com Sucesso !!', {
+      onClose: () => history.push(`/bancos/crud/${response.data?.banco?.id}`),
+      position: toast.POSITION.BOTTOM_LEFT
+    });
+
+    return dispatch({
+        type: bancoTypes.BANCO_CREATE,
+        banco: response.data,
+      });
+  }).catch(err => {
+    toast.error(err?.response?.data?.message, {
+      position: toast.POSITION.BOTTOM_LEFT
+    });
+    console.log(err.response)
+  });
 }
 
-export const deleteById = (id, token) => dispatch => {
+export const deleteById = (id, history, token) => dispatch => {
   const config = {
     headers: {
       'Authorization': token,
@@ -78,11 +101,19 @@ export const deleteById = (id, token) => dispatch => {
 
   api.delete(`/bancos/${id}`, config)
   .then((response)=>{
+      toast.warn('Foi Deletado com Sucesso !!', {
+        onClose: () => history.push(`/bancos`),
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+
       dispatch({
         type: bancoTypes.BANCO_DELETE,
         banco: null,
       });
-  }).catch((err)=>{
-      console.log(err);
-  })
+  }).catch(err => {
+    toast.error(err?.response?.data?.message, {
+      position: toast.POSITION.BOTTOM_LEFT
+    });
+    console.log(err.response)
+  });
 }

@@ -5,7 +5,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useSnackbar } from 'notistack';
+import { toast } from "react-toastify";
 
 import api from '../../../core/services/api';
 
@@ -20,7 +20,6 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
   const [selected, setSelected] = useState();
   const [flgEdit, setFlgEdit] = useState(false);
   const [chequeOperacaoForm, setChequeOperacaoForm] = useState(ChequeOperacao);
-  const { enqueueSnackbar } = useSnackbar();
 
   const columns =  [
     { label: 'Tipo', field: 'tipo' },
@@ -45,7 +44,9 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
         setChequeOperacaoForm(selected);
         setOpen({...open, [button]: true});
       } else {
-        enqueueSnackbar('Selecione um cheque!!')
+        toast.error('Selecione um cheque!!', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
       }
     } else {
       setChequeOperacaoForm(ChequeOperacao);
@@ -58,10 +59,14 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
       if(!selected?.data_quitacao) {
         setOpen({...open, 'situacao': true});
       } else {
-        enqueueSnackbar('O cheque selecionado já foi quitado!!')
+        toast.error('O cheque selecionado já foi quitado!!', {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
       }
     } else {
-      enqueueSnackbar('Selecione o cheque a ser quitado!!')
+      toast.error('Selecione o cheque a ser quitado!!', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
   };
 
@@ -69,7 +74,9 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
     if(selected?.id) {
         setOpen({...open, 'delete': true});
     } else {
-      enqueueSnackbar('Selecione o cheque a ser excluido!!')
+      toast.error('Selecione o cheque a ser excluido!!', {
+        position: toast.POSITION.BOTTOM_CENTER
+      });
     }
   };
 
@@ -102,7 +109,9 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
 
        if (retorno) {
           setSelected(retorno);
-          enqueueSnackbar('O cheque foi Quitado !!')
+          toast.success('O cheque foi Quitado !!', {
+            position: toast.POSITION.BOTTOM_CENTER
+          });
 
           chequeOperacao = chequeOperacao.map(cheque => {
             if(cheque.id === retorno.id) {
@@ -124,7 +133,10 @@ export default function ChequeOperacoes({chequeOperacao, handleUpdate}) {
        const retorno = await api.delete(`/chequeOperacao/${selected.id}`).then(r => { return r.data});
 
        if (retorno) {
-          enqueueSnackbar('O cheque foi Deletado !!')
+          toast.warn('O cheque foi Deletado !!', {
+            position: toast.POSITION.BOTTOM_CENTER
+          });
+
           const index = chequeOperacao.indexOf(cheque => cheque.id === selected.id);
           chequeOperacao.splice(index, 1);
 

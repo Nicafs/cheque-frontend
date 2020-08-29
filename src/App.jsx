@@ -1,11 +1,14 @@
 import React from 'react';
 import { BrowserRouter } from "react-router-dom";
-import Routes from "./routes";
 
 import { connect } from 'react-redux';
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import './App.css';
 
+import Routes from "./routes";
 import { history } from './core/helpers/history';
 import { alertActions } from './redux/alert/alert.actions';
 
@@ -37,6 +40,8 @@ class App extends React.Component {
 
           <Footer />
         </div>
+        
+      <ToastContainer autoClose={2000} />
       </BrowserRouter>
     )}
 }

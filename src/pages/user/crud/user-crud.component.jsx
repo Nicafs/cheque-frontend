@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import api from '../../../core/services/api';
 
 import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
@@ -16,7 +15,6 @@ import { userActions } from '../../../redux/user/user.actions';
 function CrudUser({ findUserById, createUser, updateUser, deleteUser, history, ...otherProps }) {
   const [userValue, setUserValue] = useState(initialState);
   const id = otherProps.match.params.id;
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,10 +31,8 @@ function CrudUser({ findUserById, createUser, updateUser, deleteUser, history, .
     if(id){
       userValue['id'] = id;
       updateUser(id, userValue);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
       createUser(userValue);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
@@ -102,9 +98,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   findUserById: (id) => dispatch(userActions.getById(id)),
-  createUser: (form) => dispatch(userActions.create(form)),
+  createUser: (form, history) => dispatch(userActions.create(form, history)),
   updateUser: (id, form) => dispatch(userActions.update(id, form)),
-  deleteUser: (id) => dispatch(userActions.deleteById(id))
+  deleteUser: (id, history) => dispatch(userActions.deleteById(id, history))
 });
 
 export default withRouter(connect(

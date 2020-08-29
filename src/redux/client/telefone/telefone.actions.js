@@ -1,5 +1,6 @@
 import { telefoneClientTypes } from './telefone.types';
 import api from '../../../core/services/api';
+import { toast } from "react-toastify";
 
 export const findById = id => dispatch => {
   api.get(`/telefoneClient/`&{id})
@@ -10,8 +11,12 @@ export const findById = id => dispatch => {
         payload,
       });
 
-    })
-    .catch(err => console.log(err));
+    }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    });
 }
 
 export const find = () => dispatch => {
@@ -21,9 +26,13 @@ export const find = () => dispatch => {
           type: telefoneClientTypes.TELEFONE_CLIENT_GET_ALL,
           data: response.data,
         });
-    }).catch((err)=>{
-        console.log(err);
-    })
+    }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    }
+  );
 }
 
 export const filter = (data) => dispatch => {
@@ -48,8 +57,13 @@ export const update = (formData, token) => dispatch => {
       payload,
     });
 
-  })
-  .catch(err => console.log(err));
+  }).catch(err => {
+    toast.error(err?.response?.data?.message, {
+      position: toast.POSITION.BOTTOM_LEFT
+    });
+    console.log(err.response)
+  }
+);
 }
 
 export const create = (formData, token) => dispatch => {
@@ -67,8 +81,13 @@ export const create = (formData, token) => dispatch => {
         payload,
     });
 
-    })
-    .catch(err => console.log(err));
+    }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    }
+  );
 }
 
 export const deleteById = (id, token) => dispatch => {
@@ -84,7 +103,11 @@ export const deleteById = (id, token) => dispatch => {
         type: telefoneClientTypes.TELEFONE_CLIENT_DELETE,
         client: null,
       });
-  }).catch((err)=>{
-      console.log(err);
-  })
+  }).catch(err => {
+      toast.error(err?.response?.data?.message, {
+        position: toast.POSITION.BOTTOM_LEFT
+      });
+      console.log(err.response)
+    }
+  );
 }

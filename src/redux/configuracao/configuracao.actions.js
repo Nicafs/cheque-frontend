@@ -1,5 +1,6 @@
 import { configuracaoTypes } from './configuracao.types';
 import api from '../../core/services/api';
+import { toast } from "react-toastify";
 
 export const save = (formData) => {
   return dispatch => {
@@ -13,6 +14,10 @@ export const save = (formData) => {
           },
           error => {
               dispatch(failure(error.toString()));
+              toast.error(error?.response?.data?.message, {
+                position: toast.POSITION.BOTTOM_LEFT
+              });
+              console.log(error.response);
           }
       );
     } else {
@@ -23,6 +28,10 @@ export const save = (formData) => {
           },
           error => {
               dispatch(failure(error.toString()));
+              toast.error(error?.response?.data?.message, {
+                position: toast.POSITION.BOTTOM_LEFT
+              });
+              console.log(error.response);
           }
         );
       };
@@ -40,7 +49,14 @@ export const getData = () => {
     api.get(`/configuracao`)
         .then(
             configuracao => dispatch(success(configuracao.data)),
-            error => dispatch(failure(error.toString()))
+            error => { 
+              dispatch(failure(error.toString()))
+              
+              toast.error(error?.response?.data?.message, {
+                position: toast.POSITION.BOTTOM_LEFT
+              });
+              console.log(error.response);
+            }
         );
   };
 

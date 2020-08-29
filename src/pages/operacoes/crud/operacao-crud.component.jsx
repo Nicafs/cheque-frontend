@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { useForm } from "react-hook-form";
 import api from '../../../core/services/api';
 import NumberFormat from 'react-number-format';
@@ -55,8 +54,6 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const [open, setOpen] = useState(false);
   const { ...hookForm } = useForm();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await api.get(`/operacoes/${id}`).then(r => { return r.data});
@@ -91,12 +88,10 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
         }
         
         setOperacao(response);
-        enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
         return response;
       });
     } else {
-      createOperacao(operacao);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
+      createOperacao(operacao, history);
     }
   }
 
@@ -120,7 +115,7 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   const handleDelete = () => {
     alert('Deseja deletar mesmo?');
     if(id){
-      deleteOperacao(id);
+      deleteOperacao(id, history);
     }
   };
 
@@ -270,9 +265,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   findOperacaoById: (id) => dispatch(findById(id)),
-  createOperacao: (form) => dispatch(create(form)),
+  createOperacao: (form, history) => dispatch(create(form, history)),
   updateOperacao: (id, form) => dispatch(update(id, form)),
-  deleteOperacao: (id) => dispatch(deleteById(id)),
+  deleteOperacao: (id, history) => dispatch(deleteById(id, history)),
 });
 
 export default withRouter(connect(

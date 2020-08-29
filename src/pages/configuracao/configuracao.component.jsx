@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 
 import { Button, ButtonGroup, Grid, Container } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
@@ -62,7 +61,6 @@ const initValue = {
 
 function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history, ...otherProps }) {
   const [configuracaoValue, setConfiguracaoValue] = useState(initValue);
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,9 +78,7 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
   }, [configuracao]);
    
   const handleSubmit = async event => {
-    console.log("configuracaoValue:", configuracaoValue);
     saveConfiguracao(configuracaoValue);
-    enqueueSnackbar('Foi Criado com Sucesso !!')
   }
 
   const handleChange = (name, value) => {
@@ -170,7 +166,7 @@ const mapStateToProps = (state) => {
   
 const mapDispatchToProps = dispatch => ({
   getConfiguracao: () => dispatch(getData()),
-  saveConfiguracao: (form) => dispatch(save(form)),
+  saveConfiguracao: (form, history) => dispatch(save(form, history)),
 });
 
 export default withRouter(connect(
