@@ -1,10 +1,12 @@
 import { clientTypes } from './client.types';
 import api from '../../core/services/api';
+import { toast } from "react-toastify";
 
 export const findById = id => dispatch => {
   api.get(`/clients/`&{id})
     .then(payload => {
 
+      toast.warn('Foi Criado com Sucesso !!');
       return dispatch({
         type: clientTypes.CLIENT_GET,
         payload,
@@ -17,11 +19,13 @@ export const findById = id => dispatch => {
 export const find = () => dispatch => {
   api.get('/clients')
     .then((response)=>{
-      
-        dispatch({
-          type: clientTypes.CLIENT_GET_ALL,
-          data: response.data,
-        });
+
+      toast.warn('Foi Criado com Sucesso !!');
+
+      dispatch({
+        type: clientTypes.CLIENT_GET_ALL,
+        data: response.data,
+      });
     }).catch((err)=>{
         console.log(err);
     })
@@ -44,6 +48,7 @@ export const update = (id, formData, token) => dispatch => {
   api.put(`/clients/${id}`, formData, config)
   .then(response => {
 
+    toast.warn('Foi Criado com Sucesso !!');
     return dispatch({
       type: clientTypes.CLIENT_UPDATE,
       payload: response.data,
@@ -60,6 +65,7 @@ export const create = (formData, token) => dispatch => {
         }
     };
 
+    toast.warn('Foi Criado com Sucesso !!');
     api.post('/clients', formData, config)
     .then(payload => {
 
@@ -81,6 +87,7 @@ export const deleteById = (id, token) => dispatch => {
 
   api.delete(`/clients/${id}`, config)
   .then((response)=>{
+    toast.warn('Foi Criado com Sucesso !!');
       dispatch({
         type: clientTypes.CLIENT_DELETE,
         client: null,

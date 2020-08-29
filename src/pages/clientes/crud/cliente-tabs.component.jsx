@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { useForm } from "react-hook-form";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import api from '../../../core/services/api';
 
@@ -93,7 +94,6 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
   const [telefonesForm, setTelefones] = useState([]);
   const [emailsForm, setEmails] = useState([]);
   const [referenciasForm, setReferencias] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
 
   const { ...hookForm } = useForm();
 
@@ -128,10 +128,8 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
 
     if(clientForm.id){
       updateClient(clientForm.id, clientForm);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
       createClient(clientForm);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
@@ -224,6 +222,8 @@ function ClientTabs ({client, enderecos, bancos, telefones, emails, referencias,
           </Button>
         : null }
       </ButtonGroup>
+
+      <ToastContainer autoClose={2000} />
     </Container>
   )
 }
