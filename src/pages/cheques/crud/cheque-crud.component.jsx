@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 
 import { Button, Card, CardContent, CardHeader, ButtonGroup } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -19,7 +18,6 @@ import './cheque-crud.styles.scss';
 function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, selectClient, selectBanco, clients, bancos, cheque, history, ...otherProps }) {
   const [chequeForm, setCheque] = useState(cheque);
   const id = otherProps.match.params.id;
-  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,10 +39,8 @@ function CrudCheque({ findChequeById, createCheque, updateCheque, deleteCheque, 
     if(id){
       chequeForm['id'] = id;
       updateCheque(chequeForm);
-      enqueueSnackbar('Foi realizada a Atualização com Sucesso !!')
     } else {
       createCheque(chequeForm);
-      enqueueSnackbar('Foi Criado com Sucesso !!')
     }
   }
 
