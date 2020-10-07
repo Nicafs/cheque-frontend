@@ -47,12 +47,10 @@ function DialogClient({open, handleClose, findClients, clients, filteredData, fi
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        console.log("Teste 18");
           let splitName = filter.name;
           if(filter.name) {
             splitName = filter.name.split('.');
           }
-          console.log("Teste 28");
 
         filteredData = filteredData.filter(d =>  {
 

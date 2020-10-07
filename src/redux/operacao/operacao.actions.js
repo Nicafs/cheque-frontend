@@ -105,7 +105,7 @@ export const create = (formData, history, token) => dispatch => {
 
       return dispatch({
           type: operacaoTypes.OPERACOES_CREATE,
-          payload: response.data,
+          payload: response.data.operacao,
       });
 
     }).catch(err => {

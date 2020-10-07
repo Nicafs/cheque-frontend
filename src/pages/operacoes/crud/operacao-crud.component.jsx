@@ -49,7 +49,6 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const id = otherProps.match.params.id;
   const classes = useStyles();
-
   const [operacao, setOperacao] = useState(operacaoInitial);
   const [open, setOpen] = useState(false);
   const { ...hookForm } = useForm();
@@ -79,14 +78,14 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
 
   const handleSubmit = async event => {
     if(id){
-      operacao['id'] = id; 
+      operacao['id'] = id;
       await api.put(`/operacoes/${id}`, operacao).then(r => {
         let response = r.data;
 
         if (r.data?.operacao) {
           response = operacao;
         }
-        
+
         setOperacao(response);
         return response;
       });
@@ -96,12 +95,10 @@ function CrudOperacao({ findOperacaoById, createOperacao, updateOperacao, delete
   }
 
   const handleChange = ( name, value ) => {
-    console.log("Teste 15");
       let nameCompost = name;
       if(name) {
         nameCompost = name.split('.');
       }
-      console.log("Teste 25");
 
     if(nameCompost.length > 1){
       setOperacao({...operacao,

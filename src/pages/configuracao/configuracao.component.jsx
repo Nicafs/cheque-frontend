@@ -24,6 +24,8 @@ const isValidPhoneNumber = (value) => {
   return regexp.exec(unformated) !== null
 }
 
+const isCep = /^[\d]{5}-[\d]{3}/;
+
 const isValidCPF = (value) => {
   let unformated = value;
   unformated = unformated.trim();
@@ -65,7 +67,7 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
   useEffect(() => {
     const fetchData = async () => {
       const response = await api.get(`/configuracao`);
-      
+
       if(response.data) {
         response.data.logo = '';
         setConfiguracaoValue(response.data);
@@ -76,13 +78,22 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
       fetchData();
     }
   }, [configuracao]);
-   
+
   const handleSubmit = async event => {
     saveConfiguracao(configuracaoValue);
   }
 
   const handleChange = (name, value) => {
+    if (name === "logo") {
+      handleFile(name, value);
+      return;
+    }
+
     setConfiguracaoValue({...configuracaoValue, [name]: value});
+  }
+
+  const handleFile = (name, event) => {
+    setConfiguracaoValue({...configuracaoValue, [name]: event.target.files[0]});
   }
 
   const configuracaoForm = [
@@ -98,7 +109,8 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
       errors: { validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
     { type: 'maskNumero', name: 'whatsapp', label: 'whatsapp *', size: 3, format: '(##) # ####-####', mask:'_',
       errors: { validate: { validate: values => isValidPhoneNumber(values) || "Formato do Telefone Inválido *" } } },
-    { type: 'text', name: 'endCep', label: 'CEP *', format: '00000-000', size: 3 },
+    { type: 'maskNumero', name: 'endCep', label: 'CEP *', format: '#####-###', size: 3,
+      errors: { pattern: { value: isCep, message: "CEP Inválido *"} } },
     { type: 'select', name: 'endTipoLogradouro', label: 'Tipo de Logradouro', size: 3,
       selects: [{ description: 'Alameda', value: 'Alameda' },
                 { description: 'Alto', value: 'Alto' },
@@ -117,7 +129,7 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
               ],
       value: '', fullWidth: true },
     { type: 'text', name: 'endLogradouro', label: 'Logradouro', size: 3 },
-    { type: 'text', name: 'endNumero', label: 'Número', size: 3 },
+    { type: 'number', name: 'endNumero', label: 'Número', size: 3 },
     { type: 'text', name: 'endBairro', label: 'Bairro', size: 3 },
     { type: 'select', name: 'endEstado', label: 'Estado', size: 2,
       selects: UfEnum,
@@ -127,8 +139,8 @@ function Configuracao({ getConfiguracao, saveConfiguracao, configuracao, history
       value: '', fullWidth: true,
       errors: { required: { value: true, message: "Informe a Cidade *" }} },
     { type: 'text', name: 'endComplemento', label: 'Complemento', size: 5 },
-    { type: 'text', name: 'endReferencia', label: 'Referência', size: 7 },
-    { type: 'file', name: 'logo', label: 'Logo', size: 5},
+    { type: 'text', name: 'endReferencia', label: 'Referência', size: 12 },
+    // { type: 'file', name: 'logo', label: 'Logo', size: 5},
   ];
 
   return (
@@ -163,7 +175,7 @@ const mapStateToProps = (state) => {
     configuracao: state.configuracao.configuracao
   };
 }
-  
+
 const mapDispatchToProps = dispatch => ({
   getConfiguracao: () => dispatch(getData()),
   saveConfiguracao: (form, history) => dispatch(save(form, history)),

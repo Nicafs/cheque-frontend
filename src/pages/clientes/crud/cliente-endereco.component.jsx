@@ -64,6 +64,8 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
     setNewEnderecos(initialState);
   }
 
+  const isCep = /^[\d]{5}-[\d]{3}/;
+
   const enderecoForm = [
     { type: 'select', name: 'tipo', label: 'Tipo', size: 3,
       selects: [{ description: 'Residencial', value: 'Residencial' },
@@ -72,8 +74,11 @@ function EnderecoClient ({ enderecos, setEnderecos, deleteEnderecoClient, update
               ],
       value: '', fullWidth: true,
       errors: { required: { value: true, message: "Escolha o Tipo do Endereço *" }} },
-    { type: 'text', name: 'cep', label: 'CEP *', format: '00000-000', size: 3,
-      errors: { required: { value: true, message: "Informe o CEP *" }} },
+
+    { type: 'maskNumero', name: 'cep', label: 'CEP *', format: '#####-###',
+      errors: {  required: { value: true, message: "Informe o CEP *" },
+                pattern: { value: isCep, message: "CEP Inválido *"} }},
+
     { type: 'select', name: 'tipo_logradouro', label: 'Tipo de Logradouro', size: 3,
       selects: [{ description: 'Alameda', value: 'Alameda' },
                 { description: 'Alto', value: 'Alto' },

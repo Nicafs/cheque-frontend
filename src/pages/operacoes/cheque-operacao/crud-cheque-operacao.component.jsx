@@ -13,12 +13,10 @@ function CrudChequeOperacao({ data, handleCheque, flgView }) {
   const [open, setOpen] = useState(false);
 
   const handleChange = async (name, value) => {
-    console.log("Teste 15");
       let nameCompost = name;
       if(name) {
         nameCompost = name.split('.');
       }
-      console.log("Teste 25");
 
     if(nameCompost.length > 1){
       setChequeOperacao((state) => ({...state,

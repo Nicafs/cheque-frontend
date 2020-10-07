@@ -46,16 +46,14 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
 
     filtersSubmit.map(filter => {
       if (filter.value) {
-        console.log("Teste 12");
           let splitName = filter.name;
           if(filter.name) {
             splitName = filter.name.split('.');
           }
-          console.log("Teste 22");
 
         filteredData = filteredData.filter(d =>  {
           switch (filter.type) {
-            case 'date': 
+            case 'date':
               const dateCompare = parse(format(filter.value, 'MM/dd/yyyy'), 'MM/dd/yyyy', new Date());
               return splitName.length > 1 ? isEqual(parseISO(d[splitName[0]][splitName[1]]), dateCompare) ? true : false
               : isEqual(parseISO(d[filter.name]), dateCompare) ? true : false;
@@ -65,24 +63,24 @@ function Clientes({ findClients, data, filteredData, filterSubmit }) {
                 const newValueFilter = parseInt(filter.value);
 
                switch (filter.filterType) {
-                 case 'lessThan': 
+                 case 'lessThan':
                   return splitName.length > 1 ? d[splitName[0]][splitName[1]] <= filter.value
                     : valueFilter <= newValueFilter;
 
-                case 'greaterThan': 
+                case 'greaterThan':
                   return splitName.length > 1 ? d[splitName[0]][splitName[1]] >= filter.value
                     : valueFilter >= newValueFilter;
 
-                case 'equal': 
+                case 'equal':
                   return splitName.length > 1 ? d[splitName[0]][splitName[1]] === filter.value
                     : valueFilter === newValueFilter;
 
-                default: 
+                default:
                   return splitName.length > 1 ? d[splitName[0]][splitName[1]].toUpperCase().includes(filter.value.toUpperCase())
                   : d[filter.name].toUpperCase().includes(filter.value.toUpperCase());
               }
 
-            default: 
+            default:
               return splitName.length > 1 ? d[splitName[0]][splitName[1]].toUpperCase().includes(filter.value.toUpperCase())
               : d[filter.name].toUpperCase().includes(filter.value.toUpperCase());
           }

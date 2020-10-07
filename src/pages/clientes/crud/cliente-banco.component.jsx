@@ -108,9 +108,9 @@ function BancoClient ({ bancos, setBancos, deleteBancoClient, updateBancoClient,
       name_disable: 'banco.descricao', value_disable: '', open: handleClickOpen,
       onBlur: handleOnBlurBanco,
       errors: { required: { value: true, message: "Informe o Banco *" }} },
-    { type: 'text', name: 'agencia', label: 'Agência', size: 3,
+    { type: 'number', name: 'agencia', label: 'Agência', size: 3,
       errors: { required: { value: true, message: "Informe a Agência *" }} },
-    { type: 'text', name: 'conta', label: 'Conta', size: 3,
+    { type: 'number', name: 'conta', label: 'Conta', size: 3,
       errors: { required: { value: true, message: "Informe a Conta *" }} },
   ];
 

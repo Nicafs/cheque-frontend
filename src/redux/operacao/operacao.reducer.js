@@ -51,8 +51,7 @@ export default function operacao(state = initialState, action){
     case operacaoTypes.OPERACOES_CREATE:
     return {
       ...state,
-      loading: true,
-      operacao: action.payload,
+      loading: true
     }
     default:
       return state;

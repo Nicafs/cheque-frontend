@@ -10,6 +10,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import FormFile from '../../../core/components/form-input/form-file.component';
 import FormInput from '../../../core/components/form-input/form-input.component';
 import FormDate from '../../../core/components/form-input/form-date.component';
 import FormSelect from '../../../core/components/form-input/form-select.component';
@@ -54,7 +55,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
             if (field) {
               nameCompost = field.split('.');
             }
-            
+
             Object.keys(values).find((key) => {
               if(key === nameCompost[0]) handleChange(field, '');
               return key === nameCompost[0];
@@ -88,7 +89,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
               if (field.name) {
                 split = field.name.split('.')
               }
-              
+
               let value;
 
               if(split.length > 1) {
@@ -165,7 +166,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                           <Grid container item className={classes.groupItemButton}>
                             <FormInput
                               key={field.name}
-                              type={field.type}
+                              type="number"
                               name={field.name}
                               label={field.label}
                               value={value}
@@ -185,7 +186,7 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                               <FormInput
                                   type='text'
                                   name={field.name_disable}
-                                  value={values[keyCompostDisable[0]][keyCompostDisable[1]]}
+                                  value={values[keyCompostDisable[0]] ? values[keyCompostDisable[0]][keyCompostDisable[1]] : ''}
                                   onChange={(e) => handleChange(e.target.name, e.target.value)}
                                   label='Descrição'
                                   disabled
@@ -261,6 +262,17 @@ function FormField({ fields, values, hookFormCustom, handleSubmit,
                                     helperText={errors[field.name] ? errors[field.name].message : null}
                                     disabled={field.disabled || disable || false}
                                 />
+
+                        case 'file':
+                          return <FormFile
+                                    key={field.name}
+                                    type={field.type}
+                                    name={field.name}
+                                    label={field.label}
+                                    fullWidth
+                                    onChange={(e) => handleChange(field.name, e)}
+                                    disabled={field.disabled || disable || false}
+                                />;
 
                         default:
                           return <FormInput
