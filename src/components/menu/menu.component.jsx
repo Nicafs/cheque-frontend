@@ -2,6 +2,8 @@ import React from 'react';
 
 import MenuItem from './menu-item/menu-item.component';
 
+import { Box } from '@material-ui/core';
+
 import './menu.styles.scss';
 import ClientImg from '../../assets/client.jpg';
 import BancoImg from '../../assets/banco.jpg';
@@ -44,11 +46,12 @@ class Menu extends React.Component {
 
   render() {
     return (
-      <div className='menu'>
+      <Box className='menu' 
+           flexDirection={{ xs: 'column', sm: 'column', md: 'row' }}>
         {this.state.sections.map(({ id, ...otherSectionProps }) => (
           <MenuItem key={id} {...otherSectionProps} />
         ))}
-      </div>
+      </Box>
     );
   }
 }

@@ -2,8 +2,8 @@ import axios from 'axios';
 import { getToken, login, isExpired, logout, tokenExpire } from "./auth.service";
 
 const api = axios.create({
-    // baseURL: 'http://www.unibrasilfactory.com.br:21574/api',
-    baseURL: 'http://localhost:21574',
+    baseURL: 'http://www.unibrasilfactory.com.br:21574/api',
+    // baseURL: 'http://localhost:21574',
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",

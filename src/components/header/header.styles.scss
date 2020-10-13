@@ -11,27 +11,26 @@
     white-space: nowrap;
     line-height: initial;
     padding: 0 16px;
-    
+
+    .logo-container {
+      height: 100%;
+      width: 70px;
+      margin-right: 20px;
+    }
+
+    h1{
+      text-align: center;
+      font-size: 1.4em;
+    }
+
     .sistema-container {
       display: flex;
       flex-direction: row;
       align-items: center;
-  
-      .logo-container {
-        height: 100%;
-        width: 70px;
-        margin-right: 20px;
-      }
-
-      h1{
-        text-align: center;
-        font-size: 1.4em;
-      }
     }
 
     .nome-container {
       display: flex;
-      flex-direction: column;
       place-content: center;
       align-items: center;
     }
@@ -46,5 +45,11 @@
       .option {
         padding: 10px 15px;
       }
+    }
+
+    .MuiSvgIcon-root {
+      align-self: flex-end;
+      height: 40px;
+      font-size: 35px;
     }
   }
