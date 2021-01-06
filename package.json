@@ -9,7 +9,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "@react-pdf/renderer": "^2.0.0-beta.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-fns": "^2.14.0",
     "jwt-decode": "^2.2.0",
     "pdf-viewer-reactjs": "^2.1.1",
